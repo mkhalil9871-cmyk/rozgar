@@ -21,6 +21,22 @@ async function api(path, opts = {}) {
 const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 const imgSrc = (p) => (p ? `data:${p.mime};base64,${p.b64}` : "");
 
+// Phone photos are 3-8 MB; Gemma only needs ~1024 px, so shrink before upload.
+async function shrink(file, max = 1024) {
+  try {
+    const bmp = await createImageBitmap(file);
+    const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * scale);
+    c.height = Math.round(bmp.height * scale);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.85));
+    return blob ? new File([blob], "photo.jpg", { type: "image/jpeg" }) : file;
+  } catch {
+    return file;
+  }
+}
+
 // ---------- roles ----------
 document.querySelectorAll(".role").forEach((b) =>
   b.addEventListener("click", () => {
@@ -77,7 +93,7 @@ function showProgress(on) {
 async function diagnose(answer = "") {
   const fd = new FormData();
   const f = $("#photo").files[0];
-  if (f) fd.append("photo", f);
+  if (f) fd.append("photo", await shrink(f));
   fd.append("description", $("#desc").value);
   fd.append("section", pickedSection);
   if (answer) fd.append("answer", answer);
@@ -276,7 +292,7 @@ async function loadOpenJobs() {
   }));
   $("#openJobs").querySelectorAll("[data-after]").forEach((inp) => inp.addEventListener("change", async () => {
     const fd = new FormData();
-    fd.append("photo", inp.files[0]);
+    fd.append("photo", await shrink(inp.files[0]));
     typing = true;
     inp.nextElementSibling.textContent = "⏳ Gemma 4 Verifier agent is comparing before and after…";
     try { await api(`/api/jobs/${inp.dataset.after}/verify`, { method: "POST", body: fd }); }

@@ -38,8 +38,16 @@ _lock = threading.Lock()
 _cooldown = {}
 
 
+MAX_ATTEMPTS = 10
+MAX_SECONDS = 150
+
+
 class AgentError(Exception):
     pass
+
+
+class TransientError(Exception):
+    """Busy server, empty reply or rate limit: worth retrying."""
 
 
 def _client(i):
@@ -104,21 +112,19 @@ def _generate(model, parts):
     if not KEYS:
         raise AgentError("No Gemini API key. Set GEMINI_API_KEY in .env or the host's environment.")
     last = None
-    tries = 0
-    keys_tried = 0
-    while tries < 2 and keys_tried < len(KEYS):
+    for _ in range(len(KEYS)):
         with _lock:
             i = _key_index
         try:
             resp = _client(i).models.generate_content(
                 model=model,
                 contents=parts,
-                config=types.GenerateContentConfig(temperature=0.2, max_output_tokens=1200),
+                config=types.GenerateContentConfig(temperature=0.2),
             )
             if not resp.text:
-                raise AgentError("Empty reply from model")
+                raise TransientError("empty reply")
             return resp.text
-        except AgentError:
+        except TransientError:
             raise
         except Exception as e:
             last = e
@@ -126,14 +132,11 @@ def _generate(model, parts):
             if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
                 with _lock:
                     _key_index = (i + 1) % len(KEYS)
-                keys_tried += 1
                 continue
-            if any(c in msg for c in ("500", "503", "INTERNAL", "UNAVAILABLE", "timed out", "Timeout")):
-                tries += 1
-                time.sleep(1)
-                continue
+            if any(c in msg for c in ("500", "502", "503", "504", "INTERNAL", "UNAVAILABLE", "timed out", "Timeout", "disconnected")):
+                raise TransientError(msg[:200])
             raise AgentError(f"Gemma request failed: {msg[:300]}")
-    raise AgentError(f"Gemma unavailable after retries: {str(last)[:300]}")
+    raise TransientError(f"all API keys rate-limited: {str(last)[:200]}")
 
 
 def call_agent(name, system, parts, schema):
@@ -148,7 +151,12 @@ def call_agent(name, system, parts, schema):
     # a model that just failed goes to the back of the queue for a minute
     models.sort(key=lambda m: _cooldown.get(m, 0) > time.time())
     errors = []
-    for model in models:
+    # Google's Gemma endpoints fail fast with 500/503 under load, so alternate
+    # models for several rounds instead of giving up after one try each.
+    for attempt in range(MAX_ATTEMPTS):
+        model = models[attempt % len(models)]
+        if attempt and time.time() - t0 > MAX_SECONDS:
+            break
         try:
             text = _generate(model, contents)
             try:
@@ -164,13 +172,15 @@ def call_agent(name, system, parts, schema):
                 "agent": name,
                 "model": model,
                 "ms": int((time.time() - t0) * 1000),
+                "attempts": attempt + 1,
                 "output": out.model_dump(),
             }
             return out, step
-        except (AgentError, ValueError, ValidationError) as e:
+        except (TransientError, ValueError, ValidationError) as e:
             _cooldown[model] = time.time() + 60
-            errors.append(f"{model}: {e}")
-    raise AgentError(f"{name} failed. " + " | ".join(errors))
+            errors.append(f"{model}: {str(e)[:120]}")
+            time.sleep(min(1 + attempt, 3))
+    raise AgentError(f"{name} failed after {len(errors)} attempts. Google's Gemma 4 servers are busy. Last error: {errors[-1] if errors else 'timeout'}")
 
 
 def image_part(data, mime):
