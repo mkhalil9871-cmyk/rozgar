@@ -1,6 +1,7 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    sample_job: "Sample job (demo)",
     send_code: "Send code",
     otp: "Verification code",
     otp_hint: "Demo code: 1234 (no SMS is sent in this demo)",
@@ -124,6 +125,7 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    sample_job: "نمونہ کام (ڈیمو)",
     send_code: "کوڈ بھیجیں",
     otp: "تصدیقی کوڈ",
     otp_hint: "ڈیمو کوڈ: 1234 (اس ڈیمو میں SMS نہیں بھیجا جاتا)",
@@ -247,6 +249,7 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    sample_job: "Namoona kaam (demo)",
     send_code: "Code bhejein",
     otp: "Tasdeeqi code",
     otp_hint: "Demo code: 1234 (is demo mein SMS nahi bheja jata)",

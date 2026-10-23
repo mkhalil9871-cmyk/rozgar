@@ -104,6 +104,16 @@ def join_worker(body: WorkerIn):
     return new
 
 
+@app.post("/api/workers/{worker_id}/demo-job")
+def demo_job(worker_id: str):
+    w = worker(worker_id)
+    if not w:
+        raise HTTPException(404, "Worker not found")
+    sec = SECTIONS[w["section"]]
+    wi = TRADES.get(w["trade"]) or sec
+    return store.seed_demo_job(w, sec, wi)
+
+
 @app.get("/api/areas")
 def areas():
     return sorted({w["area"] for w in WORKERS})

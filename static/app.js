@@ -106,11 +106,19 @@ function showScreen() {
   }
 }
 
+// a clearly labelled sample invitation so a worker always has something to try
+async function seedDemoJob() {
+  if (!me) return;
+  await api(`/api/workers/${me}/demo-job`, { method: "POST" }).catch(() => {});
+  lastOpenHTML = "";
+  loadOpenJobs();
+}
+
 function startSession(s) {
   session = s;
   role = s.role;
   store.set("rozgar.session", s);
-  if (s.role === "worker") { me = s.workerId; }
+  if (s.role === "worker") { me = s.workerId; seedDemoJob(); }
   if (s.area) { store.set("rozgar.area", s.area); $("#area").value = s.area; }
   lastMyHTML = lastOpenHTML = "";
   showScreen();
@@ -478,7 +486,7 @@ async function loadOpenJobs() {
     } else if (j.status === "in_progress" && mine) {
       action = `<label class="upload">${icon("camera")}<input type="file" accept="image/*" data-after="${j.id}"><span>${esc(t("upload_after"))}</span></label>`;
     }
-    return `<div class="card">${(j.invited || []).includes(me) ? `<span class="badge ok">${esc(t("invited_you"))}</span>` : ""}
+    return `<div class="card">${(j.invited || []).includes(me) ? `<span class="badge ok">${esc(t("invited_you"))}</span>` : ""}${j.demo ? ` <span class="badge">${esc(t("sample_job"))}</span>` : ""}
       ${j.safety.level === "danger" ? `<div class="card danger row-ic">${icon("warning")}<b>${esc(t("danger"))}</b></div>` : ""}
       ${jobHead(j).replace(esc(t("your_offer")), esc(t("customer_pays")))}
       <div class="card inner"><div class="muted small">${esc(t("job_card"))}</div><div class="jobcard ${j.lang === "ur" ? "urdu" : ""}">${esc(j.job_card_urdu)}</div>
@@ -534,6 +542,7 @@ function refresh() {
   $("#area").addEventListener("change", () => { store.set("rozgar.area", $("#area").value); if (lastDiagnosis) renderResult(lastDiagnosis); });
   if (session?.role === "worker" && !WORKERS.some((w) => w.id === session.workerId)) session = null; // server restarted
   showScreen();
+  if (session?.role === "worker") seedDemoJob();
   api("/api/health").then((h) => ($("#modelName").textContent = h.model)).catch(() => {});
   applyLang();
   setInterval(refresh, 4000);
