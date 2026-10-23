@@ -1,13 +1,15 @@
 {
   "_note": "Rough Faisalabad 2026 estimates in PKR for guidance only. Edit to match your city.",
   "sections": {
-    "bijli":  {"name": "Bijli (electrical)",    "emoji": "⚡", "worker": "Electrician",   "worker_urdu": "الیکٹریشن",  "labour_per_hour": 600, "visit_fee": 500},
-    "pani":   {"name": "Pani (plumbing)",       "emoji": "🚿", "worker": "Plumber",       "worker_urdu": "پلمبر",      "labour_per_hour": 600, "visit_fee": 500},
-    "deewar": {"name": "Deewar/Chhat (masonry)", "emoji": "🧱", "worker": "Raj mistri",    "worker_urdu": "راج مستری",  "labour_per_hour": 500, "visit_fee": 500},
-    "lakri":  {"name": "Lakri (carpentry)",     "emoji": "🪵", "worker": "Carpenter",     "worker_urdu": "ترکھان",     "labour_per_hour": 600, "visit_fee": 500},
-    "rang":   {"name": "Rang (painting)",       "emoji": "🎨", "worker": "Painter",       "worker_urdu": "پینٹر",      "labour_per_hour": 450, "visit_fee": 300},
-    "ac":     {"name": "AC/Fridge",             "emoji": "❄️", "worker": "AC technician", "worker_urdu": "اے سی ٹیکنیشن", "labour_per_hour": 800, "visit_fee": 1000},
-    "gas":    {"name": "Gas",                   "emoji": "🔥", "worker": "Gas fitter",    "worker_urdu": "گیس فٹر",    "labour_per_hour": 700, "visit_fee": 700}
+    "bijli":     {"icon": "bijli",     "name": {"en": "Electrical",     "ur": "بجلی",           "roman": "Bijli"},          "worker": {"en": "Electrician",         "ur": "الیکٹریشن",       "roman": "Electrician"},       "labour_per_hour": 600, "visit_fee": 500},
+    "pani":      {"icon": "pani",      "name": {"en": "Plumbing",       "ur": "پلمبنگ",         "roman": "Pani / Plumbing"}, "worker": {"en": "Plumber",             "ur": "پلمبر",           "roman": "Plumber"},           "labour_per_hour": 600, "visit_fee": 500},
+    "deewar":    {"icon": "deewar",    "name": {"en": "Walls & Roof",   "ur": "دیوار اور چھت",  "roman": "Deewar / Chhat"},  "worker": {"en": "Mason",               "ur": "راج مستری",       "roman": "Raj mistri"},        "labour_per_hour": 500, "visit_fee": 500},
+    "lakri":     {"icon": "lakri",     "name": {"en": "Carpentry",      "ur": "لکڑی کا کام",    "roman": "Lakri ka kaam"},   "worker": {"en": "Carpenter",           "ur": "ترکھان",          "roman": "Tarkhan"},           "labour_per_hour": 600, "visit_fee": 500},
+    "rang":      {"icon": "rang",      "name": {"en": "Painting",       "ur": "رنگ و روغن",     "roman": "Rang / Paint"},    "worker": {"en": "Painter",             "ur": "پینٹر",           "roman": "Painter"},           "labour_per_hour": 450, "visit_fee": 300},
+    "ac":        {"icon": "ac",        "name": {"en": "AC",             "ur": "اے سی",          "roman": "AC"},              "worker": {"en": "AC technician",       "ur": "اے سی ٹیکنیشن",   "roman": "AC technician"},     "labour_per_hour": 800, "visit_fee": 1000},
+    "gas":       {"icon": "gas",       "name": {"en": "Gas",            "ur": "گیس",            "roman": "Gas"},             "worker": {"en": "Gas fitter",          "ur": "گیس فٹر",         "roman": "Gas fitter"},        "labour_per_hour": 700, "visit_fee": 700},
+    "computer":  {"icon": "computer",  "name": {"en": "Computer & IT",  "ur": "کمپیوٹر",        "roman": "Computer / IT"},   "worker": {"en": "Computer technician", "ur": "کمپیوٹر ٹیکنیشن", "roman": "Computer technician"}, "labour_per_hour": 700, "visit_fee": 500},
+    "appliance": {"icon": "appliance", "name": {"en": "Home appliances","ur": "گھریلو مشینیں",  "roman": "Ghar ki machines"},"worker": {"en": "Appliance technician","ur": "مشین ٹیکنیشن",    "roman": "Machine technician"}, "labour_per_hour": 700, "visit_fee": 600}
   },
   "materials": {
     "switch": 250, "socket": 350, "circuit breaker": 900, "wire per meter": 120, "ceiling fan capacitor": 300,
@@ -16,6 +18,8 @@
     "door hinge": 300, "door lock": 1800, "wood screws pack": 200,
     "emulsion paint litre": 1100, "primer litre": 700, "sandpaper sheet": 50,
     "ac gas refill": 4500, "ac capacitor": 1500,
-    "gas pipe per meter": 450, "gas valve": 900
+    "gas pipe per meter": 450, "gas valve": 900,
+    "usb drive 16gb": 1200, "thermal paste": 400, "network cable per meter": 60,
+    "washing machine timer": 2500, "drain pump": 3000, "motor capacitor": 600, "fridge thermostat": 1800, "fuse": 100
   }
 }

@@ -1,4 +1,4 @@
-"""Deterministic tools: skill loading, fair price, safety guard and bid check.
+"""Deterministic tools: skill loading, cost estimate, safety guard and price check.
 
 No LLM here, so every rupee on screen can be explained from rates.json.
 """
@@ -8,8 +8,16 @@ import re
 from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parent.parent / "skills" / "rozgar-repair-estimator"
-RATES = json.loads((SKILL_DIR / "rates.json").read_text(encoding="utf-8"))
+
+
+def _load(name):
+    return json.loads((SKILL_DIR / name).read_text(encoding="utf-8"))
+
+
+RATES = _load("rates.json")
 SECTIONS = RATES["sections"]
+CATALOG = _load("catalog.json")["sections"]
+WORKERS = _load("workers.json")["workers"]
 GUIDES = {sid: (SKILL_DIR / "sections" / f"{sid}.md").read_text(encoding="utf-8") for sid in SECTIONS}
 SKILL_MD = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
 
@@ -22,9 +30,27 @@ HELPLINES = {
 DANGER_PATTERNS = {
     "bijli": [r"spark", r"chingari", r"چنگاری", r"burning smell", r"jal raha", r"jalne ki boo", r"smoke", r"dhuan",
               r"دھواں", r"shock", r"current lag", r"کرنٹ", r"pani.*(wire|socket|board)", r"water.*(wire|socket|board)"],
-    "deewar": [r"collapse", r"girne wal", r"gir sakt", r"گرنے", r"bulg", r"lean", r"jhuk"],
+    "deewar": [r"collapse", r"girne wal", r"gir sakt", r"گرنے", r"bulg", r"lean", r"jhuk", r"depth=through"],
     "pani": [r"pani.*(wire|socket|board|bijli)", r"water.*(wire|socket|board)"],
+    "appliance": [r"spark", r"chingari", r"چنگاری", r"burning", r"jalne", r"جلنے", r"smoke"],
 }
+
+
+def find_sub(section, sub_id):
+    return next((s for s in CATALOG.get(section, []) if s["id"] == sub_id), None)
+
+
+def answers_mult(section, sub_id, answers):
+    """Largest multiplier among the chosen guided answers (size, depth, count...)."""
+    sub = find_sub(section, sub_id)
+    if not sub or not answers:
+        return 1.0
+    mult = 1.0
+    for q in sub["questions"]:
+        chosen = next((o for o in q["options"] if o["v"] == answers.get(q["id"])), None)
+        if chosen:
+            mult = max(mult, chosen.get("mult", 1.0))
+    return mult
 
 
 def material_price(item, est_pkr):
@@ -37,7 +63,7 @@ def material_price(item, est_pkr):
     return RATES["materials"][max(matches, key=len)]
 
 
-def fair_range(section, materials, labour_hours):
+def fair_range(section, materials, labour_hours, mult=1.0, remote=False):
     rate = SECTIONS[section]
     mat_rows = []
     mat_total = 0
@@ -46,15 +72,18 @@ def fair_range(section, materials, labour_hours):
         line = unit * m.qty
         mat_total += line
         mat_rows.append({"item": m.item, "qty": m.qty, "unit_pkr": unit, "total_pkr": line})
-    labour = labour_hours * rate["labour_per_hour"]
-    base = mat_total + labour + rate["visit_fee"]
+    hours = round(labour_hours * mult, 1)
+    labour = hours * rate["labour_per_hour"]
+    visit = 0 if remote else rate["visit_fee"]
+    base = mat_total + labour + visit
     return {
         "materials": mat_rows,
         "materials_total": round(mat_total),
-        "labour_hours": labour_hours,
+        "labour_hours": hours,
+        "size_multiplier": mult,
         "labour_per_hour": rate["labour_per_hour"],
         "labour_total": round(labour),
-        "visit_fee": rate["visit_fee"],
+        "visit_fee": visit,
         "base": round(base),
         "fair_min": int(round(base * 0.8, -1)),
         "fair_max": int(round(base * 1.2, -1)),
@@ -68,11 +97,11 @@ def safety_guard(section, description, model_level, model_advice):
     reasons = []
     if section == "gas":
         level = "danger"
-        reasons.append("Any gas job is treated as dangerous until checked.")
+        reasons.append("gas")
     hit = any(re.search(p, text) for p in DANGER_PATTERNS.get(section, []))
     if hit and level != "danger":
         level = "danger"
-        reasons.append("Description mentions a danger sign (sparking, burning, shock, water on wiring or collapse).")
+        reasons.append("keyword")
     helpline = HELPLINES.get(section, HELPLINES["default"])
     return {
         "level": level,
@@ -83,8 +112,18 @@ def safety_guard(section, description, model_level, model_advice):
 
 
 def bid_check(amount, fair_min, fair_max):
+    """Language-neutral status; the UI translates it."""
     if amount > fair_max * 1.25:
-        return {"status": "high", "label": "⚠️ Above fair price", "detail": f"More than 25% above the fair maximum of Rs {fair_max:,}."}
+        return {"status": "high"}
     if amount < fair_min * 0.75:
-        return {"status": "low", "label": "⚠️ Unfair to worker", "detail": f"More than 25% below the fair minimum of Rs {fair_min:,}."}
-    return {"status": "fair", "label": "✅ Fair price", "detail": f"Within the fair range Rs {fair_min:,} – {fair_max:,}."}
+        return {"status": "low"}
+    return {"status": "fair"}
+
+
+def workers_for(section, area=""):
+    ws = [w for w in WORKERS if w["section"] == section]
+    return sorted(ws, key=lambda w: (w["area"] != area, -w["rating"]))
+
+
+def worker(worker_id):
+    return next((w for w in WORKERS if w["id"] == worker_id), None)

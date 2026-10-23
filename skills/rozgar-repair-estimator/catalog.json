@@ -1,0 +1,1815 @@
+{
+ "_note": "Guided questions per section. Labels in en / ur / roman. mult multiplies labour hours.",
+ "sections": {
+  "bijli": [
+   {
+    "id": "socket",
+    "label": {
+     "en": "Burnt switch / socket",
+     "ur": "جلا ہوا سوئچ / ساکٹ",
+     "roman": "Jala hua switch / socket"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     },
+     {
+      "id": "urgency",
+      "label": {
+       "en": "How urgent?",
+       "ur": "کتنی جلدی چاہیے؟",
+       "roman": "Kitni jaldi chahiye?"
+      },
+      "options": [
+       {
+        "v": "today",
+        "label": {
+         "en": "Today",
+         "ur": "آج ہی",
+         "roman": "Aaj hi"
+        },
+        "mult": 1.2
+       },
+       {
+        "v": "week",
+        "label": {
+         "en": "This week",
+         "ur": "اس ہفتے",
+         "roman": "Is haftay"
+        },
+        "mult": 1.0
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "breaker",
+    "label": {
+     "en": "Breaker keeps tripping",
+     "ur": "بریکر بار بار گرتا ہے",
+     "roman": "Breaker baar baar girta hai"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "urgency",
+      "label": {
+       "en": "How urgent?",
+       "ur": "کتنی جلدی چاہیے؟",
+       "roman": "Kitni jaldi chahiye?"
+      },
+      "options": [
+       {
+        "v": "today",
+        "label": {
+         "en": "Today",
+         "ur": "آج ہی",
+         "roman": "Aaj hi"
+        },
+        "mult": 1.2
+       },
+       {
+        "v": "week",
+        "label": {
+         "en": "This week",
+         "ur": "اس ہفتے",
+         "roman": "Is haftay"
+        },
+        "mult": 1.0
+       }
+      ]
+     }
+    ],
+    "symptoms": [
+     {
+      "v": "one_room",
+      "label": {
+       "en": "Only one room",
+       "ur": "صرف ایک کمرہ",
+       "roman": "Sirf aik kamra"
+      }
+     },
+     {
+      "v": "whole_house",
+      "label": {
+       "en": "Whole house",
+       "ur": "پورا گھر",
+       "roman": "Poora ghar"
+      }
+     },
+     {
+      "v": "with_ac",
+      "label": {
+       "en": "When AC/iron is on",
+       "ur": "اے سی یا استری چلانے پر",
+       "roman": "AC ya istri chalane par"
+      }
+     }
+    ]
+   },
+   {
+    "id": "fan",
+    "label": {
+     "en": "Fan slow / not working",
+     "ur": "پنکھا آہستہ / بند",
+     "roman": "Pankha aahista / band"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "wiring",
+    "label": {
+     "en": "New wiring / fitting",
+     "ur": "نئی وائرنگ / فٹنگ",
+     "roman": "Nayi wiring / fitting"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "size",
+      "label": {
+       "en": "How big is it?",
+       "ur": "یہ کتنا بڑا ہے؟",
+       "roman": "Kitna bara hai?"
+      },
+      "options": [
+       {
+        "v": "small",
+        "label": {
+         "en": "Small (under 30 cm)",
+         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
+         "roman": "Chhota (30 cm se kam)"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "medium",
+        "label": {
+         "en": "Medium (30 cm – 1 m)",
+         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
+         "roman": "Darmiyana (30 cm – 1 meter)"
+        },
+        "mult": 1.5
+       },
+       {
+        "v": "large",
+        "label": {
+         "en": "Large (over 1 m)",
+         "ur": "بڑا (1 میٹر سے زیادہ)",
+         "roman": "Bara (1 meter se zyada)"
+        },
+        "mult": 2.2
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "ups",
+    "label": {
+     "en": "UPS / inverter / solar",
+     "ur": "یو پی ایس / انورٹر / سولر",
+     "roman": "UPS / inverter / solar"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_backup",
+      "label": {
+       "en": "No backup",
+       "ur": "بیک اپ نہیں",
+       "roman": "Backup nahi"
+      }
+     },
+     {
+      "v": "beeping",
+      "label": {
+       "en": "Beeping",
+       "ur": "بیپ کر رہا ہے",
+       "roman": "Beep kar raha hai"
+      }
+     },
+     {
+      "v": "not_charging",
+      "label": {
+       "en": "Not charging",
+       "ur": "چارج نہیں ہو رہا",
+       "roman": "Charge nahi ho raha"
+      }
+     }
+    ]
+   }
+  ],
+  "pani": [
+   {
+    "id": "tap",
+    "label": {
+     "en": "Leaking tap",
+     "ur": "ٹپکتا نلکا",
+     "roman": "Tapakta nalka"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "pipe",
+    "label": {
+     "en": "Burst / leaking pipe",
+     "ur": "پھٹا / لیک پائپ",
+     "roman": "Phata / leak pipe"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "where",
+      "label": {
+       "en": "Where is the pipe?",
+       "ur": "پائپ کہاں ہے؟",
+       "roman": "Pipe kahan hai?"
+      },
+      "options": [
+       {
+        "v": "open",
+        "label": {
+         "en": "Visible",
+         "ur": "سامنے",
+         "roman": "Saamne"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "wall",
+        "label": {
+         "en": "Inside wall",
+         "ur": "دیوار کے اندر",
+         "roman": "Deewar ke andar"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "underground",
+        "label": {
+         "en": "Underground",
+         "ur": "زمین کے نیچے",
+         "roman": "Zameen ke neeche"
+        },
+        "mult": 2.5
+       }
+      ]
+     },
+     {
+      "id": "urgency",
+      "label": {
+       "en": "How urgent?",
+       "ur": "کتنی جلدی چاہیے؟",
+       "roman": "Kitni jaldi chahiye?"
+      },
+      "options": [
+       {
+        "v": "today",
+        "label": {
+         "en": "Today",
+         "ur": "آج ہی",
+         "roman": "Aaj hi"
+        },
+        "mult": 1.2
+       },
+       {
+        "v": "week",
+        "label": {
+         "en": "This week",
+         "ur": "اس ہفتے",
+         "roman": "Is haftay"
+        },
+        "mult": 1.0
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "drain",
+    "label": {
+     "en": "Blocked drain / gutter",
+     "ur": "بند نالی / گٹر",
+     "roman": "Band naali / gutter"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "urgency",
+      "label": {
+       "en": "How urgent?",
+       "ur": "کتنی جلدی چاہیے؟",
+       "roman": "Kitni jaldi chahiye?"
+      },
+      "options": [
+       {
+        "v": "today",
+        "label": {
+         "en": "Today",
+         "ur": "آج ہی",
+         "roman": "Aaj hi"
+        },
+        "mult": 1.2
+       },
+       {
+        "v": "week",
+        "label": {
+         "en": "This week",
+         "ur": "اس ہفتے",
+         "roman": "Is haftay"
+        },
+        "mult": 1.0
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "pump",
+    "label": {
+     "en": "Water pump / motor",
+     "ur": "پانی کی موٹر",
+     "roman": "Pani ki motor"
+    },
+    "photo": "label",
+    "questions": [
+     {
+      "id": "urgency",
+      "label": {
+       "en": "How urgent?",
+       "ur": "کتنی جلدی چاہیے؟",
+       "roman": "Kitni jaldi chahiye?"
+      },
+      "options": [
+       {
+        "v": "today",
+        "label": {
+         "en": "Today",
+         "ur": "آج ہی",
+         "roman": "Aaj hi"
+        },
+        "mult": 1.2
+       },
+       {
+        "v": "week",
+        "label": {
+         "en": "This week",
+         "ur": "اس ہفتے",
+         "roman": "Is haftay"
+        },
+        "mult": 1.0
+       }
+      ]
+     }
+    ],
+    "symptoms": [
+     {
+      "v": "no_start",
+      "label": {
+       "en": "Won't start",
+       "ur": "چلتی نہیں",
+       "roman": "Chalti nahi"
+      }
+     },
+     {
+      "v": "hums",
+      "label": {
+       "en": "Hums but no water",
+       "ur": "آواز آتی ہے پانی نہیں",
+       "roman": "Awaz aati hai pani nahi"
+      }
+     },
+     {
+      "v": "leak",
+      "label": {
+       "en": "Leaks water",
+       "ur": "پانی لیک کرتی ہے",
+       "roman": "Pani leak karti hai"
+      }
+     },
+     {
+      "v": "noise",
+      "label": {
+       "en": "Loud noise",
+       "ur": "زیادہ شور",
+       "roman": "Zyada shor"
+      }
+     },
+     {
+      "v": "trips",
+      "label": {
+       "en": "Trips the breaker",
+       "ur": "بریکر گراتی ہے",
+       "roman": "Breaker girati hai"
+      }
+     }
+    ]
+   },
+   {
+    "id": "tank",
+    "label": {
+     "en": "Water tank / overflow",
+     "ur": "پانی کی ٹینکی",
+     "roman": "Pani ki tanki"
+    },
+    "photo": "yes",
+    "questions": [],
+    "symptoms": []
+   },
+   {
+    "id": "geyser",
+    "label": {
+     "en": "Geyser (water side)",
+     "ur": "گیزر (پانی کی طرف)",
+     "roman": "Geyser (pani wali side)"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "leak",
+      "label": {
+       "en": "Leaking",
+       "ur": "لیک",
+       "roman": "Leak"
+      }
+     },
+     {
+      "v": "no_hot",
+      "label": {
+       "en": "No hot water",
+       "ur": "گرم پانی نہیں",
+       "roman": "Garam pani nahi"
+      }
+     }
+    ]
+   },
+   {
+    "id": "flush",
+    "label": {
+     "en": "Toilet flush",
+     "ur": "فلش",
+     "roman": "Flush"
+    },
+    "photo": "yes",
+    "questions": [],
+    "symptoms": []
+   }
+  ],
+  "deewar": [
+   {
+    "id": "crack",
+    "label": {
+     "en": "Crack in wall",
+     "ur": "دیوار میں دراڑ",
+     "roman": "Deewar mein crack"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "length",
+      "label": {
+       "en": "How long is the crack?",
+       "ur": "دراڑ کتنی لمبی ہے؟",
+       "roman": "Crack kitna lamba hai?"
+      },
+      "options": [
+       {
+        "v": "short",
+        "label": {
+         "en": "Under 30 cm",
+         "ur": "30 سینٹی میٹر سے کم",
+         "roman": "30 cm se kam"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "mid",
+        "label": {
+         "en": "30 cm – 1 m",
+         "ur": "30 سینٹی میٹر سے 1 میٹر",
+         "roman": "30 cm – 1 meter"
+        },
+        "mult": 1.6
+       },
+       {
+        "v": "long",
+        "label": {
+         "en": "Over 1 m",
+         "ur": "1 میٹر سے زیادہ",
+         "roman": "1 meter se zyada"
+        },
+        "mult": 2.5
+       }
+      ]
+     },
+     {
+      "id": "width",
+      "label": {
+       "en": "How wide?",
+       "ur": "کتنی چوڑی ہے؟",
+       "roman": "Kitna chaura hai?"
+      },
+      "options": [
+       {
+        "v": "hairline",
+        "label": {
+         "en": "Hairline",
+         "ur": "بال جتنی",
+         "roman": "Baal jitna"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "coin",
+        "label": {
+         "en": "Coin edge",
+         "ur": "سکے جتنی",
+         "roman": "Sikkay jitna"
+        },
+        "mult": 1.3
+       },
+       {
+        "v": "finger",
+        "label": {
+         "en": "A finger fits",
+         "ur": "انگلی جتنی",
+         "roman": "Ungli jitna"
+        },
+        "mult": 1.8
+       }
+      ]
+     },
+     {
+      "id": "depth",
+      "label": {
+       "en": "How deep?",
+       "ur": "کتنی گہری ہے؟",
+       "roman": "Kitna gehra hai?"
+      },
+      "options": [
+       {
+        "v": "surface",
+        "label": {
+         "en": "Only plaster",
+         "ur": "صرف پلستر",
+         "roman": "Sirf plaster"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "deep",
+        "label": {
+         "en": "Into the bricks",
+         "ur": "اینٹوں تک",
+         "roman": "Eenton tak"
+        },
+        "mult": 1.6
+       },
+       {
+        "v": "through",
+        "label": {
+         "en": "Through the wall (light comes through)",
+         "ur": "آر پار (روشنی آتی ہے)",
+         "roman": "Aar paar (roshni aati hai)"
+        },
+        "mult": 2.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "hole",
+    "label": {
+     "en": "Hole / broken corner",
+     "ur": "سوراخ / ٹوٹا کونا",
+     "roman": "Surakh / toota kona"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "size",
+      "label": {
+       "en": "How big is it?",
+       "ur": "یہ کتنا بڑا ہے؟",
+       "roman": "Kitna bara hai?"
+      },
+      "options": [
+       {
+        "v": "small",
+        "label": {
+         "en": "Small (under 30 cm)",
+         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
+         "roman": "Chhota (30 cm se kam)"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "medium",
+        "label": {
+         "en": "Medium (30 cm – 1 m)",
+         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
+         "roman": "Darmiyana (30 cm – 1 meter)"
+        },
+        "mult": 1.5
+       },
+       {
+        "v": "large",
+        "label": {
+         "en": "Large (over 1 m)",
+         "ur": "بڑا (1 میٹر سے زیادہ)",
+         "roman": "Bara (1 meter se zyada)"
+        },
+        "mult": 2.2
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "damp",
+    "label": {
+     "en": "Seepage / damp wall",
+     "ur": "سیلن / گیلی دیوار",
+     "roman": "Seelan / geeli deewar"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "size",
+      "label": {
+       "en": "How big is it?",
+       "ur": "یہ کتنا بڑا ہے؟",
+       "roman": "Kitna bara hai?"
+      },
+      "options": [
+       {
+        "v": "small",
+        "label": {
+         "en": "Small (under 30 cm)",
+         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
+         "roman": "Chhota (30 cm se kam)"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "medium",
+        "label": {
+         "en": "Medium (30 cm – 1 m)",
+         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
+         "roman": "Darmiyana (30 cm – 1 meter)"
+        },
+        "mult": 1.5
+       },
+       {
+        "v": "large",
+        "label": {
+         "en": "Large (over 1 m)",
+         "ur": "بڑا (1 میٹر سے زیادہ)",
+         "roman": "Bara (1 meter se zyada)"
+        },
+        "mult": 2.2
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "tile",
+    "label": {
+     "en": "Broken tiles",
+     "ur": "ٹوٹی ٹائلیں",
+     "roman": "Tooti tiles"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "roof",
+    "label": {
+     "en": "Roof leak",
+     "ur": "چھت ٹپکتی ہے",
+     "roman": "Chhat tapakti hai"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "size",
+      "label": {
+       "en": "How big is it?",
+       "ur": "یہ کتنا بڑا ہے؟",
+       "roman": "Kitna bara hai?"
+      },
+      "options": [
+       {
+        "v": "small",
+        "label": {
+         "en": "Small (under 30 cm)",
+         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
+         "roman": "Chhota (30 cm se kam)"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "medium",
+        "label": {
+         "en": "Medium (30 cm – 1 m)",
+         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
+         "roman": "Darmiyana (30 cm – 1 meter)"
+        },
+        "mult": 1.5
+       },
+       {
+        "v": "large",
+        "label": {
+         "en": "Large (over 1 m)",
+         "ur": "بڑا (1 میٹر سے زیادہ)",
+         "roman": "Bara (1 meter se zyada)"
+        },
+        "mult": 2.2
+       }
+      ]
+     },
+     {
+      "id": "urgency",
+      "label": {
+       "en": "How urgent?",
+       "ur": "کتنی جلدی چاہیے؟",
+       "roman": "Kitni jaldi chahiye?"
+      },
+      "options": [
+       {
+        "v": "today",
+        "label": {
+         "en": "Today",
+         "ur": "آج ہی",
+         "roman": "Aaj hi"
+        },
+        "mult": 1.2
+       },
+       {
+        "v": "week",
+        "label": {
+         "en": "This week",
+         "ur": "اس ہفتے",
+         "roman": "Is haftay"
+        },
+        "mult": 1.0
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   }
+  ],
+  "lakri": [
+   {
+    "id": "door",
+    "label": {
+     "en": "Door not closing",
+     "ur": "دروازہ بند نہیں ہوتا",
+     "roman": "Darwaza band nahi hota"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "lock",
+    "label": {
+     "en": "Broken lock / handle",
+     "ur": "ٹوٹا تالا / ہینڈل",
+     "roman": "Toota tala / handle"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "cabinet",
+    "label": {
+     "en": "Cabinet / wardrobe",
+     "ur": "الماری / کیبنٹ",
+     "roman": "Almari / cabinet"
+    },
+    "photo": "yes",
+    "questions": [],
+    "symptoms": []
+   },
+   {
+    "id": "furniture",
+    "label": {
+     "en": "Furniture repair",
+     "ur": "فرنیچر مرمت",
+     "roman": "Furniture marammat"
+    },
+    "photo": "yes",
+    "questions": [],
+    "symptoms": []
+   }
+  ],
+  "rang": [
+   {
+    "id": "room",
+    "label": {
+     "en": "Paint a room",
+     "ur": "کمرہ پینٹ کرنا",
+     "roman": "Kamra paint karna"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "rooms",
+      "label": {
+       "en": "How many rooms?",
+       "ur": "کتنے کمرے؟",
+       "roman": "Kitne kamre?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.5
+       },
+       {
+        "v": "house",
+        "label": {
+         "en": "Whole house",
+         "ur": "پورا گھر",
+         "roman": "Poora ghar"
+        },
+        "mult": 6.0
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "peel",
+    "label": {
+     "en": "Peeling / damp stains",
+     "ur": "اکھڑا پینٹ / دھبے",
+     "roman": "Ukhra paint / dhabbay"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "size",
+      "label": {
+       "en": "How big is it?",
+       "ur": "یہ کتنا بڑا ہے؟",
+       "roman": "Kitna bara hai?"
+      },
+      "options": [
+       {
+        "v": "small",
+        "label": {
+         "en": "Small (under 30 cm)",
+         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
+         "roman": "Chhota (30 cm se kam)"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "medium",
+        "label": {
+         "en": "Medium (30 cm – 1 m)",
+         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
+         "roman": "Darmiyana (30 cm – 1 meter)"
+        },
+        "mult": 1.5
+       },
+       {
+        "v": "large",
+        "label": {
+         "en": "Large (over 1 m)",
+         "ur": "بڑا (1 میٹر سے زیادہ)",
+         "roman": "Bara (1 meter se zyada)"
+        },
+        "mult": 2.2
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "polish",
+    "label": {
+     "en": "Wood polish",
+     "ur": "لکڑی پالش",
+     "roman": "Lakri polish"
+    },
+    "photo": "yes",
+    "questions": [],
+    "symptoms": []
+   }
+  ],
+  "ac": [
+   {
+    "id": "ac_cooling",
+    "label": {
+     "en": "AC not cooling",
+     "ur": "اے سی ٹھنڈا نہیں کرتا",
+     "roman": "AC thanda nahi karta"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "runs_warm",
+      "label": {
+       "en": "Runs but warm air",
+       "ur": "چلتا ہے گرم ہوا",
+       "roman": "Chalta hai garam hawa"
+      }
+     },
+     {
+      "v": "outdoor_off",
+      "label": {
+       "en": "Outdoor unit does not start",
+       "ur": "باہر والا یونٹ نہیں چلتا",
+       "roman": "Bahar wala unit nahi chalta"
+      }
+     },
+     {
+      "v": "dripping",
+      "label": {
+       "en": "Water dripping inside",
+       "ur": "اندر پانی ٹپکتا ہے",
+       "roman": "Andar pani tapakta hai"
+      }
+     },
+     {
+      "v": "ice",
+      "label": {
+       "en": "Ice on pipes",
+       "ur": "پائپ پر برف",
+       "roman": "Pipe par baraf"
+      }
+     }
+    ]
+   },
+   {
+    "id": "ac_service",
+    "label": {
+     "en": "AC service / cleaning",
+     "ur": "اے سی سروس",
+     "roman": "AC service"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "ac_install",
+    "label": {
+     "en": "AC install / shifting",
+     "ur": "اے سی لگوانا / شفٹ",
+     "roman": "AC lagwana / shift"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   }
+  ],
+  "gas": [
+   {
+    "id": "smell",
+    "label": {
+     "en": "Gas smell / leak",
+     "ur": "گیس کی بو / لیک",
+     "roman": "Gas ki boo / leak"
+    },
+    "photo": "no",
+    "questions": [],
+    "symptoms": []
+   },
+   {
+    "id": "stove",
+    "label": {
+     "en": "Stove / burner problem",
+     "ur": "چولہا / برنر",
+     "roman": "Chulha / burner"
+    },
+    "photo": "yes",
+    "questions": [],
+    "symptoms": []
+   },
+   {
+    "id": "heater",
+    "label": {
+     "en": "Gas heater / geyser fitting",
+     "ur": "گیس ہیٹر / گیزر فٹنگ",
+     "roman": "Gas heater / geyser fitting"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   }
+  ],
+  "computer": [
+   {
+    "id": "windows",
+    "label": {
+     "en": "Install / reinstall Windows",
+     "ur": "ونڈوز انسٹال کرنا",
+     "roman": "Windows install karna"
+    },
+    "photo": "no",
+    "questions": [
+     {
+      "id": "device",
+      "label": {
+       "en": "Which device?",
+       "ur": "کون سا کمپیوٹر؟",
+       "roman": "Kaunsa computer?"
+      },
+      "options": [
+       {
+        "v": "laptop",
+        "label": {
+         "en": "Laptop",
+         "ur": "لیپ ٹاپ",
+         "roman": "Laptop"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "desktop",
+        "label": {
+         "en": "Desktop",
+         "ur": "ڈیسک ٹاپ",
+         "roman": "Desktop"
+        },
+        "mult": 1.0
+       }
+      ]
+     },
+     {
+      "id": "backup",
+      "label": {
+       "en": "Do you need your files saved?",
+       "ur": "کیا فائلیں بچانی ہیں؟",
+       "roman": "Kya files bachani hain?"
+      },
+      "options": [
+       {
+        "v": "no",
+        "label": {
+         "en": "No",
+         "ur": "نہیں",
+         "roman": "Nahi"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "yes",
+        "label": {
+         "en": "Yes, save my files",
+         "ur": "ہاں، فائلیں بچائیں",
+         "roman": "Haan, files bachayen"
+        },
+        "mult": 1.5
+       }
+      ]
+     },
+     {
+      "id": "visit",
+      "label": {
+       "en": "Where?",
+       "ur": "کہاں؟",
+       "roman": "Kahan?"
+      },
+      "options": [
+       {
+        "v": "home",
+        "label": {
+         "en": "Come to my home",
+         "ur": "گھر آ کر",
+         "roman": "Ghar aa kar"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "remote",
+        "label": {
+         "en": "Online / remote help",
+         "ur": "آن لائن مدد",
+         "roman": "Online madad"
+        },
+        "mult": 0.6
+       }
+      ]
+     }
+    ],
+    "symptoms": []
+   },
+   {
+    "id": "slow",
+    "label": {
+     "en": "Slow PC / virus",
+     "ur": "سست کمپیوٹر / وائرس",
+     "roman": "Slow computer / virus"
+    },
+    "photo": "no",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "slow_start",
+      "label": {
+       "en": "Slow to start",
+       "ur": "دیر سے کھلتا ہے",
+       "roman": "Der se khulta hai"
+      }
+     },
+     {
+      "v": "popups",
+      "label": {
+       "en": "Pop-ups / ads",
+       "ur": "اشتہار آتے ہیں",
+       "roman": "Ishtehar aate hain"
+      }
+     },
+     {
+      "v": "hangs",
+      "label": {
+       "en": "Hangs / freezes",
+       "ur": "ہینگ ہوتا ہے",
+       "roman": "Hang hota hai"
+      }
+     },
+     {
+      "v": "blue",
+      "label": {
+       "en": "Blue screen",
+       "ur": "نیلی اسکرین",
+       "roman": "Neeli screen"
+      }
+     }
+    ]
+   },
+   {
+    "id": "printer",
+    "label": {
+     "en": "Printer not working",
+     "ur": "پرنٹر نہیں چلتا",
+     "roman": "Printer nahi chalta"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "not_found",
+      "label": {
+       "en": "PC cannot find it",
+       "ur": "کمپیوٹر نہیں پہچانتا",
+       "roman": "Computer nahi pehchanta"
+      }
+     },
+     {
+      "v": "jam",
+      "label": {
+       "en": "Paper jam",
+       "ur": "کاغذ پھنستا ہے",
+       "roman": "Kaghaz phansta hai"
+      }
+     },
+     {
+      "v": "faded",
+      "label": {
+       "en": "Faded print",
+       "ur": "ہلکی پرنٹنگ",
+       "roman": "Halki printing"
+      }
+     }
+    ]
+   },
+   {
+    "id": "wifi",
+    "label": {
+     "en": "Wi-Fi / internet setup",
+     "ur": "وائی فائی / انٹرنیٹ",
+     "roman": "WiFi / internet"
+    },
+    "photo": "no",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_net",
+      "label": {
+       "en": "No internet",
+       "ur": "انٹرنیٹ نہیں",
+       "roman": "Internet nahi"
+      }
+     },
+     {
+      "v": "weak",
+      "label": {
+       "en": "Weak signal in rooms",
+       "ur": "کمروں میں سگنل کمزور",
+       "roman": "Kamron mein signal kamzor"
+      }
+     },
+     {
+      "v": "new_router",
+      "label": {
+       "en": "New router setup",
+       "ur": "نیا راؤٹر لگانا",
+       "roman": "Naya router lagana"
+      }
+     }
+    ]
+   },
+   {
+    "id": "software",
+    "label": {
+     "en": "MS Office / software install",
+     "ur": "ایم ایس آفس / سافٹ ویئر",
+     "roman": "MS Office / software"
+    },
+    "photo": "no",
+    "questions": [],
+    "symptoms": []
+   },
+   {
+    "id": "data",
+    "label": {
+     "en": "Recover deleted data",
+     "ur": "ڈیلیٹ ڈیٹا واپس لانا",
+     "roman": "Delete data wapas lana"
+    },
+    "photo": "no",
+    "questions": [],
+    "symptoms": []
+   }
+  ],
+  "appliance": [
+   {
+    "id": "washing",
+    "label": {
+     "en": "Washing machine",
+     "ur": "واشنگ مشین",
+     "roman": "Washing machine"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_spin",
+      "label": {
+       "en": "Does not spin",
+       "ur": "گھومتی نہیں",
+       "roman": "Ghoomti nahi"
+      }
+     },
+     {
+      "v": "no_drain",
+      "label": {
+       "en": "Water does not drain",
+       "ur": "پانی نہیں نکلتا",
+       "roman": "Pani nahi nikalta"
+      }
+     },
+     {
+      "v": "noise",
+      "label": {
+       "en": "Loud noise / shaking",
+       "ur": "شور / ہلتی ہے",
+       "roman": "Shor / hilti hai"
+      }
+     },
+     {
+      "v": "no_power",
+      "label": {
+       "en": "Does not turn on",
+       "ur": "آن نہیں ہوتی",
+       "roman": "On nahi hoti"
+      }
+     },
+     {
+      "v": "leak",
+      "label": {
+       "en": "Leaks water",
+       "ur": "پانی لیک کرتی ہے",
+       "roman": "Pani leak karti hai"
+      }
+     }
+    ]
+   },
+   {
+    "id": "fridge",
+    "label": {
+     "en": "Fridge / freezer",
+     "ur": "فریج / فریزر",
+     "roman": "Fridge / freezer"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "not_cold",
+      "label": {
+       "en": "Not cooling",
+       "ur": "ٹھنڈا نہیں کرتا",
+       "roman": "Thanda nahi karta"
+      }
+     },
+     {
+      "v": "noise",
+      "label": {
+       "en": "Noisy",
+       "ur": "شور کرتا ہے",
+       "roman": "Shor karta hai"
+      }
+     },
+     {
+      "v": "ice",
+      "label": {
+       "en": "Too much ice",
+       "ur": "زیادہ برف",
+       "roman": "Zyada baraf"
+      }
+     },
+     {
+      "v": "leak",
+      "label": {
+       "en": "Water under fridge",
+       "ur": "نیچے پانی",
+       "roman": "Neeche pani"
+      }
+     }
+    ]
+   },
+   {
+    "id": "motor",
+    "label": {
+     "en": "Water pump / motor",
+     "ur": "پانی کی موٹر",
+     "roman": "Pani ki motor"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_start",
+      "label": {
+       "en": "Will not start",
+       "ur": "چلتی نہیں",
+       "roman": "Chalti nahi"
+      }
+     },
+     {
+      "v": "hums",
+      "label": {
+       "en": "Hums but no water",
+       "ur": "آواز آتی ہے پانی نہیں",
+       "roman": "Awaz aati hai pani nahi"
+      }
+     },
+     {
+      "v": "hot",
+      "label": {
+       "en": "Gets very hot",
+       "ur": "بہت گرم ہوتی ہے",
+       "roman": "Bohat garam hoti hai"
+      }
+     }
+    ]
+   },
+   {
+    "id": "microwave",
+    "label": {
+     "en": "Microwave / oven",
+     "ur": "مائیکرو ویو / اوون",
+     "roman": "Microwave / oven"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_heat",
+      "label": {
+       "en": "Does not heat",
+       "ur": "گرم نہیں کرتا",
+       "roman": "Garam nahi karta"
+      }
+     },
+     {
+      "v": "spark",
+      "label": {
+       "en": "Sparks inside",
+       "ur": "اندر چنگاری",
+       "roman": "Andar chingari"
+      }
+     },
+     {
+      "v": "no_power",
+      "label": {
+       "en": "Does not turn on",
+       "ur": "آن نہیں ہوتا",
+       "roman": "On nahi hota"
+      }
+     }
+    ]
+   },
+   {
+    "id": "small",
+    "label": {
+     "en": "Iron / blender / small appliance",
+     "ur": "استری / بلینڈر / چھوٹی مشین",
+     "roman": "Istri / blender / chhoti machine"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_power",
+      "label": {
+       "en": "Does not turn on",
+       "ur": "آن نہیں ہوتی",
+       "roman": "On nahi hoti"
+      }
+     },
+     {
+      "v": "burning",
+      "label": {
+       "en": "Burning smell",
+       "ur": "جلنے کی بو",
+       "roman": "Jalne ki boo"
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

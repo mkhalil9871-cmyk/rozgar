@@ -4,63 +4,94 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rozgar</title>
-  <meta name="description" content="InDrive for mistris: fair repair prices with Gemma 4">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+  <meta name="description" content="Fair home-repair prices with Gemma 4">
+  <link rel="icon" href="/static/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <header>
-    <div class="brand">🛠️ <b>Rozgar</b> <span class="tag">روزگار</span></div>
-    <div class="roles">
-      <button class="role active" data-role="customer">Customer</button>
-      <button class="role" data-role="mistri">Mistri</button>
+    <div class="brand"><img src="/static/img/logo.png" alt=""><div><b>Rozgar</b><span class="tag" data-t="tagline"></span></div></div>
+    <div class="controls">
+      <div class="seg" id="langSeg">
+        <button data-lang="en">English</button>
+        <button data-lang="ur">اردو</button>
+        <button data-lang="roman">Roman</button>
+      </div>
+      <div class="seg" id="roleSeg">
+        <button data-role="customer" data-t="customer"></button>
+        <button data-role="worker" data-t="worker"></button>
+      </div>
     </div>
   </header>
 
   <main>
-    <!-- CUSTOMER -->
     <section id="customer">
-      <h1>Fix anything at home at a fair price</h1>
-      <p class="muted">Snap a photo. Gemma 4 finds the right worker, explains the problem and sets a fair price, so nobody overcharges and nobody gets underpaid.</p>
+      <div class="hero">
+        <div>
+          <h1 data-t="hero_title"></h1>
+          <p class="muted" data-t="hero_sub"></p>
+        </div>
+        <img src="/static/img/wrench.png" alt="">
+      </div>
 
-      <h2>1. Choose a section <span class="muted small">(or skip, and Gemma will pick one)</span></h2>
-      <div id="tiles" class="tiles"></div>
+      <h2><span class="num">1</span><span data-t="step_section"></span></h2>
+      <div id="sections" class="sections"></div>
 
-      <h2>2. Show the problem</h2>
+      <div id="subBlock" class="hidden">
+        <h2><span class="num">2</span><span data-t="step_sub"></span></h2>
+        <div id="subs" class="chips"></div>
+      </div>
+
+      <h2><span class="num" id="detailsNum">3</span><span data-t="step_details"></span></h2>
+      <p class="muted small" id="notSure" data-t="not_sure"></p>
       <div class="card">
+        <div id="questions"></div>
+        <div id="symptomsBlock" class="hidden">
+          <div class="qlabel" data-t="symptoms"></div>
+          <div id="symptoms" class="chips"></div>
+        </div>
+        <p id="photoHint" class="hint hidden"></p>
         <label class="upload">
-          <input type="file" id="photo" accept="image/*" capture="environment">
-          <span>📷 Take or upload a photo</span>
+          <input type="file" id="photo" accept="image/*">
+          <img src="/static/img/camera.png" alt=""><span id="photoLabel"></span>
         </label>
         <img id="preview" class="preview hidden" alt="">
-        <textarea id="desc" rows="3" placeholder="e.g. Deewar mein crack aa gaya hai khidki ke paas / Socket jal gaya hai"></textarea>
-        <input id="area" placeholder="Area, e.g. Madina Town, Faisalabad">
-        <button id="diagnoseBtn" class="primary">🔍 Diagnose with Gemma 4</button>
+        <div class="qlabel" data-t="explain"></div>
+        <textarea id="desc" rows="3" data-tp="explain_ph"></textarea>
+        <div class="qlabel" data-t="area"></div>
+        <select id="area"></select>
+        <button id="diagnoseBtn" class="primary" data-t="diagnose"></button>
         <div id="progress" class="progress hidden"></div>
         <div id="clarify" class="card warn hidden"></div>
       </div>
 
       <div id="result" class="hidden"></div>
 
-      <h2>My jobs</h2>
-      <div id="myJobs"><p class="muted">No jobs yet.</p></div>
+      <h2 data-t="my_jobs"></h2>
+      <div id="myJobs"></div>
     </section>
 
-    <!-- MISTRI -->
-    <section id="mistri" class="hidden">
-      <h1>Find work near you</h1>
-      <div class="card row">
-        <input id="workerName" placeholder="Your name, e.g. Usman Electrician">
+    <section id="worker" class="hidden">
+      <h1 data-t="w_title"></h1>
+      <div class="card">
+        <div class="qlabel" data-t="sign_in_as"></div>
+        <select id="workerSel"></select>
+        <div id="workerProfile"></div>
       </div>
-      <div id="mTiles" class="tiles small"></div>
+      <h2 data-t="w_jobs"></h2>
       <div id="openJobs"></div>
     </section>
   </main>
 
   <footer>
-    Open source (MIT) · Powered by <b id="modelName">Gemma 4</b> via the Gemini API · <a href="/api/skill" target="_blank">Agent Skill</a>
+    <span data-t="footer"></span> <b id="modelName">Gemma 4</b> <span data-t="via"></span> ·
+    <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Fluent 3D</a> ·
+    <a href="/api/skill" target="_blank" data-t="skill"></a>
   </footer>
 
+  <script src="/static/i18n.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,1652 @@
+{
+ "_note": "SAMPLE worker profiles for the demo. Not real people.",
+ "workers": [
+  {
+   "id": "w01",
+   "name": {
+    "en": "Usman Ali",
+    "ur": "عثمان علی",
+    "roman": "Usman Ali"
+   },
+   "section": "bijli",
+   "area": "Gulberg",
+   "rating": 4.2,
+   "jobs_done": 254,
+   "years": 5,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Fan slow / not working",
+      "ur": "پنکھا آہستہ / بند",
+      "roman": "Pankha aahista / band"
+     },
+     "area": "Peoples Colony",
+     "price": 4200,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Breaker keeps tripping",
+      "ur": "بریکر بار بار گرتا ہے",
+      "roman": "Breaker baar baar girta hai"
+     },
+     "area": "Jinnah Colony",
+     "price": 4500,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "New wiring / fitting",
+      "ur": "نئی وائرنگ / فٹنگ",
+      "roman": "Nayi wiring / fitting"
+     },
+     "area": "Gulberg",
+     "price": 1000,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w02",
+   "name": {
+    "en": "Imran Khan",
+    "ur": "عمران خان",
+    "roman": "Imran Khan"
+   },
+   "section": "bijli",
+   "area": "Batala Colony",
+   "rating": 4.9,
+   "jobs_done": 63,
+   "years": 20,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Breaker keeps tripping",
+      "ur": "بریکر بار بار گرتا ہے",
+      "roman": "Breaker baar baar girta hai"
+     },
+     "area": "Madina Town",
+     "price": 4400,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Burnt switch / socket",
+      "ur": "جلا ہوا سوئچ / ساکٹ",
+      "roman": "Jala hua switch / socket"
+     },
+     "area": "Gulberg",
+     "price": 4800,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Fan slow / not working",
+      "ur": "پنکھا آہستہ / بند",
+      "roman": "Pankha aahista / band"
+     },
+     "area": "Satiana Road",
+     "price": 1100,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w03",
+   "name": {
+    "en": "Shahid Mehmood",
+    "ur": "شاہد محمود",
+    "roman": "Shahid Mehmood"
+   },
+   "section": "bijli",
+   "area": "Gulberg",
+   "rating": 4.5,
+   "jobs_done": 72,
+   "years": 21,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Breaker keeps tripping",
+      "ur": "بریکر بار بار گرتا ہے",
+      "roman": "Breaker baar baar girta hai"
+     },
+     "area": "Peoples Colony",
+     "price": 4400,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Fan slow / not working",
+      "ur": "پنکھا آہستہ / بند",
+      "roman": "Pankha aahista / band"
+     },
+     "area": "D Ground",
+     "price": 1400,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "UPS / inverter / solar",
+      "ur": "یو پی ایس / انورٹر / سولر",
+      "roman": "UPS / inverter / solar"
+     },
+     "area": "Jinnah Colony",
+     "price": 1400,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w04",
+   "name": {
+    "en": "Rashid Iqbal",
+    "ur": "راشد اقبال",
+    "roman": "Rashid Iqbal"
+   },
+   "section": "pani",
+   "area": "Samanabad",
+   "rating": 4.3,
+   "jobs_done": 132,
+   "years": 10,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Leaking tap",
+      "ur": "ٹپکتا نلکا",
+      "roman": "Tapakta nalka"
+     },
+     "area": "Satiana Road",
+     "price": 5700,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Water tank / overflow",
+      "ur": "پانی کی ٹینکی",
+      "roman": "Pani ki tanki"
+     },
+     "area": "Batala Colony",
+     "price": 4500,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Burst / leaking pipe",
+      "ur": "پھٹا / لیک پائپ",
+      "roman": "Phata / leak pipe"
+     },
+     "area": "Jinnah Colony",
+     "price": 2700,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w05",
+   "name": {
+    "en": "Akram Butt",
+    "ur": "اکرم بٹ",
+    "roman": "Akram Butt"
+   },
+   "section": "pani",
+   "area": "Madina Town",
+   "rating": 4.4,
+   "jobs_done": 215,
+   "years": 7,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Leaking tap",
+      "ur": "ٹپکتا نلکا",
+      "roman": "Tapakta nalka"
+     },
+     "area": "Jinnah Colony",
+     "price": 5400,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Water tank / overflow",
+      "ur": "پانی کی ٹینکی",
+      "roman": "Pani ki tanki"
+     },
+     "area": "Samanabad",
+     "price": 4600,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Blocked drain / gutter",
+      "ur": "بند نالی / گٹر",
+      "roman": "Band naali / gutter"
+     },
+     "area": "Peoples Colony",
+     "price": 4000,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w06",
+   "name": {
+    "en": "Naveed Anjum",
+    "ur": "نوید انجم",
+    "roman": "Naveed Anjum"
+   },
+   "section": "pani",
+   "area": "Samanabad",
+   "rating": 4.9,
+   "jobs_done": 282,
+   "years": 5,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Water pump / motor",
+      "ur": "پانی کی موٹر",
+      "roman": "Pani ki motor"
+     },
+     "area": "Jinnah Colony",
+     "price": 2900,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Toilet flush",
+      "ur": "فلش",
+      "roman": "Flush"
+     },
+     "area": "Batala Colony",
+     "price": 4500,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Leaking tap",
+      "ur": "ٹپکتا نلکا",
+      "roman": "Tapakta nalka"
+     },
+     "area": "Peoples Colony",
+     "price": 1300,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w07",
+   "name": {
+    "en": "Ghulam Rasool",
+    "ur": "غلام رسول",
+    "roman": "Ghulam Rasool"
+   },
+   "section": "deewar",
+   "area": "Jinnah Colony",
+   "rating": 4.6,
+   "jobs_done": 292,
+   "years": 4,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Crack in wall",
+      "ur": "دیوار میں دراڑ",
+      "roman": "Deewar mein crack"
+     },
+     "area": "Samanabad",
+     "price": 5300,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Seepage / damp wall",
+      "ur": "سیلن / گیلی دیوار",
+      "roman": "Seelan / geeli deewar"
+     },
+     "area": "Jinnah Colony",
+     "price": 900,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Broken tiles",
+      "ur": "ٹوٹی ٹائلیں",
+      "roman": "Tooti tiles"
+     },
+     "area": "Jinnah Colony",
+     "price": 1800,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w08",
+   "name": {
+    "en": "Bashir Ahmad",
+    "ur": "بشیر احمد",
+    "roman": "Bashir Ahmad"
+   },
+   "section": "deewar",
+   "area": "Peoples Colony",
+   "rating": 4.3,
+   "jobs_done": 110,
+   "years": 16,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Hole / broken corner",
+      "ur": "سوراخ / ٹوٹا کونا",
+      "roman": "Surakh / toota kona"
+     },
+     "area": "Satiana Road",
+     "price": 3300,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Seepage / damp wall",
+      "ur": "سیلن / گیلی دیوار",
+      "roman": "Seelan / geeli deewar"
+     },
+     "area": "Peoples Colony",
+     "price": 1800,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Crack in wall",
+      "ur": "دیوار میں دراڑ",
+      "roman": "Deewar mein crack"
+     },
+     "area": "Satiana Road",
+     "price": 4300,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w09",
+   "name": {
+    "en": "Liaqat Ali",
+    "ur": "لیاقت علی",
+    "roman": "Liaqat Ali"
+   },
+   "section": "deewar",
+   "area": "Jinnah Colony",
+   "rating": 4.3,
+   "jobs_done": 159,
+   "years": 3,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Roof leak",
+      "ur": "چھت ٹپکتی ہے",
+      "roman": "Chhat tapakti hai"
+     },
+     "area": "Jinnah Colony",
+     "price": 5100,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Seepage / damp wall",
+      "ur": "سیلن / گیلی دیوار",
+      "roman": "Seelan / geeli deewar"
+     },
+     "area": "Gulberg",
+     "price": 1700,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Broken tiles",
+      "ur": "ٹوٹی ٹائلیں",
+      "roman": "Tooti tiles"
+     },
+     "area": "D Ground",
+     "price": 1700,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w10",
+   "name": {
+    "en": "Nadeem Akhtar",
+    "ur": "ندیم اختر",
+    "roman": "Nadeem Akhtar"
+   },
+   "section": "lakri",
+   "area": "Satiana Road",
+   "rating": 4.7,
+   "jobs_done": 303,
+   "years": 4,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Furniture repair",
+      "ur": "فرنیچر مرمت",
+      "roman": "Furniture marammat"
+     },
+     "area": "Samanabad",
+     "price": 800,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Cabinet / wardrobe",
+      "ur": "الماری / کیبنٹ",
+      "roman": "Almari / cabinet"
+     },
+     "area": "Satiana Road",
+     "price": 4200,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Door not closing",
+      "ur": "دروازہ بند نہیں ہوتا",
+      "roman": "Darwaza band nahi hota"
+     },
+     "area": "Jinnah Colony",
+     "price": 1600,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w11",
+   "name": {
+    "en": "Sajid Hussain",
+    "ur": "ساجد حسین",
+    "roman": "Sajid Hussain"
+   },
+   "section": "lakri",
+   "area": "D Ground",
+   "rating": 4.2,
+   "jobs_done": 146,
+   "years": 17,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Furniture repair",
+      "ur": "فرنیچر مرمت",
+      "roman": "Furniture marammat"
+     },
+     "area": "Satiana Road",
+     "price": 3300,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Cabinet / wardrobe",
+      "ur": "الماری / کیبنٹ",
+      "roman": "Almari / cabinet"
+     },
+     "area": "Batala Colony",
+     "price": 4800,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Broken lock / handle",
+      "ur": "ٹوٹا تالا / ہینڈل",
+      "roman": "Toota tala / handle"
+     },
+     "area": "Madina Town",
+     "price": 2000,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w12",
+   "name": {
+    "en": "Tariq Javed",
+    "ur": "طارق جاوید",
+    "roman": "Tariq Javed"
+   },
+   "section": "lakri",
+   "area": "Satiana Road",
+   "rating": 4.6,
+   "jobs_done": 116,
+   "years": 11,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Broken lock / handle",
+      "ur": "ٹوٹا تالا / ہینڈل",
+      "roman": "Toota tala / handle"
+     },
+     "area": "Peoples Colony",
+     "price": 800,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Door not closing",
+      "ur": "دروازہ بند نہیں ہوتا",
+      "roman": "Darwaza band nahi hota"
+     },
+     "area": "Peoples Colony",
+     "price": 3100,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Furniture repair",
+      "ur": "فرنیچر مرمت",
+      "roman": "Furniture marammat"
+     },
+     "area": "Peoples Colony",
+     "price": 2100,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w13",
+   "name": {
+    "en": "Asif Masih",
+    "ur": "آصف مسیح",
+    "roman": "Asif Masih"
+   },
+   "section": "rang",
+   "area": "Batala Colony",
+   "rating": 4.2,
+   "jobs_done": 215,
+   "years": 11,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Peeling / damp stains",
+      "ur": "اکھڑا پینٹ / دھبے",
+      "roman": "Ukhra paint / dhabbay"
+     },
+     "area": "Peoples Colony",
+     "price": 3900,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Wood polish",
+      "ur": "لکڑی پالش",
+      "roman": "Lakri polish"
+     },
+     "area": "Batala Colony",
+     "price": 3800,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Paint a room",
+      "ur": "کمرہ پینٹ کرنا",
+      "roman": "Kamra paint karna"
+     },
+     "area": "Peoples Colony",
+     "price": 1700,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w14",
+   "name": {
+    "en": "Zafar Iqbal",
+    "ur": "ظفر اقبال",
+    "roman": "Zafar Iqbal"
+   },
+   "section": "rang",
+   "area": "Gulberg",
+   "rating": 4.4,
+   "jobs_done": 125,
+   "years": 14,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Peeling / damp stains",
+      "ur": "اکھڑا پینٹ / دھبے",
+      "roman": "Ukhra paint / dhabbay"
+     },
+     "area": "Jinnah Colony",
+     "price": 1700,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Paint a room",
+      "ur": "کمرہ پینٹ کرنا",
+      "roman": "Kamra paint karna"
+     },
+     "area": "Samanabad",
+     "price": 4900,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Wood polish",
+      "ur": "لکڑی پالش",
+      "roman": "Lakri polish"
+     },
+     "area": "Samanabad",
+     "price": 4100,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w15",
+   "name": {
+    "en": "Kashif Ali",
+    "ur": "کاشف علی",
+    "roman": "Kashif Ali"
+   },
+   "section": "rang",
+   "area": "Batala Colony",
+   "rating": 4.1,
+   "jobs_done": 54,
+   "years": 11,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Paint a room",
+      "ur": "کمرہ پینٹ کرنا",
+      "roman": "Kamra paint karna"
+     },
+     "area": "Gulberg",
+     "price": 3300,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Peeling / damp stains",
+      "ur": "اکھڑا پینٹ / دھبے",
+      "roman": "Ukhra paint / dhabbay"
+     },
+     "area": "Gulberg",
+     "price": 4100,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Wood polish",
+      "ur": "لکڑی پالش",
+      "roman": "Lakri polish"
+     },
+     "area": "Jinnah Colony",
+     "price": 5400,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w16",
+   "name": {
+    "en": "Faisal Raza",
+    "ur": "فیصل رضا",
+    "roman": "Faisal Raza"
+   },
+   "section": "ac",
+   "area": "Madina Town",
+   "rating": 4.5,
+   "jobs_done": 212,
+   "years": 9,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "AC service / cleaning",
+      "ur": "اے سی سروس",
+      "roman": "AC service"
+     },
+     "area": "Batala Colony",
+     "price": 5900,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "AC install / shifting",
+      "ur": "اے سی لگوانا / شفٹ",
+      "roman": "AC lagwana / shift"
+     },
+     "area": "Jinnah Colony",
+     "price": 1300,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "AC not cooling",
+      "ur": "اے سی ٹھنڈا نہیں کرتا",
+      "roman": "AC thanda nahi karta"
+     },
+     "area": "Peoples Colony",
+     "price": 2200,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w17",
+   "name": {
+    "en": "Waqas Ahmed",
+    "ur": "وقاص احمد",
+    "roman": "Waqas Ahmed"
+   },
+   "section": "ac",
+   "area": "Samanabad",
+   "rating": 4.4,
+   "jobs_done": 365,
+   "years": 13,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "AC service / cleaning",
+      "ur": "اے سی سروس",
+      "roman": "AC service"
+     },
+     "area": "Peoples Colony",
+     "price": 5000,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "AC not cooling",
+      "ur": "اے سی ٹھنڈا نہیں کرتا",
+      "roman": "AC thanda nahi karta"
+     },
+     "area": "Satiana Road",
+     "price": 5800,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "AC install / shifting",
+      "ur": "اے سی لگوانا / شفٹ",
+      "roman": "AC lagwana / shift"
+     },
+     "area": "Batala Colony",
+     "price": 1900,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w18",
+   "name": {
+    "en": "Adnan Saleem",
+    "ur": "عدنان سلیم",
+    "roman": "Adnan Saleem"
+   },
+   "section": "ac",
+   "area": "Madina Town",
+   "rating": 4.8,
+   "jobs_done": 375,
+   "years": 7,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "AC not cooling",
+      "ur": "اے سی ٹھنڈا نہیں کرتا",
+      "roman": "AC thanda nahi karta"
+     },
+     "area": "Peoples Colony",
+     "price": 5400,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "AC service / cleaning",
+      "ur": "اے سی سروس",
+      "roman": "AC service"
+     },
+     "area": "D Ground",
+     "price": 1600,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "AC install / shifting",
+      "ur": "اے سی لگوانا / شفٹ",
+      "roman": "AC lagwana / shift"
+     },
+     "area": "D Ground",
+     "price": 4500,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w19",
+   "name": {
+    "en": "Munir Ahmad",
+    "ur": "منیر احمد",
+    "roman": "Munir Ahmad"
+   },
+   "section": "gas",
+   "area": "Peoples Colony",
+   "rating": 4.8,
+   "jobs_done": 148,
+   "years": 3,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Gas heater / geyser fitting",
+      "ur": "گیس ہیٹر / گیزر فٹنگ",
+      "roman": "Gas heater / geyser fitting"
+     },
+     "area": "D Ground",
+     "price": 900,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Stove / burner problem",
+      "ur": "چولہا / برنر",
+      "roman": "Chulha / burner"
+     },
+     "area": "Peoples Colony",
+     "price": 4100,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Gas smell / leak",
+      "ur": "گیس کی بو / لیک",
+      "roman": "Gas ki boo / leak"
+     },
+     "area": "Satiana Road",
+     "price": 2000,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w20",
+   "name": {
+    "en": "Javed Iqbal",
+    "ur": "جاوید اقبال",
+    "roman": "Javed Iqbal"
+   },
+   "section": "gas",
+   "area": "Jinnah Colony",
+   "rating": 4.6,
+   "jobs_done": 304,
+   "years": 16,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Stove / burner problem",
+      "ur": "چولہا / برنر",
+      "roman": "Chulha / burner"
+     },
+     "area": "Jinnah Colony",
+     "price": 2400,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Gas smell / leak",
+      "ur": "گیس کی بو / لیک",
+      "roman": "Gas ki boo / leak"
+     },
+     "area": "D Ground",
+     "price": 1100,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Gas heater / geyser fitting",
+      "ur": "گیس ہیٹر / گیزر فٹنگ",
+      "roman": "Gas heater / geyser fitting"
+     },
+     "area": "Batala Colony",
+     "price": 5000,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w21",
+   "name": {
+    "en": "Arshad Mahmood",
+    "ur": "ارشد محمود",
+    "roman": "Arshad Mahmood"
+   },
+   "section": "gas",
+   "area": "Peoples Colony",
+   "rating": 4.5,
+   "jobs_done": 411,
+   "years": 6,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Gas heater / geyser fitting",
+      "ur": "گیس ہیٹر / گیزر فٹنگ",
+      "roman": "Gas heater / geyser fitting"
+     },
+     "area": "Batala Colony",
+     "price": 5700,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Gas smell / leak",
+      "ur": "گیس کی بو / لیک",
+      "roman": "Gas ki boo / leak"
+     },
+     "area": "Madina Town",
+     "price": 5700,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Stove / burner problem",
+      "ur": "چولہا / برنر",
+      "roman": "Chulha / burner"
+     },
+     "area": "D Ground",
+     "price": 1700,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w22",
+   "name": {
+    "en": "Hamza Tariq",
+    "ur": "حمزہ طارق",
+    "roman": "Hamza Tariq"
+   },
+   "section": "computer",
+   "area": "D Ground",
+   "rating": 4.2,
+   "jobs_done": 271,
+   "years": 20,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "MS Office / software install",
+      "ur": "ایم ایس آفس / سافٹ ویئر",
+      "roman": "MS Office / software"
+     },
+     "area": "Peoples Colony",
+     "price": 4300,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Install / reinstall Windows",
+      "ur": "ونڈوز انسٹال کرنا",
+      "roman": "Windows install karna"
+     },
+     "area": "Gulberg",
+     "price": 2000,
+     "rating": 5,
+     "review": {
+      "en": "On time and neat work",
+      "ur": "وقت پر آئے، صاف کام",
+      "roman": "Waqt par aaye, saaf kaam"
+     }
+    },
+    {
+     "title": {
+      "en": "Printer not working",
+      "ur": "پرنٹر نہیں چلتا",
+      "roman": "Printer nahi chalta"
+     },
+     "area": "Madina Town",
+     "price": 5700,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w23",
+   "name": {
+    "en": "Ayesha Noor",
+    "ur": "عائشہ نور",
+    "roman": "Ayesha Noor"
+   },
+   "section": "computer",
+   "area": "Satiana Road",
+   "rating": 4.5,
+   "jobs_done": 172,
+   "years": 20,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Install / reinstall Windows",
+      "ur": "ونڈوز انسٹال کرنا",
+      "roman": "Windows install karna"
+     },
+     "area": "Gulberg",
+     "price": 5200,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Recover deleted data",
+      "ur": "ڈیلیٹ ڈیٹا واپس لانا",
+      "roman": "Delete data wapas lana"
+     },
+     "area": "Batala Colony",
+     "price": 4000,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Wi-Fi / internet setup",
+      "ur": "وائی فائی / انٹرنیٹ",
+      "roman": "WiFi / internet"
+     },
+     "area": "Gulberg",
+     "price": 5200,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w24",
+   "name": {
+    "en": "Bilal Aslam",
+    "ur": "بلال اسلم",
+    "roman": "Bilal Aslam"
+   },
+   "section": "computer",
+   "area": "D Ground",
+   "rating": 4.3,
+   "jobs_done": 195,
+   "years": 6,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Slow PC / virus",
+      "ur": "سست کمپیوٹر / وائرس",
+      "roman": "Slow computer / virus"
+     },
+     "area": "Peoples Colony",
+     "price": 3300,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Wi-Fi / internet setup",
+      "ur": "وائی فائی / انٹرنیٹ",
+      "roman": "WiFi / internet"
+     },
+     "area": "Jinnah Colony",
+     "price": 1200,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Recover deleted data",
+      "ur": "ڈیلیٹ ڈیٹا واپس لانا",
+      "roman": "Delete data wapas lana"
+     },
+     "area": "Satiana Road",
+     "price": 1200,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w25",
+   "name": {
+    "en": "Shakeel Ahmad",
+    "ur": "شکیل احمد",
+    "roman": "Shakeel Ahmad"
+   },
+   "section": "appliance",
+   "area": "Gulberg",
+   "rating": 4.8,
+   "jobs_done": 122,
+   "years": 16,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Fridge / freezer",
+      "ur": "فریج / فریزر",
+      "roman": "Fridge / freezer"
+     },
+     "area": "D Ground",
+     "price": 3700,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Water pump / motor",
+      "ur": "پانی کی موٹر",
+      "roman": "Pani ki motor"
+     },
+     "area": "Peoples Colony",
+     "price": 3300,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Washing machine",
+      "ur": "واشنگ مشین",
+      "roman": "Washing machine"
+     },
+     "area": "D Ground",
+     "price": 5000,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w26",
+   "name": {
+    "en": "Rizwan Haider",
+    "ur": "رضوان حیدر",
+    "roman": "Rizwan Haider"
+   },
+   "section": "appliance",
+   "area": "Batala Colony",
+   "rating": 4.5,
+   "jobs_done": 265,
+   "years": 3,
+   "verified": true,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Iron / blender / small appliance",
+      "ur": "استری / بلینڈر / چھوٹی مشین",
+      "roman": "Istri / blender / chhoti machine"
+     },
+     "area": "Gulberg",
+     "price": 3000,
+     "rating": 5,
+     "review": {
+      "en": "Explained the problem clearly",
+      "ur": "مسئلہ اچھی طرح سمجھایا",
+      "roman": "Masla achi tarah samjhaya"
+     }
+    },
+    {
+     "title": {
+      "en": "Microwave / oven",
+      "ur": "مائیکرو ویو / اوون",
+      "roman": "Microwave / oven"
+     },
+     "area": "Peoples Colony",
+     "price": 5400,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Fridge / freezer",
+      "ur": "فریج / فریزر",
+      "roman": "Fridge / freezer"
+     },
+     "area": "Madina Town",
+     "price": 2900,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w27",
+   "name": {
+    "en": "Mudassar Nazir",
+    "ur": "مدثر نذیر",
+    "roman": "Mudassar Nazir"
+   },
+   "section": "appliance",
+   "area": "Gulberg",
+   "rating": 4.8,
+   "jobs_done": 132,
+   "years": 11,
+   "verified": false,
+   "past_projects": [
+    {
+     "title": {
+      "en": "Microwave / oven",
+      "ur": "مائیکرو ویو / اوون",
+      "roman": "Microwave / oven"
+     },
+     "area": "Peoples Colony",
+     "price": 1500,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    },
+    {
+     "title": {
+      "en": "Water pump / motor",
+      "ur": "پانی کی موٹر",
+      "roman": "Pani ki motor"
+     },
+     "area": "Peoples Colony",
+     "price": 1300,
+     "rating": 5,
+     "review": {
+      "en": "Fixed it in one visit",
+      "ur": "ایک ہی بار میں ٹھیک کر دیا",
+      "roman": "Aik hi baar mein theek kar diya"
+     }
+    },
+    {
+     "title": {
+      "en": "Iron / blender / small appliance",
+      "ur": "استری / بلینڈر / چھوٹی مشین",
+      "roman": "Istri / blender / chhoti machine"
+     },
+     "area": "Samanabad",
+     "price": 1000,
+     "rating": 4,
+     "review": {
+      "en": "Good work, fair price",
+      "ur": "اچھا کام، مناسب قیمت",
+      "roman": "Acha kaam, munasib qeemat"
+     }
+    }
+   ]
+  }
+ ]
+}
