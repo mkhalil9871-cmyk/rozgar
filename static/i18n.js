@@ -1,6 +1,8 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    dark_mode: "Dark mode",
+    light_mode: "Light mode",
     chat_with: "Chat with",
     chat_empty: "No messages yet. Ask about timing, materials or the address.",
     chat_ph: "Type a message…",
@@ -142,6 +144,8 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    dark_mode: "ڈارک موڈ",
+    light_mode: "لائٹ موڈ",
     chat_with: "بات کریں:",
     chat_empty: "ابھی کوئی پیغام نہیں۔ وقت، سامان یا پتے کے بارے میں پوچھیں۔",
     chat_ph: "پیغام لکھیں…",
@@ -283,6 +287,8 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    dark_mode: "Dark mode",
+    light_mode: "Light mode",
     chat_with: "Baat karein:",
     chat_empty: "Abhi koi paigham nahi. Waqt, saamaan ya pate ke baare mein poochein.",
     chat_ph: "Paigham likhen…",

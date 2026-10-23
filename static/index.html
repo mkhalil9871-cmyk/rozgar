@@ -8,12 +8,14 @@
   <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=24">
+  <script>(function(){try{var s=localStorage.getItem("rozgar.theme");if(s)document.documentElement.dataset.theme=JSON.parse(s)}catch(e){}})()</script>
+  <link rel="stylesheet" href="/static/style.css?v=26">
 </head>
 <body>
   <header>
     <div class="brand"><svg class="logo-svg" viewBox="0 0 64 64" role="img" aria-label="Rozgar"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="bg1"/><stop offset="1" class="bg2"/></linearGradient><mask id="jaw1"><rect x="-40" y="-40" width="80" height="80" fill="#fff"/><rect x="-3.5" y="-28" width="7" height="9" rx="1" fill="#000"/></mask></defs><rect width="64" height="64" rx="16" fill="url(#lg1)"/><g transform="translate(32 32) rotate(45)" fill="#fff"><rect x="-3" y="-14" width="6" height="34" rx="3"/><circle cx="0" cy="-18" r="8" mask="url(#jaw1)"/></g><g transform="translate(32 32) rotate(-45)"><rect x="-2.75" y="-12" width="5.5" height="32" rx="2.75" fill="#d7f2e6"/><rect x="-11" y="-22" width="22" height="10" rx="3" fill="#d7f2e6"/><rect x="-11" y="-22" width="6" height="10" rx="2" fill="#b4e3cf"/></g></svg><div><b>Rozgar</b><span class="tag" data-t="tagline"></span></div></div>
     <div class="controls">
+      <button class="theme-btn" id="themeBtn" aria-label="Dark mode"><span class="mi" id="themeIc"></span></button>
       <div class="seg" id="langSeg">
         <button data-lang="en">English</button>
         <button data-lang="ur">اردو</button>
@@ -37,12 +39,12 @@
 
       <div id="rolePick" class="role-cards">
         <button class="role-card" data-pick="customer">
-          <img class="role-photo" src="/static/photos/customer.jpg?v=24" alt="">
+          <img class="role-photo" src="/static/photos/customer.jpg?v=26" alt="">
           <b data-t="as_customer"></b>
           <span class="muted small" data-t="as_customer_sub"></span>
         </button>
         <button class="role-card" data-pick="worker">
-          <img class="role-photo" src="/static/photos/worker.jpg?v=24" alt="">
+          <img class="role-photo" src="/static/photos/worker.jpg?v=26" alt="">
           <b data-t="as_worker"></b>
           <span class="muted small" data-t="as_worker_sub"></span>
         </button>
@@ -98,7 +100,7 @@
           <h1 data-t="hero_title"></h1>
           <p class="muted" data-t="hero_sub"></p>
         </div>
-        <img class="hero-photo" src="/static/photos/hero.jpg?v=24" alt="">
+        <img class="hero-photo" src="/static/photos/hero.jpg?v=26" alt="">
       </div>
 
       <h2><span class="num">1</span><span data-t="step_section"></span></h2>
@@ -155,7 +157,7 @@
     <a href="/api/skill" target="_blank" data-t="skill"></a>
   </footer>
 
-  <script src="/static/i18n.js?v=24"></script>
-  <script src="/static/app.js?v=24"></script>
+  <script src="/static/i18n.js?v=26"></script>
+  <script src="/static/app.js?v=26"></script>
 </body>
 </html>

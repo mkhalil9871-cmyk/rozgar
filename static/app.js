@@ -607,6 +607,22 @@ async function sendChat(key) {
 document.addEventListener("click", (e) => { const b = e.target.closest("[data-chat-send]"); if (b) sendChat(b.dataset.chatSend); });
 document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.dataset?.chat) sendChat(e.target.dataset.chat); });
 
+// ---------- light / dark mode ----------
+const isDark = () => document.documentElement.dataset.theme
+  ? document.documentElement.dataset.theme === "dark"
+  : matchMedia("(prefers-color-scheme: dark)").matches;
+function paintThemeBtn() {
+  $("#themeIc").style.setProperty("--i", `url(/static/img/${isDark() ? "sun" : "moon"}.svg)`);
+  $("#themeBtn").title = t(isDark() ? "light_mode" : "dark_mode");
+}
+$("#themeBtn").addEventListener("click", () => {
+  const next = isDark() ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  store.set("rozgar.theme", next);
+  paintThemeBtn();
+});
+paintThemeBtn();
+
 // ---------- boot ----------
 function refresh() {
   if (!session) return;
