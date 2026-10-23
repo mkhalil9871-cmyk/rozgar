@@ -78,6 +78,7 @@ class WorkerIn(BaseModel):
     trade: str
     area: str
     years: int = 1
+    cnic: str = ""
 
 
 @app.post("/api/workers")
@@ -99,7 +100,7 @@ def join_worker(body: WorkerIn):
         "new": True,
         "past_projects": [],
     }
-    WORKERS.append(new)  # in memory, like jobs; the phone number is not stored
+    WORKERS.append(new)  # in memory, like jobs; phone and CNIC are only format-checked, never stored
     return new
 
 
@@ -144,6 +145,7 @@ class JobIn(BaseModel):
     area: str = ""
     invited: list[str] = []
     customer: str = ""
+    booking: dict = {}
 
 
 @app.post("/api/jobs")
@@ -175,6 +177,7 @@ def create_job(body: JobIn):
         "area": body.area,
         "invited": body.invited,
         "customer": body.customer[:60],
+        "booking": {k: str(v)[:120] for k, v in body.booking.items()},
         "trace": d.get("trace", []),
     })
 

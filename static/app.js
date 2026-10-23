@@ -22,6 +22,17 @@ const tradeInfo = (k) => TRADES[k] || SECTIONS[k] || {};
 const sel = { section: "", sub: "", answers: {}, symptoms: [] };
 let lastDiagnosis = null;
 let invited = new Set();
+const booking = { address: "", landmark: "", day: "today", slot: "morning", payment: "cash" };
+const DAYS = ["today", "tomorrow", "day_after"], SLOTS = ["morning", "afternoon", "evening"], PAYS = ["cash", "jazzcash", "easypaisa"];
+const chipRow = (key, opts) => `<div class="chips">${opts.map((o) => `<button class="chip ${booking[key] === o ? "active" : ""}" data-bk="${key}" data-v="${o}">${esc(t(o))}</button>`).join("")}</div>`;
+function bookingHTML() {
+  return `<h3>${icon("pin")}${esc(t("booking"))}</h3>
+    <div class="qlabel">${esc(t("address"))}</div><input id="bkAddress" value="${esc(booking.address)}" placeholder="${esc(t("address_ph"))}">
+    <div class="qlabel">${esc(t("landmark"))}</div><input id="bkLandmark" value="${esc(booking.landmark)}" placeholder="${esc(t("landmark_ph"))}">
+    <div class="qlabel">${esc(t("day"))}</div>${chipRow("day", DAYS)}
+    <div class="qlabel">${esc(t("slot"))}</div>${chipRow("slot", SLOTS)}
+    <div class="qlabel">${esc(t("payment"))}</div>${chipRow("payment", PAYS)}`;
+}
 let myJobIds = store.get("rozgar.myJobs", []);
 let lastMyHTML = "", lastOpenHTML = "", typing = false;
 
@@ -73,6 +84,14 @@ document.querySelectorAll("#langSeg button").forEach((b) => b.addEventListener("
   applyLang();
 }));
 // ---------- login ----------
+const validCnic = (c) => /^\d{5}-?\d{7}-?\d$/.test(c.trim());
+const DEMO_OTP = "1234";
+document.querySelectorAll("[data-otp]").forEach((b) => b.addEventListener("click", () => {
+  const k = b.dataset.otp;
+  if (!validPhone($(`#${k}Phone`).value)) return alert(t("bad_phone"));
+  $(`#${k}OtpBox`).classList.remove("hidden");
+  $(`#${k}Otp`).focus();
+}));
 const validPhone = (p) => /^(\+92|0)?3\d{2}[\s-]?\d{7}$/.test(p.trim());
 
 function showScreen() {
@@ -130,6 +149,7 @@ $("#cLogin").addEventListener("click", () => {
   const name = $("#cName").value.trim();
   if (!name) return alert(t("need_name"));
   if (!validPhone($("#cPhone").value)) return alert(t("bad_phone"));
+  if ($("#cOtp").value !== DEMO_OTP) { $("#cOtpBox").classList.remove("hidden"); return alert(t("wrong_otp")); }
   startSession({ role: "customer", name, area: $("#cArea").value });
 });
 $("#wLogin").addEventListener("click", () => {
@@ -141,6 +161,8 @@ $("#wJoinBtn").addEventListener("click", async () => {
   const name = $("#jName").value.trim();
   if (!name) return alert(t("need_name"));
   if (!validPhone($("#jPhone").value)) return alert(t("bad_phone"));
+  if ($("#jOtp").value !== DEMO_OTP) { $("#jOtpBox").classList.remove("hidden"); return alert(t("wrong_otp")); }
+  if (!validCnic($("#jCnic").value)) return alert(t("bad_cnic"));
   try {
     const w = await postJSON("/api/workers", { name, phone: $("#jPhone").value, trade: $("#jTrade").value, area: $("#jArea").value, years: +$("#jYears").value || 0 });
     WORKERS.push(w);
@@ -157,7 +179,7 @@ $("#logoutBtn").addEventListener("click", () => {
 // ---------- step 1: sections ----------
 function renderSections() {
   $("#sections").innerHTML = Object.entries(SECTIONS).map(([id, s]) =>
-    `<button class="sec ${sel.section === id ? "active" : ""}" data-s="${id}">${icon(s.icon, "sec-ic")}<span class="n">${esc(L(s.name))}</span><span class="w">${esc(L(s.worker))}</span></button>`
+    `<button class="sec ${sel.section === id ? "active" : ""}" data-s="${id}"><img class="sec-photo" src="/static/photos/${id}.jpg" alt="" loading="lazy"><span class="sec-body"><span class="n">${esc(L(s.name))}</span><span class="w">${esc(L(s.worker))}</span></span></button>`
   ).join("");
   $("#sections").querySelectorAll(".sec").forEach((b) => b.addEventListener("click", () => {
     const id = b.dataset.s;
@@ -342,6 +364,7 @@ async function renderResult(d) {
       <div id="offerChk"></div>
       <p class="note">${esc(t("price_note"))}</p>
 
+      ${bookingHTML()}
       <h3>${esc(t("workers_near"))} <span class="small muted">(${esc(t("sample_note"))})</span></h3>
       <div id="workerList">${workers.map((w) => workerCard(w, { inviteBtn: true })).join("")}</div>
 
@@ -355,6 +378,12 @@ async function renderResult(d) {
   };
   $("#offer").addEventListener("input", upd);
   upd();
+  $("#bkAddress").addEventListener("input", (e) => (booking.address = e.target.value));
+  $("#bkLandmark").addEventListener("input", (e) => (booking.landmark = e.target.value));
+  $("#result").querySelectorAll("[data-bk]").forEach((b) => b.addEventListener("click", () => {
+    booking[b.dataset.bk] = b.dataset.v;
+    b.parentElement.querySelectorAll(".chip").forEach((x) => x.classList.toggle("active", x === b));
+  }));
   $("#workerList").querySelectorAll("[data-invite]").forEach((b) => b.addEventListener("click", () => {
     const id = b.dataset.invite;
     invited.has(id) ? invited.delete(id) : invited.add(id);
@@ -366,9 +395,10 @@ async function renderResult(d) {
 async function postJob() {
   const offer = +$("#offer").value;
   if (!offer) { alert(t("enter_price")); $("#offer").focus(); return; }
+  if (!booking.address.trim()) { alert(t("need_address")); $("#bkAddress").focus(); return; }
   if (lastDiagnosis.safety.level === "danger" && !confirm(t("confirm_danger"))) return;
   try {
-    const job = await postJSON("/api/jobs", { diagnosis: lastDiagnosis, offer, area: $("#area").value, invited: [...invited], customer: session?.name || "" });
+    const job = await postJSON("/api/jobs", { diagnosis: lastDiagnosis, offer, area: $("#area").value, invited: [...invited], customer: session?.name || "", booking: { ...booking } });
     myJobIds.unshift(job.id);
     store.set("rozgar.myJobs", myJobIds);
     $("#result").innerHTML = `<div class="card ok row-ic">${icon("check", "ic-lg")}<b>${esc(t("posted"))}</b></div>`;
@@ -395,6 +425,7 @@ function jobHead(j) {
   return `<div class="row-ic">${j.photo ? `<img class="thumb" src="${imgSrc(j.photo)}">` : icon(s.icon, "thumb ic-box")}<div class="grow">
     <span class="badge">${esc(L(s.worker))}</span> <span class="small status ${j.status}">${esc(statusText(j))}</span>
     <h3>${esc(j.diagnosis)}</h3>
+    ${j.booking ? `<div class="small muted">${icon("pin")}${esc(j.booking.address)}${j.booking.landmark ? ", " + esc(j.booking.landmark) : ""} · ${esc(t(j.booking.day))}, ${esc(t(j.booking.slot))} · ${esc(t(j.booking.payment))}</div>` : ""}
     <div class="small muted">${icon("pin")}${esc(j.area || "Faisalabad")} · ${esc(t("your_offer"))} <b>${rs(j.offer)}</b> · ${esc(t("estimate"))} ${rs(j.price.fair_min)} – ${rs(j.price.fair_max)}</div></div></div>`;
 }
 

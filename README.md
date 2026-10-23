@@ -17,7 +17,11 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
 
 ## How it works
 
-1. **Log in as a customer or a worker.** Customers enter their name, mobile number and area. Workers sign in to their profile (the demo PIN is 1234) or join as a new worker with their trade, area and experience. This is a demo login with no passwords: the phone number is only checked for format and is not stored.
+1. **Log in as a customer or a worker**, as on Urban Company or TaskRabbit:
+   - **Customers** give their name, mobile number with a verification code, and area.
+   - **Workers** sign in to their profile (demo PIN 1234), or join with name, mobile and verification code, CNIC, trade, area and experience.
+
+   This is a demo login: no SMS is sent (the demo code is 1234), and the phone and CNIC numbers are only checked for format, never stored.
 2. **Choose your language.** The whole app switches between English, اردو (right-to-left) and Roman Urdu, and Gemma's answers come back in that language too.
 3. **Pick what you need.** There are 7 sections, each with its own problem types:
    - **Electrical & Appliances** → electrician, AC technician or appliance technician, depending on the problem. Switches, wiring, fans, UPS/solar, ACs, washing machines, fridges and water motors are all in one place.
@@ -29,10 +33,11 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
 6. **Gemma 4 diagnoses the problem** and writes a job card for the worker. It works from a photo, from symptoms only, or from text.
 7. **Get an estimated cost.** It's computed from open, editable rates, and each rupee is explained.
 8. **Dangerous jobs are flagged first.** A gas smell, sparking or a wall about to collapse shows SNGPL 1199, FESCO 118 or Rescue 1122.
-9. **Type your own price.** The app reminds you to enter a justifiable amount and tells you live whether it's reasonable, too low (unfair to the worker), or higher than the estimate.
-10. **See workers near you.** The list is filtered by your area and shows each worker's rating, jobs done, years of experience and past projects. Invite specific workers or post to everyone nearby.
-11. **Workers send offers**, and each offer is checked the same way.
-12. **The worker uploads an "after" photo.** Gemma compares it with the "before" photo and marks the job verified. The verified job is added to that worker's past projects.
+9. **Booking details.** Give the house address and a nearby landmark, the preferred day and time slot, and the payment method (cash after work, JazzCash or Easypaisa).
+10. **Type your own price.** The app reminds you to enter a justifiable amount and tells you live whether it's reasonable, too low (unfair to the worker), or higher than the estimate.
+11. **See workers near you.** The list is filtered by your area and shows each worker's rating, jobs done, years of experience and past projects. Invite specific workers or post to everyone nearby.
+12. **Workers send offers**, and each offer is checked the same way.
+13. **The worker uploads an "after" photo.** Gemma compares it with the "before" photo and marks the job verified. The verified job is added to that worker's past projects.
 
 ## Multi-agent orchestration
 
@@ -143,7 +148,7 @@ Two things to know about the free plan:
 
 The frontend is plain HTML, CSS and JavaScript with no frameworks.
 
-Icons are from [Lucide](https://lucide.dev) (ISC). Fonts are [Inter](https://fonts.google.com/specimen/Inter) and [Noto Nastaliq Urdu](https://fonts.google.com/noto/specimen/Noto+Nastaliq+Urdu) (SIL OFL).
+Icons are from [Lucide](https://lucide.dev) (ISC). Photos in `static/photos/` are from [Unsplash](https://unsplash.com) under the [Unsplash License](https://unsplash.com/license) (free to use). Fonts are [Inter](https://fonts.google.com/specimen/Inter) and [Noto Nastaliq Urdu](https://fonts.google.com/noto/specimen/Noto+Nastaliq+Urdu) (SIL OFL).
 
 ## What's next
 

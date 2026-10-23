@@ -207,3 +207,19 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .ic-box { padding: 0; background: var(--c); }
 .brand .tile { margin-inline-end: 2px; }
 .login-hero .tile, .role-card .tile, .hero .tile { margin: 0 auto 8px; }
+
+/* photo cards */
+.sec { padding: 0; overflow: hidden; align-items: stretch; gap: 0; }
+.sec-photo { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
+.sec-body { display: flex; flex-direction: column; padding: 10px 10px 12px; }
+.sec.active { box-shadow: 0 0 0 3px var(--brand); }
+.role-card { padding: 0; overflow: hidden; gap: 4px; }
+.role-card b { margin-top: 12px; }
+.role-card .muted { padding: 0 16px 20px; }
+.role-photo { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.hero-photo { width: 220px; height: 150px; object-fit: cover; border-radius: 16px; flex: none; }
+.row.nowrap { flex-wrap: nowrap; }
+.row.nowrap input { flex: 1; }
+@media (max-width: 520px) { .hero-photo { display: none; } .sections { grid-template-columns: repeat(2, 1fr); } }
+.role-card img.role-photo { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.hero img.hero-photo { width: 220px; height: 150px; }
