@@ -113,7 +113,7 @@ Two things to know about the free plan:
 - **It sleeps after about 15 minutes idle**, so the first visit takes around 30–50 seconds to wake it.
 - **Jobs live in memory** and reset when the service restarts. That's fine for a prototype; a real launch would use a database.
 
-**Why not Vercel?** Vercel runs Python as serverless functions that don't share memory, so live bidding between customer and mistri would need an external database. Render runs one always-on process, which this app needs.
+**Why not Vercel?** Vercel runs Python as serverless functions that don't share memory, so live bidding between customer and worker would need an external database. Render runs one always-on process, which this app needs.
 
 ## API
 
@@ -125,7 +125,7 @@ Two things to know about the free plan:
 | GET | `/api/workers?section=&area=` | sample workers, nearest area first, then by rating |
 | POST | `/api/diagnose` | multipart `photo`, `description`, `section`, `subcategory`, `answers`, `symptoms`, `lang` → diagnosis, estimate, safety, trace |
 | POST | `/api/jobs` | post a job with the customer's offer |
-| GET | `/api/jobs?section=` | list jobs for mistris |
+| GET | `/api/jobs?section=` | list jobs for workers |
 | POST | `/api/jobs/{id}/bids` | worker offer (`worker_id`, `amount`), checked against the estimate |
 | POST | `/api/jobs/{id}/accept` | customer accepts a bid |
 | POST | `/api/jobs/{id}/verify` | after photo → Gemma Verifier |
