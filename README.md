@@ -1,32 +1,43 @@
-# 🛠️ Rozgar (روزگار): InDrive for mistris
+# Rozgar (روزگار): fair prices for home repairs and services
 
-**Rozgar helps Pakistani households and mistris agree on a fair price for home repairs. Gemma 4 diagnoses the problem from a photo, routes it to the right worker, sets a fair price, checks every bid, and verifies the finished job.**
+**Rozgar helps Pakistani households and skilled workers agree on a fair price for home jobs, in English, Urdu or Roman Urdu. Gemma 4 understands the problem from a photo, guided questions or symptoms, routes it to the right worker, estimates the cost, checks every offer, and verifies the finished work.**
 
 Built in one afternoon at Hacktoberfest Hack Day Faisalabad 2026 for the *Best Open-Source AI Project* and *Best Use of Gemma 4* challenges.
 
 ## The problem
 
-Every week, millions of households in Pakistan call a plumber, electrician or raj mistri, and both sides lose:
+Every week, millions of households in Pakistan call a plumber, electrician, mason or technician, and both sides lose:
 
 - **Customers get overcharged.** "Bara kaam hai, 4000 lagenge" for a Rs 300 tap washer.
-- **Honest workers get underpaid.** Haggling pushes good mistris below a fair wage.
+- **Honest workers get underpaid.** Haggling pushes good workers below a fair wage.
+- **Many people can't describe the problem.** They don't know who to call, and closed machines like a washing machine or a water pump can't be photographed.
 - **Nobody can prove the job was done** before the money changes hands.
 
-InDrive fixed this for rides by letting the customer offer a fare. Rozgar does the same for home repairs, with **Gemma 4 as a neutral judge** between both sides.
+Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language each person is comfortable with.
 
 ## How it works
 
-1. **Pick a section, or just snap a photo.** ⚡ Bijli (anything electrical) goes to an electrician, 🧱 Deewar/Chhat (a broken or cracked wall, seepage, a roof leak) goes to a raj mistri. There are also 🚿 Pani, 🪵 Lakri, 🎨 Rang, ❄️ AC/Fridge and 🔥 Gas.
-2. **Gemma 4 diagnoses the problem** and writes a job card in Urdu for the worker.
-3. **A fair price range** is computed from open, editable rates. Each rupee is explained.
-4. **Dangerous jobs are flagged first.** A gas smell, sparking or a collapsing wall shows SNGPL 1199, FESCO 118 or Rescue 1122.
-5. **The customer makes an offer and mistris bid.** Every bid is checked: *above fair price*, *unfair to worker*, or *fair*.
-6. **The mistri uploads an "after" photo.** Gemma compares it with the "before" photo and marks the job ✅ verified before payment.
+1. **Choose your language.** The whole app switches between English, اردو (right-to-left) and Roman Urdu, and Gemma's answers come back in that language too.
+2. **Pick what you need.** There are 9 sections, each with its own problem types:
+   - **Electrical** → electrician. Anything with switches, wiring or breakers.
+   - **Walls & roof** → mason. A broken or cracked wall, seepage, a roof leak.
+   - **Plumbing, Carpentry, Painting, AC, Gas.**
+   - **Computer & IT** → a technician for Windows installs, slow PCs, printers or Wi-Fi, for people who aren't technical.
+   - **Home appliances** → a washing machine, fridge or water pump technician.
+3. **Answer a few guided questions.** For example, a wall crack asks for its length (<30 cm / 30 cm–1 m / >1 m), width (hairline / coin / finger) and depth (plaster / bricks / through the wall). These answers scale the estimate.
+4. **Machines you can't photograph** get a symptoms checklist ("doesn't spin", "hums but no water"). You can also add a photo of the model sticker.
+5. **Gemma 4 diagnoses the problem** and writes a job card for the worker. It works from a photo, from symptoms only, or from text.
+6. **Get an estimated cost.** It's computed from open, editable rates, and each rupee is explained.
+7. **Dangerous jobs are flagged first.** A gas smell, sparking or a wall about to collapse shows SNGPL 1199, FESCO 118 or Rescue 1122.
+8. **Type your own price.** The app reminds you to enter a justifiable amount and tells you live whether it's reasonable, too low (unfair to the worker), or higher than the estimate.
+9. **See workers near you.** The list is filtered by your area and shows each worker's rating, jobs done, years of experience and past projects. Invite specific workers or post to everyone nearby.
+10. **Workers send offers**, and each offer is checked the same way.
+11. **The worker uploads an "after" photo.** Gemma compares it with the "before" photo and marks the job verified. The verified job is added to that worker's past projects.
 
 ## Multi-agent orchestration
 
 ```
- photo + text (Urdu / Roman Urdu / English)
+ photo / guided answers / symptoms / text   (output language: English, Urdu or Roman Urdu)
         │
         ▼
  ┌──────────────┐  section, summary, confidence  (asks a clarifying question if unsure)
@@ -35,13 +46,13 @@ InDrive fixed this for rides by letting the customer offer a fare. Rozgar does t
  └──────────────┘                              ▼
                                ┌─────────────────────────────┐
                                │ Section specialist agent    │  loads skills/…/sections/<id>.md
-                               │ Gemma 4 (electrician, mason…)│  → diagnosis, materials, hours,
+                               │ Gemma 4 (9 trade experts)   │  → diagnosis, materials, hours,
                                └─────────────────────────────┘    safety, Urdu job card
                                               │
                     ┌─────────────────────────┼──────────────────────────┐
                     ▼                         ▼                          ▼
           Pricing tool (Python)      Safety guard (Python)       Bid check (Python)
-          rates.json → fair range    hard rules + helplines      every offer and bid
+          rates.json × size answers  hard rules + helplines      customer price and offers
                                               │
                                               ▼
                                ┌─────────────────────────────┐
@@ -75,6 +86,8 @@ Only Gemma 4 models are used. No closed models.
 [skills/rozgar-repair-estimator/SKILL.md](skills/rozgar-repair-estimator/SKILL.md) follows the [Agent Skills open standard](https://agentskills.io). It packages the whole method (route → diagnose → price → safety → bid check → verify) together with:
 
 - [rates.json](skills/rozgar-repair-estimator/rates.json): labour rates, visit fees and material prices (Faisalabad 2026 estimates; edit them for your city)
+- [catalog.json](skills/rozgar-repair-estimator/catalog.json): 41 problem types across 9 sections, each with guided questions and symptoms, all in 3 languages
+- [workers.json](skills/rozgar-repair-estimator/workers.json): **sample** worker profiles for the demo. These are not real people.
 - [sections/](skills/rozgar-repair-estimator/sections/): one guide per trade, covering common faults, materials and safety rules
 
 The app loads these same files at startup, so the product and the skill share one source of truth. Any agent that supports skills, such as Claude Code, can use it on its own: copy the folder into its skills directory.
@@ -87,7 +100,7 @@ cp .env.example .env        # then paste your Gemini API key
 python -m uvicorn app.main:app --port 8000
 ```
 
-Open http://localhost:8000. To demo both sides, open it in two tabs: switch one to **Customer** and the other to **Mistri**. On Windows you can double-click `run.bat` instead.
+Open http://localhost:8000. To demo both sides, open it in two tabs: switch one to **Customer** and the other to **Worker**, then sign in as a sample worker. On Windows you can double-click `run.bat` instead.
 
 ## Deploy for free (Render)
 
@@ -108,10 +121,12 @@ Two things to know about the free plan:
 |---|---|---|
 | GET | `/api/health` | model in use and number of keys loaded (never the keys themselves) |
 | GET | `/api/sections` | trade sections from the skill |
-| POST | `/api/diagnose` | multipart `photo`, `description`, optional `section` and `answer` → diagnosis, price, safety, trace |
+| GET | `/api/catalog` | problem types, guided questions and symptoms per section |
+| GET | `/api/workers?section=&area=` | sample workers, nearest area first, then by rating |
+| POST | `/api/diagnose` | multipart `photo`, `description`, `section`, `subcategory`, `answers`, `symptoms`, `lang` → diagnosis, estimate, safety, trace |
 | POST | `/api/jobs` | post a job with the customer's offer |
 | GET | `/api/jobs?section=` | list jobs for mistris |
-| POST | `/api/jobs/{id}/bids` | mistri bid, checked for fairness |
+| POST | `/api/jobs/{id}/bids` | worker offer (`worker_id`, `amount`), checked against the estimate |
 | POST | `/api/jobs/{id}/accept` | customer accepts a bid |
 | POST | `/api/jobs/{id}/verify` | after photo → Gemma Verifier |
 
@@ -128,11 +143,14 @@ Two things to know about the free plan:
 
 The frontend is plain HTML, CSS and JavaScript with no frameworks.
 
+Illustrations are from [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (MIT). Fonts are [Inter](https://fonts.google.com/specimen/Inter) and [Noto Nastaliq Urdu](https://fonts.google.com/noto/specimen/Noto+Nastaliq+Urdu) (SIL OFL).
+
 ## What's next
 
 - Escrow payment through JazzCash or Easypaisa, released automatically when Gemma verifies the job
-- Mistri ratings and verified CNIC profiles
-- A WhatsApp intake: forward a photo, get a fair price
+- Real worker sign-up with verified CNIC profiles and customer ratings
+- A WhatsApp intake: forward a photo, get an estimate
+- Voice input and output in Urdu for people who can't read
 - Live rates per city, learned from accepted bids
 
 ## Disclaimer

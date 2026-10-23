@@ -1,6 +1,6 @@
 ---
 name: rozgar-repair-estimator
-description: Diagnose a home-repair problem from a photo and description, route it to the right trade section (electrician, plumber, mason, carpenter, painter, AC technician, gas fitter), estimate a fair price in Pakistani Rupees, flag dangerous jobs, check bids against the fair range, and verify a finished job from before/after photos. Use when someone in Pakistan needs to know who to call for a repair, what it should cost, or whether a mistri's quote or finished work is fair.
+description: Diagnose a home-repair or home-service problem from a photo, guided answers (size, depth, count), ticked symptoms or a description, route it to the right worker (electrician, plumber, mason, carpenter, painter, AC technician, gas fitter, computer technician, appliance technician), estimate the cost in Pakistani Rupees, flag dangerous jobs, check prices against the estimate, and verify finished work from before/after photos. Answers in English, Urdu or Roman Urdu. Use when someone in Pakistan needs to know who to call, what a job should cost, or whether a worker's quote or finished work is reasonable.
 license: MIT
 metadata:
   project: Rozgar
@@ -14,33 +14,41 @@ It is the same logic the Rozgar app runs; the app loads these files at startup.
 
 ## Files
 
-- [rates.json](rates.json): labour rate per hour, visit fee and common material prices per section (Faisalabad, 2026, rough estimates).
+- [rates.json](rates.json): labour rate per hour, visit fee and common material prices per section (Faisalabad, 2026, rough estimates), with section and worker names in English, Urdu and Roman Urdu.
+- [catalog.json](catalog.json): the problem types inside each section, the guided questions for each (size, depth, count, urgency...) with a labour multiplier per answer, and symptom lists for machines that cannot be photographed.
+- [workers.json](workers.json): SAMPLE worker profiles (area, rating, jobs done, past projects) for demos. Not real people.
 - [sections/](sections/): one guide per trade section with common faults, typical materials and safety rules. Read only the guide for the section you route to.
 
 ## Sections
 
 | id | Section | Worker |
 |---|---|---|
-| `bijli` | ⚡ Bijli (electrical) | Electrician |
-| `pani` | 🚿 Pani (plumbing) | Plumber |
-| `deewar` | 🧱 Deewar/Chhat (masonry) | Raj mistri |
-| `lakri` | 🪵 Lakri (carpentry) | Carpenter |
-| `rang` | 🎨 Rang (painting) | Painter |
-| `ac` | ❄️ AC/Fridge | AC technician |
-| `gas` | 🔥 Gas | Gas fitter |
+| `bijli` | Electrical (Bijli) | Electrician |
+| `pani` | Plumbing (Pani) | Plumber |
+| `deewar` | Walls & roof (Deewar/Chhat) | Mason (raj mistri) |
+| `lakri` | Carpentry (Lakri) | Carpenter |
+| `rang` | Painting (Rang) | Painter |
+| `ac` | AC | AC technician |
+| `gas` | Gas | Gas fitter |
+| `computer` | Computer & IT | Computer technician |
+| `appliance` | Home appliances | Appliance technician |
 
 Anything with wires, switches, sockets, breakers, fans, UPS or solar wiring goes to `bijli`.
 Broken or cracked walls, plaster, seepage, tiles and roof leaks go to `deewar`.
+Windows installs, slow PCs, printers, Wi-Fi and software go to `computer`.
+Washing machines, fridges, water pumps, microwaves and small machines go to `appliance`.
 
 ## Procedure
 
+0. **Ask, don't guess.** If the section is known, ask the problem type and its guided questions from `catalog.json` (e.g. crack length, width and depth). For a closed machine, ask the symptoms and, optionally, a photo of the model sticker instead of a photo of the fault.
 1. **Route.** From the photo and description, pick exactly one section id from the table above. Give a one-line problem summary and a confidence from 0 to 1. If confidence is below 0.5, ask one short clarifying question instead of guessing.
 2. **Diagnose.** Read `sections/<id>.md`. Return the diagnosis, likely cause, materials (item, qty, estimated PKR each), labour hours, difficulty (easy/medium/hard), a safety level (none/caution/danger) with advice, and a short job card in Urdu for the worker.
 3. **Price.** Do not invent a total. Compute it:
-   `base = sum(qty × est_pkr) + labour_hours × rates[id].labour_per_hour + rates[id].visit_fee`
+   `base = sum(qty × est_pkr) + labour_hours × mult × rates[id].labour_per_hour + rates[id].visit_fee`
+   where `mult` is the largest multiplier among the chosen guided answers (1 if none), and the visit fee is 0 for remote help.
    `fair_min = round(base × 0.8, -1)`, `fair_max = round(base × 1.2, -1)`
 4. **Safety.** Force `danger` for gas smell or leak, sparking, burning smell from wiring, water near electrics, or a wall/roof that may collapse. Show helplines: SNGPL 1199 (gas), FESCO 118 (electricity), Rescue 1122 (emergency).
-5. **Check bids.** A bid above `fair_max × 1.25` is "above fair price". An offer below `fair_min × 0.75` is "unfair to worker". Otherwise it is fair.
+5. **Check prices.** The customer types their own price and each worker sends an offer. Above `fair_max × 1.25` is "higher than the estimate". Below `fair_min × 0.75` is "too low, unfair to the worker". Otherwise it is reasonable.
 6. **Verify.** Compare the before and after photos with the diagnosis. Return `fixed` (yes/no/unclear), the visible evidence, and a confidence. If the two photos look identical, answer `no` or `unclear`.
 
 ## Output formats
@@ -63,4 +71,4 @@ Verifier:
 ## Notes
 
 - Prices are estimates for guidance, not quotes.
-- Reply in the user's language (Urdu, Roman Urdu or English); the job card is always in Urdu.
+- Reply in the user's chosen language: English, Urdu in Urdu script, or Roman Urdu in Latin letters. The job card uses the same language.
