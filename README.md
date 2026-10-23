@@ -95,7 +95,7 @@ Only Gemma 4 models are used. No closed models.
 - [workers.json](skills/rozgar-repair-estimator/workers.json): **sample** worker profiles for the demo. These are not real people.
 - [sections/](skills/rozgar-repair-estimator/sections/): one guide per trade, covering common faults, materials and safety rules
 
-The app loads these same files at startup, so the product and the skill share one source of truth. Any agent that supports skills, such as Claude Code, can use it on its own: copy the folder into its skills directory.
+The app loads these same files at startup, so the product and the skill share one source of truth. Any agent that supports the Agent Skills standard can use it on its own: copy the folder into its skills directory.
 
 ## Run locally
 
