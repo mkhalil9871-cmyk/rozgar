@@ -5,35 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rozgar</title>
   <meta name="description" content="Fair home-repair prices with Gemma 4">
-  <link rel="icon" href="/static/img/logo.png">
+  <link rel="icon" href="/static/img/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.css?v=4">
 </head>
 <body>
   <header>
-    <div class="brand"><img src="/static/img/logo.png" alt=""><div><b>Rozgar</b><span class="tag" data-t="tagline"></span></div></div>
+    <div class="brand"><span class="tile tile-md c-logo"><span class="mi" style="--i:url(/static/img/logo.svg)"></span></span><div><b>Rozgar</b><span class="tag" data-t="tagline"></span></div></div>
     <div class="controls">
       <div class="seg" id="langSeg">
         <button data-lang="en">English</button>
         <button data-lang="ur">اردو</button>
         <button data-lang="roman">Roman</button>
       </div>
-      <div class="seg" id="roleSeg">
-        <button data-role="customer" data-t="customer"></button>
-        <button data-role="worker" data-t="worker"></button>
+      <div class="userbox hidden" id="userBox">
+        <span id="userIc"></span>
+        <span id="userName"></span>
+        <button class="secondary" id="logoutBtn" data-t="logout"></button>
       </div>
     </div>
   </header>
 
   <main>
+    <section id="login" class="hidden">
+      <div class="login-hero">
+        <span class="tile tile-xl c-logo"><span class="mi" style="--i:url(/static/img/logo.svg)"></span></span>
+        <h1 data-t="login_title"></h1>
+        <p class="muted" data-t="login_sub"></p>
+      </div>
+
+      <div id="rolePick" class="role-cards">
+        <button class="role-card" data-pick="customer">
+          <span class="tile tile-xl c-customer"><span class="mi" style="--i:url(/static/img/customer.svg)"></span></span>
+          <b data-t="as_customer"></b>
+          <span class="muted small" data-t="as_customer_sub"></span>
+        </button>
+        <button class="role-card" data-pick="worker">
+          <span class="tile tile-xl c-worker"><span class="mi" style="--i:url(/static/img/worker.svg)"></span></span>
+          <b data-t="as_worker"></b>
+          <span class="muted small" data-t="as_worker_sub"></span>
+        </button>
+      </div>
+
+      <div id="customerForm" class="card login-form hidden">
+        <h2 data-t="as_customer"></h2>
+        <div class="qlabel" data-t="your_name"></div>
+        <input id="cName" autocomplete="name">
+        <div class="qlabel" data-t="phone"></div>
+        <input id="cPhone" type="tel" inputmode="tel" data-tp="phone_ph" autocomplete="tel">
+        <div class="qlabel" data-t="area"></div>
+        <select id="cArea"></select>
+        <button class="primary" id="cLogin" data-t="continue_btn"></button>
+        <button class="link" data-back data-t="back"></button>
+        <p class="small muted" data-t="demo_login"></p>
+      </div>
+
+      <div id="workerForm" class="card login-form hidden">
+        <div class="seg tabs"><button class="active" data-wtab="signin" data-t="sign_in"></button><button data-wtab="join" data-t="join"></button></div>
+        <div id="wSignin">
+          <div class="qlabel" data-t="your_profile"></div>
+          <select id="wPick"></select>
+          <div class="qlabel" data-t="pin"></div>
+          <input id="wPin" type="password" inputmode="numeric" maxlength="4">
+          <p class="small muted" data-t="pin_hint"></p>
+          <button class="primary" id="wLogin" data-t="sign_in"></button>
+        </div>
+        <div id="wJoin" class="hidden">
+          <div class="qlabel" data-t="your_name"></div>
+          <input id="jName">
+          <div class="qlabel" data-t="phone"></div>
+          <input id="jPhone" type="tel" inputmode="tel" data-tp="phone_ph">
+          <div class="qlabel" data-t="trade"></div>
+          <select id="jTrade"></select>
+          <div class="qlabel" data-t="area"></div>
+          <select id="jArea"></select>
+          <div class="qlabel" data-t="years_exp"></div>
+          <input id="jYears" type="number" min="0" max="60" value="3">
+          <button class="primary" id="wJoinBtn" data-t="create_profile"></button>
+        </div>
+        <button class="link" data-back data-t="back"></button>
+      </div>
+    </section>
+
     <section id="customer">
       <div class="hero">
         <div>
           <h1 data-t="hero_title"></h1>
           <p class="muted" data-t="hero_sub"></p>
         </div>
-        <img src="/static/img/wrench.png" alt="">
+        <span class="tile tile-xl c-wrench"><span class="mi" style="--i:url(/static/img/wrench.svg)"></span></span>
       </div>
 
       <h2><span class="num">1</span><span data-t="step_section"></span></h2>
@@ -55,7 +116,7 @@
         <p id="photoHint" class="hint hidden"></p>
         <label class="upload">
           <input type="file" id="photo" accept="image/*">
-          <img src="/static/img/camera.png" alt=""><span id="photoLabel"></span>
+          <span class="mi ic-cam" style="--i:url(/static/img/camera.svg)"></span><span id="photoLabel"></span>
         </label>
         <img id="preview" class="preview hidden" alt="">
         <div class="qlabel" data-t="explain"></div>
@@ -76,8 +137,6 @@
     <section id="worker" class="hidden">
       <h1 data-t="w_title"></h1>
       <div class="card">
-        <div class="qlabel" data-t="sign_in_as"></div>
-        <select id="workerSel"></select>
         <div id="workerProfile"></div>
       </div>
       <h2 data-t="w_jobs"></h2>
@@ -87,11 +146,11 @@
 
   <footer>
     <span data-t="footer"></span> <b id="modelName">Gemma 4</b> <span data-t="via"></span> ·
-    <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Fluent 3D</a> ·
+    <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide icons</a> ·
     <a href="/api/skill" target="_blank" data-t="skill"></a>
   </footer>
 
-  <script src="/static/i18n.js"></script>
-  <script src="/static/app.js"></script>
+  <script src="/static/i18n.js?v=4"></script>
+  <script src="/static/app.js?v=4"></script>
 </body>
 </html>

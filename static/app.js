@@ -5,10 +5,15 @@ const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
-const icon = (name, cls = "ic") => `<img class="${cls}" src="/static/img/${name}.png" alt="">`;
+// Lucide line icons (ISC), coloured with CSS masks; big ones sit on a coloured tile.
+const INLINE = new Set(["ic", "star", "ic chip-ic"]);
+const icon = (name, cls = "ic") => INLINE.has(cls)
+  ? `<span class="mi ${cls}" style="--i:url(/static/img/${name}.svg)"></span>`
+  : `<span class="tile ${cls} c-${name}"><span class="mi" style="--i:url(/static/img/${name}.svg)"></span></span>`;
 
 let lang = store.get("rozgar.lang", "en");
-let role = store.get("rozgar.role", "customer");
+let session = store.get("rozgar.session", null);
+let role = session?.role || "customer";
 const t = (k) => I18N[lang][k] ?? I18N.en[k] ?? k;
 const L = (obj) => (obj && typeof obj === "object" ? obj[lang] || obj.en : obj ?? "");
 
@@ -53,7 +58,6 @@ function applyLang() {
   document.querySelectorAll("[data-t]").forEach((el) => (el.textContent = t(el.dataset.t)));
   document.querySelectorAll("[data-tp]").forEach((el) => (el.placeholder = t(el.dataset.tp)));
   document.querySelectorAll("#langSeg button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
-  document.querySelectorAll("#roleSeg button").forEach((b) => b.classList.toggle("active", b.dataset.role === role));
   renderSections();
   renderSubs();
   renderDetails();
@@ -68,13 +72,87 @@ document.querySelectorAll("#langSeg button").forEach((b) => b.addEventListener("
   store.set("rozgar.lang", lang);
   applyLang();
 }));
-document.querySelectorAll("#roleSeg button").forEach((b) => b.addEventListener("click", () => {
-  role = b.dataset.role;
-  store.set("rozgar.role", role);
-  $("#customer").classList.toggle("hidden", role !== "customer");
-  $("#worker").classList.toggle("hidden", role !== "worker");
+// ---------- login ----------
+const validPhone = (p) => /^(\+92|0)?3\d{2}[\s-]?\d{7}$/.test(p.trim());
+
+function showScreen() {
+  const loggedIn = !!session;
+  $("#login").classList.toggle("hidden", loggedIn);
+  $("#customer").classList.toggle("hidden", !loggedIn || role !== "customer");
+  $("#worker").classList.toggle("hidden", !loggedIn || role !== "worker");
+  $("#userBox").classList.toggle("hidden", !loggedIn);
+  if (loggedIn) {
+    $("#userName").textContent = session.name;
+    $("#userIc").innerHTML = icon(role === "worker" ? "worker" : "customer", "tile-sm");
+  }
+}
+
+function startSession(s) {
+  session = s;
+  role = s.role;
+  store.set("rozgar.session", s);
+  if (s.role === "worker") { me = s.workerId; }
+  if (s.area) { store.set("rozgar.area", s.area); $("#area").value = s.area; }
+  lastMyHTML = lastOpenHTML = "";
+  showScreen();
   applyLang();
+}
+
+function renderLoginSelects() {
+  const areaOpts = AREAS.map((a) => `<option>${esc(a)}</option>`).join("");
+  for (const id of ["#cArea", "#jArea"]) { const v = $(id).value; $(id).innerHTML = areaOpts; if (v) $(id).value = v; }
+  const tv = $("#jTrade").value;
+  $("#jTrade").innerHTML = Object.entries(TRADES).concat(Object.entries(SECTIONS).filter(([k]) => k !== "bijli"))
+    .map(([k, v]) => `<option value="${k}">${esc(L(v.worker))}</option>`).join("");
+  if (tv) $("#jTrade").value = tv;
+  const pv = $("#wPick").value;
+  $("#wPick").innerHTML = [...new Set(WORKERS.map((w) => w.trade))].map((tr) =>
+    `<optgroup label="${esc(L(tradeInfo(tr).worker))}">${WORKERS.filter((w) => w.trade === tr).map((w) =>
+      `<option value="${w.id}">${esc(L(w.name))} · ${esc(w.area)}</option>`).join("")}</optgroup>`).join("");
+  if (pv) $("#wPick").value = pv;
+}
+
+document.querySelectorAll("[data-pick]").forEach((b) => b.addEventListener("click", () => {
+  $("#rolePick").classList.add("hidden");
+  $(b.dataset.pick === "customer" ? "#customerForm" : "#workerForm").classList.remove("hidden");
 }));
+document.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => {
+  $("#customerForm").classList.add("hidden");
+  $("#workerForm").classList.add("hidden");
+  $("#rolePick").classList.remove("hidden");
+}));
+document.querySelectorAll("[data-wtab]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-wtab]").forEach((x) => x.classList.toggle("active", x === b));
+  $("#wSignin").classList.toggle("hidden", b.dataset.wtab !== "signin");
+  $("#wJoin").classList.toggle("hidden", b.dataset.wtab !== "join");
+}));
+$("#cLogin").addEventListener("click", () => {
+  const name = $("#cName").value.trim();
+  if (!name) return alert(t("need_name"));
+  if (!validPhone($("#cPhone").value)) return alert(t("bad_phone"));
+  startSession({ role: "customer", name, area: $("#cArea").value });
+});
+$("#wLogin").addEventListener("click", () => {
+  if ($("#wPin").value !== "1234") return alert(t("wrong_pin"));
+  const w = WORKERS.find((x) => x.id === $("#wPick").value);
+  startSession({ role: "worker", name: L(w.name), workerId: w.id, area: w.area });
+});
+$("#wJoinBtn").addEventListener("click", async () => {
+  const name = $("#jName").value.trim();
+  if (!name) return alert(t("need_name"));
+  if (!validPhone($("#jPhone").value)) return alert(t("bad_phone"));
+  try {
+    const w = await postJSON("/api/workers", { name, phone: $("#jPhone").value, trade: $("#jTrade").value, area: $("#jArea").value, years: +$("#jYears").value || 0 });
+    WORKERS.push(w);
+    startSession({ role: "worker", name, workerId: w.id, area: w.area });
+  } catch (e) { alert(e.message); }
+});
+$("#logoutBtn").addEventListener("click", () => {
+  session = null;
+  store.set("rozgar.session", null);
+  lastMyHTML = lastOpenHTML = "";
+  showScreen();
+});
 
 // ---------- step 1: sections ----------
 function renderSections() {
@@ -290,7 +368,7 @@ async function postJob() {
   if (!offer) { alert(t("enter_price")); $("#offer").focus(); return; }
   if (lastDiagnosis.safety.level === "danger" && !confirm(t("confirm_danger"))) return;
   try {
-    const job = await postJSON("/api/jobs", { diagnosis: lastDiagnosis, offer, area: $("#area").value, invited: [...invited] });
+    const job = await postJSON("/api/jobs", { diagnosis: lastDiagnosis, offer, area: $("#area").value, invited: [...invited], customer: session?.name || "" });
     myJobIds.unshift(job.id);
     store.set("rozgar.myJobs", myJobIds);
     $("#result").innerHTML = `<div class="card ok row-ic">${icon("check", "ic-lg")}<b>${esc(t("posted"))}</b></div>`;
@@ -342,26 +420,13 @@ async function loadMyJobs() {
 
 // ---------- worker view ----------
 let WORKERS = [];
-let me = store.get("rozgar.workerId", "");
+let me = session?.workerId || "";
 
 function renderWorkerSelect() {
-  if (!WORKERS.length) return;
-  if (!me) me = WORKERS[0].id;
-  const trades = [...new Set(WORKERS.map((w) => w.trade))];
-  $("#workerSel").innerHTML = trades.map((tr) =>
-    `<optgroup label="${esc(L(tradeInfo(tr).worker))}">${WORKERS.filter((w) => w.trade === tr).map((w) =>
-      `<option value="${w.id}" ${w.id === me ? "selected" : ""}>${esc(L(w.name))} · ${esc(w.area)}</option>`).join("")}</optgroup>`
-  ).join("");
+  renderLoginSelects();
   const w = WORKERS.find((x) => x.id === me);
   $("#workerProfile").innerHTML = w ? workerCard(w) : "";
 }
-$("#workerSel").addEventListener("change", () => {
-  me = $("#workerSel").value;
-  store.set("rozgar.workerId", me);
-  lastOpenHTML = "";
-  renderWorkerSelect();
-  loadOpenJobs();
-});
 
 async function loadOpenJobs() {
   if (typing) return;
@@ -426,6 +491,7 @@ async function loadOpenJobs() {
 
 // ---------- boot ----------
 function refresh() {
+  if (!session) return;
   if (role === "customer") loadMyJobs();
   else loadOpenJobs();
 }
@@ -435,8 +501,8 @@ function refresh() {
   $("#area").innerHTML = AREAS.map((a) => `<option>${esc(a)}</option>`).join("");
   $("#area").value = store.get("rozgar.area", AREAS[0]);
   $("#area").addEventListener("change", () => { store.set("rozgar.area", $("#area").value); if (lastDiagnosis) renderResult(lastDiagnosis); });
-  $("#customer").classList.toggle("hidden", role !== "customer");
-  $("#worker").classList.toggle("hidden", role !== "worker");
+  if (session?.role === "worker" && !WORKERS.some((w) => w.id === session.workerId)) session = null; // server restarted
+  showScreen();
   api("/api/health").then((h) => ($("#modelName").textContent = h.model)).catch(() => {});
   applyLang();
   setInterval(refresh, 4000);

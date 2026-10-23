@@ -158,3 +158,52 @@ footer a { color: var(--brand); }
 }
 
 .chip-ic { width: 18px; height: 18px; vertical-align: -4px; }
+
+/* login */
+.login-hero { text-align: center; padding: 24px 8px 8px; }
+.login-hero img { width: 88px; height: 88px; }
+.role-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 16px; }
+.role-card { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 24px 16px; cursor: pointer; color: var(--text); font: inherit; box-shadow: var(--shadow); transition: transform .12s, border-color .12s; }
+.role-card:hover { transform: translateY(-3px); border-color: var(--brand); }
+.role-card img { width: 84px; height: 84px; }
+.role-card b { font-size: 18px; }
+.login-form { max-width: 440px; margin: 16px auto; }
+.tabs { margin-bottom: 8px; }
+.tabs button { flex: 1; }
+button.link { background: none; border: 0; color: var(--brand); font: inherit; font-weight: 600; cursor: pointer; padding: 10px 0; width: 100%; }
+.userbox { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+.userbox img { width: 28px; height: 28px; }
+
+/* Lucide icons: mask + currentColor so they follow the theme */
+.mi { display: inline-block; width: 18px; height: 18px; background: currentColor; -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; vertical-align: -3px; flex: none; }
+.mi.ic { margin-inline-end: 6px; }
+.mi.star { width: 14px; height: 14px; color: #e0a100; margin-inline-end: 3px; }
+.mi.chip-ic { width: 16px; height: 16px; margin-inline-end: 6px; }
+.ic-cam { width: 26px; height: 26px; color: var(--brand); }
+.tile { display: inline-grid; place-items: center; flex: none; border-radius: 14px; color: #fff; background: var(--c, var(--brand)); box-shadow: inset 0 -2px 0 rgba(0,0,0,.12); }
+.tile .mi { width: 55%; height: 55%; }
+.tile.sec-ic { width: 60px; height: 60px; border-radius: 18px; margin-bottom: 8px; }
+.tile.ic-lg { width: 46px; height: 46px; }
+.tile.avatar { width: 46px; height: 46px; border-radius: 50%; padding: 0; }
+.tile.thumb { width: 84px; height: 84px; }
+.tile.tile-sm { width: 28px; height: 28px; border-radius: 8px; }
+.tile.tile-md { width: 40px; height: 40px; border-radius: 12px; }
+.tile.tile-xl { width: 84px; height: 84px; border-radius: 24px; }
+.c-bijli { --c: linear-gradient(135deg, #f7b500, #e07b00); }
+.c-ac { --c: linear-gradient(135deg, #2bb3e6, #1478c8); }
+.c-appliance { --c: linear-gradient(135deg, #20b2a6, #0f7f86); }
+.c-pani { --c: linear-gradient(135deg, #3d8bfd, #1d4fd8); }
+.c-deewar { --c: linear-gradient(135deg, #e0734a, #b2472b); }
+.c-lakri { --c: linear-gradient(135deg, #b98552, #7c5230); }
+.c-rang { --c: linear-gradient(135deg, #a46bf5, #6d3fd1); }
+.c-gas { --c: linear-gradient(135deg, #ff6a3d, #d62f2f); }
+.c-computer { --c: linear-gradient(135deg, #5b6cff, #3341c9); }
+.c-logo, .c-wrench, .c-customer, .c-money, .c-check { --c: linear-gradient(135deg, #18a873, #0e7a55); }
+.c-worker { --c: linear-gradient(135deg, #f5a623, #d9771a); }
+.c-warning { --c: linear-gradient(135deg, #f5a623, #d9531a); }
+.c-cross { --c: linear-gradient(135deg, #ef4d4d, #b91c1c); }
+.c-brain { --c: linear-gradient(135deg, #5b6cff, #3341c9); }
+.tile { background: var(--c); }
+.ic-box { padding: 0; background: var(--c); }
+.brand .tile { margin-inline-end: 2px; }
+.login-hero .tile, .role-card .tile, .hero .tile { margin: 0 auto 8px; }

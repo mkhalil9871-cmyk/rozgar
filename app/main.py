@@ -72,6 +72,37 @@ def list_workers(section: str = "", area: str = "", trade: str = ""):
     return workers_for(section, area, trade) if section else WORKERS
 
 
+class WorkerIn(BaseModel):
+    name: str
+    phone: str
+    trade: str
+    area: str
+    years: int = 1
+
+
+@app.post("/api/workers")
+def join_worker(body: WorkerIn):
+    if body.trade not in TRADES and body.trade not in SECTIONS:
+        raise HTTPException(400, "Unknown trade")
+    if not body.name.strip():
+        raise HTTPException(400, "Enter your name")
+    new = {
+        "id": f"n{len(WORKERS) + 1:03d}",
+        "name": {"en": body.name.strip(), "ur": body.name.strip(), "roman": body.name.strip()},
+        "section": "bijli" if body.trade in ("ac", "appliance") else body.trade,
+        "trade": body.trade,
+        "area": body.area,
+        "rating": 0,
+        "jobs_done": 0,
+        "years": max(0, body.years),
+        "verified": False,
+        "new": True,
+        "past_projects": [],
+    }
+    WORKERS.append(new)  # in memory, like jobs; the phone number is not stored
+    return new
+
+
 @app.get("/api/areas")
 def areas():
     return sorted({w["area"] for w in WORKERS})
@@ -112,6 +143,7 @@ class JobIn(BaseModel):
     offer: int
     area: str = ""
     invited: list[str] = []
+    customer: str = ""
 
 
 @app.post("/api/jobs")
@@ -142,6 +174,7 @@ def create_job(body: JobIn):
         "offer_check": bid_check(body.offer, price["fair_min"], price["fair_max"]),
         "area": body.area,
         "invited": body.invited,
+        "customer": body.customer[:60],
         "trace": d.get("trace", []),
     })
 
