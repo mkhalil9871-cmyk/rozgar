@@ -17,10 +17,6 @@
     <circle cx="0" cy="-18" r="8" mask="url(#jaw)"/>
   </g>
 
-  <!-- hammer: handle bottom-right to head top-left -->
-  <g transform="translate(32 32) rotate(-45)">
-    <rect x="-2.75" y="-12" width="5.5" height="32" rx="2.75" fill="#d7f2e6"/>
-    <rect x="-11" y="-22" width="22" height="10" rx="3" fill="#d7f2e6"/>
-    <rect x="-11" y="-22" width="6" height="10" rx="2" fill="#b4e3cf"/>
-  </g>
+  <!-- screwdriver: handle bottom-right, tip top-left -->
+  <g transform="translate(32 32) rotate(-45)"><rect x="-1.7" y="-20" width="3.4" height="22" rx="1" fill="#e8f7f0"/><path d="M-1.7 -20 L0 -24.5 L1.7 -20 Z" fill="#e8f7f0"/><rect x="-4.8" y="1" width="9.6" height="20" rx="4.5" fill="#b4e3cf"/><rect x="-4.8" y="1" width="9.6" height="4" rx="2" fill="#e8f7f0"/></g>
 </svg>
