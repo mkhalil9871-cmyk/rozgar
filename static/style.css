@@ -252,3 +252,11 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .logo-svg.lg { width: 96px; height: 96px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); }
 .logo-svg .bg1 { stop-color: #2a9d74; }
 .logo-svg .bg2 { stop-color: #17694d; }
+
+.qty-input { display: flex; align-items: center; border: 2px solid var(--line); border-radius: 12px; background: var(--bg); padding-inline-end: 12px; max-width: 260px; }
+.qty-input input { border: 0; margin: 0; background: transparent; font-size: 18px; font-weight: 700; }
+.qty-input span { color: var(--muted); font-weight: 600; white-space: nowrap; }
+.req { color: var(--danger); }
+.warn-hint { background: var(--warn-bg); color: var(--warn); }
+button.primary.muted-btn { opacity: .55; }
+tr.muted td { color: var(--muted); }

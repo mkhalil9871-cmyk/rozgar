@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from . import store
 from .agents import AgentError, health
 from .orchestrator import diagnose_pipeline, verify_pipeline
-from .pricing import CATALOG, SECTIONS, SKILL_MD, TRADES, WORKERS, bid_check, worker, workers_for
+from .pricing import CATALOG, SECTIONS, SKILL_MD, TRADES, WORKERS, bid_check, find_sub, worker, workers_for
 
 STATIC = Path(__file__).resolve().parent.parent / "static"
 MAX_IMAGE = 8 * 1024 * 1024
@@ -133,6 +133,8 @@ async def diagnose(
     symptoms: str = Form(""),
     lang: str = Form("en"),
     answer: str = Form(""),
+    qty: float = Form(0),
+    worker_brings: bool = Form(False),
     photo: Optional[UploadFile] = File(None),
 ):
     image, mime = await _read_image(photo)
@@ -140,9 +142,17 @@ async def diagnose(
     syms = _json_field(symptoms, [])
     if not image and not description.strip() and not subcategory:
         raise HTTPException(400, "Add a photo, pick a problem or describe it")
+    sub = find_sub(section, subcategory) if subcategory else None
+    if sub:
+        # ask before estimating: the amount of work and every guided question are required
+        if qty <= 0:
+            raise HTTPException(400, "Enter how much work there is")
+        missing = [q["id"] for q in sub["questions"] if q["id"] not in ans]
+        if missing:
+            raise HTTPException(400, f"Answer all questions first: {', '.join(missing)}")
     result = await run_in_threadpool(
         diagnose_pipeline, description, image, mime, section or None, answer or None,
-        subcategory or None, ans, syms, lang,
+        subcategory or None, ans, syms, lang, qty or None, worker_brings,
     )
     if image:
         result["photo"] = {"mime": mime, "b64": base64.b64encode(image).decode()}

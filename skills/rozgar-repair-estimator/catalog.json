@@ -1,5 +1,5 @@
 {
- "_note": "Guided questions per section. Labels in en / ur / roman. mult multiplies labour hours.",
+ "_note": "Problem types per section. unit = how the worker charges (per ft, sq ft, item or job), rate/min in PKR (Faisalabad 2026 estimates). mult = small difficulty factor. Labels in en / ur / roman.",
  "sections": {
   "bijli": [
    {
@@ -11,43 +11,6 @@
     },
     "photo": "yes",
     "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     },
      {
       "id": "urgency",
       "label": {
@@ -63,7 +26,7 @@
          "ur": "آج ہی",
          "roman": "Aaj hi"
         },
-        "mult": 1.2
+        "mult": 1.07
        },
        {
         "v": "week",
@@ -78,7 +41,24 @@
      }
     ],
     "symptoms": [],
-    "trade": "bijli"
+    "trade": "bijli",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 300,
+     "min": 500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "breaker",
@@ -104,7 +84,7 @@
          "ur": "آج ہی",
          "roman": "Aaj hi"
         },
-        "mult": 1.2
+        "mult": 1.07
        },
        {
         "v": "week",
@@ -144,7 +124,24 @@
       }
      }
     ],
-    "trade": "bijli"
+    "trade": "bijli",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1000,
+     "min": 1000,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "fan",
@@ -154,47 +151,26 @@
      "roman": "Pankha aahista / band"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "bijli"
+    "trade": "bijli",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 600,
+     "min": 600,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "wiring",
@@ -204,47 +180,26 @@
      "roman": "Nayi wiring / fitting"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "size",
-      "label": {
-       "en": "How big is it?",
-       "ur": "یہ کتنا بڑا ہے؟",
-       "roman": "Kitna bara hai?"
-      },
-      "options": [
-       {
-        "v": "small",
-        "label": {
-         "en": "Small (under 30 cm)",
-         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
-         "roman": "Chhota (30 cm se kam)"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "medium",
-        "label": {
-         "en": "Medium (30 cm – 1 m)",
-         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
-         "roman": "Darmiyana (30 cm – 1 meter)"
-        },
-        "mult": 1.5
-       },
-       {
-        "v": "large",
-        "label": {
-         "en": "Large (over 1 m)",
-         "ur": "بڑا (1 میٹر سے زیادہ)",
-         "roman": "Bara (1 meter se zyada)"
-        },
-        "mult": 2.2
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "bijli"
+    "trade": "bijli",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 800,
+     "min": 1500,
+     "default": 2
+    },
+    "materials": true
    },
    {
     "id": "ups",
@@ -281,7 +236,24 @@
       }
      }
     ],
-    "trade": "bijli"
+    "trade": "bijli",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "ac_cooling",
@@ -326,7 +298,24 @@
       }
      }
     ],
-    "trade": "ac"
+    "trade": "ac",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "ac_service",
@@ -336,47 +325,26 @@
      "roman": "AC service"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "ac"
+    "trade": "ac",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 2500,
+     "min": 2500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "ac_install",
@@ -386,47 +354,26 @@
      "roman": "AC lagwana / shift"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "ac"
+    "trade": "ac",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 5000,
+     "min": 5000,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "washing",
@@ -479,7 +426,24 @@
       }
      }
     ],
-    "trade": "appliance"
+    "trade": "appliance",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "fridge",
@@ -524,7 +488,24 @@
       }
      }
     ],
-    "trade": "appliance"
+    "trade": "appliance",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "motor",
@@ -561,7 +542,24 @@
       }
      }
     ],
-    "trade": "appliance"
+    "trade": "appliance",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1200,
+     "min": 1200,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "microwave",
@@ -598,7 +596,24 @@
       }
      }
     ],
-    "trade": "appliance"
+    "trade": "appliance",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1000,
+     "min": 1000,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "small",
@@ -627,7 +642,24 @@
       }
      }
     ],
-    "trade": "appliance"
+    "trade": "appliance",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 500,
+     "min": 500,
+     "default": 1
+    },
+    "materials": true
    }
   ],
   "pani": [
@@ -639,47 +671,26 @@
      "roman": "Tapakta nalka"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "pani"
+    "trade": "pani",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 500,
+     "min": 500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "pipe",
@@ -714,7 +725,7 @@
          "ur": "دیوار کے اندر",
          "roman": "Deewar ke andar"
         },
-        "mult": 2.0
+        "mult": 1.33
        },
        {
         "v": "underground",
@@ -723,7 +734,7 @@
          "ur": "زمین کے نیچے",
          "roman": "Zameen ke neeche"
         },
-        "mult": 2.5
+        "mult": 1.5
        }
       ]
      },
@@ -742,7 +753,7 @@
          "ur": "آج ہی",
          "roman": "Aaj hi"
         },
-        "mult": 1.2
+        "mult": 1.07
        },
        {
         "v": "week",
@@ -757,7 +768,24 @@
      }
     ],
     "symptoms": [],
-    "trade": "pani"
+    "trade": "pani",
+    "unit": {
+     "type": "ft",
+     "label": {
+      "en": "Length (feet)",
+      "ur": "لمبائی (فٹ)",
+      "roman": "Lambai (feet)"
+     },
+     "short": {
+      "en": "ft",
+      "ur": "فٹ",
+      "roman": "ft"
+     },
+     "rate": 150,
+     "min": 800,
+     "default": 3
+    },
+    "materials": true
    },
    {
     "id": "drain",
@@ -783,7 +811,7 @@
          "ur": "آج ہی",
          "roman": "Aaj hi"
         },
-        "mult": 1.2
+        "mult": 1.07
        },
        {
         "v": "week",
@@ -798,7 +826,24 @@
      }
     ],
     "symptoms": [],
-    "trade": "pani"
+    "trade": "pani",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "tank",
@@ -810,7 +855,24 @@
     "photo": "yes",
     "questions": [],
     "symptoms": [],
-    "trade": "pani"
+    "trade": "pani",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "geyser",
@@ -839,7 +901,24 @@
       }
      }
     ],
-    "trade": "pani"
+    "trade": "pani",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1200,
+     "min": 1200,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "flush",
@@ -851,7 +930,24 @@
     "photo": "yes",
     "questions": [],
     "symptoms": [],
-    "trade": "pani"
+    "trade": "pani",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 800,
+     "min": 800,
+     "default": 1
+    },
+    "materials": true
    }
   ],
   "deewar": [
@@ -864,43 +960,6 @@
     },
     "photo": "yes",
     "questions": [
-     {
-      "id": "length",
-      "label": {
-       "en": "How long is the crack?",
-       "ur": "دراڑ کتنی لمبی ہے؟",
-       "roman": "Crack kitna lamba hai?"
-      },
-      "options": [
-       {
-        "v": "short",
-        "label": {
-         "en": "Under 30 cm",
-         "ur": "30 سینٹی میٹر سے کم",
-         "roman": "30 cm se kam"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "mid",
-        "label": {
-         "en": "30 cm – 1 m",
-         "ur": "30 سینٹی میٹر سے 1 میٹر",
-         "roman": "30 cm – 1 meter"
-        },
-        "mult": 1.6
-       },
-       {
-        "v": "long",
-        "label": {
-         "en": "Over 1 m",
-         "ur": "1 میٹر سے زیادہ",
-         "roman": "1 meter se zyada"
-        },
-        "mult": 2.5
-       }
-      ]
-     },
      {
       "id": "width",
       "label": {
@@ -925,7 +984,7 @@
          "ur": "سکے جتنی",
          "roman": "Sikkay jitna"
         },
-        "mult": 1.3
+        "mult": 1.1
        },
        {
         "v": "finger",
@@ -934,7 +993,7 @@
          "ur": "انگلی جتنی",
          "roman": "Ungli jitna"
         },
-        "mult": 1.8
+        "mult": 1.26
        }
       ]
      },
@@ -962,7 +1021,7 @@
          "ur": "اینٹوں تک",
          "roman": "Eenton tak"
         },
-        "mult": 1.6
+        "mult": 1.2
        },
        {
         "v": "through",
@@ -971,13 +1030,30 @@
          "ur": "آر پار (روشنی آتی ہے)",
          "roman": "Aar paar (roshni aati hai)"
         },
-        "mult": 2.5
+        "mult": 1.5
        }
       ]
      }
     ],
     "symptoms": [],
-    "trade": "deewar"
+    "trade": "deewar",
+    "unit": {
+     "type": "ft",
+     "label": {
+      "en": "Length (feet)",
+      "ur": "لمبائی (فٹ)",
+      "roman": "Lambai (feet)"
+     },
+     "short": {
+      "en": "ft",
+      "ur": "فٹ",
+      "roman": "ft"
+     },
+     "rate": 80,
+     "min": 800,
+     "default": 3
+    },
+    "materials": true
    },
    {
     "id": "hole",
@@ -987,47 +1063,26 @@
      "roman": "Surakh / toota kona"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "size",
-      "label": {
-       "en": "How big is it?",
-       "ur": "یہ کتنا بڑا ہے؟",
-       "roman": "Kitna bara hai?"
-      },
-      "options": [
-       {
-        "v": "small",
-        "label": {
-         "en": "Small (under 30 cm)",
-         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
-         "roman": "Chhota (30 cm se kam)"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "medium",
-        "label": {
-         "en": "Medium (30 cm – 1 m)",
-         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
-         "roman": "Darmiyana (30 cm – 1 meter)"
-        },
-        "mult": 1.5
-       },
-       {
-        "v": "large",
-        "label": {
-         "en": "Large (over 1 m)",
-         "ur": "بڑا (1 میٹر سے زیادہ)",
-         "roman": "Bara (1 meter se zyada)"
-        },
-        "mult": 2.2
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "deewar"
+    "trade": "deewar",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 700,
+     "min": 700,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "damp",
@@ -1037,47 +1092,26 @@
      "roman": "Seelan / geeli deewar"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "size",
-      "label": {
-       "en": "How big is it?",
-       "ur": "یہ کتنا بڑا ہے؟",
-       "roman": "Kitna bara hai?"
-      },
-      "options": [
-       {
-        "v": "small",
-        "label": {
-         "en": "Small (under 30 cm)",
-         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
-         "roman": "Chhota (30 cm se kam)"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "medium",
-        "label": {
-         "en": "Medium (30 cm – 1 m)",
-         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
-         "roman": "Darmiyana (30 cm – 1 meter)"
-        },
-        "mult": 1.5
-       },
-       {
-        "v": "large",
-        "label": {
-         "en": "Large (over 1 m)",
-         "ur": "بڑا (1 میٹر سے زیادہ)",
-         "roman": "Bara (1 meter se zyada)"
-        },
-        "mult": 2.2
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "deewar"
+    "trade": "deewar",
+    "unit": {
+     "type": "sqft",
+     "label": {
+      "en": "Area (square feet)",
+      "ur": "رقبہ (مربع فٹ)",
+      "roman": "Raqba (square feet)"
+     },
+     "short": {
+      "en": "sq ft",
+      "ur": "مربع فٹ",
+      "roman": "sq ft"
+     },
+     "rate": 60,
+     "min": 1500,
+     "default": 20
+    },
+    "materials": true
    },
    {
     "id": "tile",
@@ -1087,47 +1121,26 @@
      "roman": "Tooti tiles"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "deewar"
+    "trade": "deewar",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 150,
+     "min": 800,
+     "default": 4
+    },
+    "materials": true
    },
    {
     "id": "roof",
@@ -1138,43 +1151,6 @@
     },
     "photo": "yes",
     "questions": [
-     {
-      "id": "size",
-      "label": {
-       "en": "How big is it?",
-       "ur": "یہ کتنا بڑا ہے؟",
-       "roman": "Kitna bara hai?"
-      },
-      "options": [
-       {
-        "v": "small",
-        "label": {
-         "en": "Small (under 30 cm)",
-         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
-         "roman": "Chhota (30 cm se kam)"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "medium",
-        "label": {
-         "en": "Medium (30 cm – 1 m)",
-         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
-         "roman": "Darmiyana (30 cm – 1 meter)"
-        },
-        "mult": 1.5
-       },
-       {
-        "v": "large",
-        "label": {
-         "en": "Large (over 1 m)",
-         "ur": "بڑا (1 میٹر سے زیادہ)",
-         "roman": "Bara (1 meter se zyada)"
-        },
-        "mult": 2.2
-       }
-      ]
-     },
      {
       "id": "urgency",
       "label": {
@@ -1190,7 +1166,7 @@
          "ur": "آج ہی",
          "roman": "Aaj hi"
         },
-        "mult": 1.2
+        "mult": 1.07
        },
        {
         "v": "week",
@@ -1205,7 +1181,24 @@
      }
     ],
     "symptoms": [],
-    "trade": "deewar"
+    "trade": "deewar",
+    "unit": {
+     "type": "sqft",
+     "label": {
+      "en": "Area (square feet)",
+      "ur": "رقبہ (مربع فٹ)",
+      "roman": "Raqba (square feet)"
+     },
+     "short": {
+      "en": "sq ft",
+      "ur": "مربع فٹ",
+      "roman": "sq ft"
+     },
+     "rate": 45,
+     "min": 2000,
+     "default": 50
+    },
+    "materials": true
    }
   ],
   "lakri": [
@@ -1217,47 +1210,26 @@
      "roman": "Darwaza band nahi hota"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "lakri"
+    "trade": "lakri",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 800,
+     "min": 800,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "lock",
@@ -1267,47 +1239,26 @@
      "roman": "Toota tala / handle"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "lakri"
+    "trade": "lakri",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 800,
+     "min": 800,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "cabinet",
@@ -1319,7 +1270,24 @@
     "photo": "yes",
     "questions": [],
     "symptoms": [],
-    "trade": "lakri"
+    "trade": "lakri",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "furniture",
@@ -1331,7 +1299,24 @@
     "photo": "yes",
     "questions": [],
     "symptoms": [],
-    "trade": "lakri"
+    "trade": "lakri",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": true
    }
   ],
   "rang": [
@@ -1343,47 +1328,26 @@
      "roman": "Kamra paint karna"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "rooms",
-      "label": {
-       "en": "How many rooms?",
-       "ur": "کتنے کمرے؟",
-       "roman": "Kitne kamre?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.5
-       },
-       {
-        "v": "house",
-        "label": {
-         "en": "Whole house",
-         "ur": "پورا گھر",
-         "roman": "Poora ghar"
-        },
-        "mult": 6.0
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "rang"
+    "trade": "rang",
+    "unit": {
+     "type": "sqft",
+     "label": {
+      "en": "Area (square feet)",
+      "ur": "رقبہ (مربع فٹ)",
+      "roman": "Raqba (square feet)"
+     },
+     "short": {
+      "en": "sq ft",
+      "ur": "مربع فٹ",
+      "roman": "sq ft"
+     },
+     "rate": 20,
+     "min": 1500,
+     "default": 300
+    },
+    "materials": true
    },
    {
     "id": "peel",
@@ -1393,47 +1357,26 @@
      "roman": "Ukhra paint / dhabbay"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "size",
-      "label": {
-       "en": "How big is it?",
-       "ur": "یہ کتنا بڑا ہے؟",
-       "roman": "Kitna bara hai?"
-      },
-      "options": [
-       {
-        "v": "small",
-        "label": {
-         "en": "Small (under 30 cm)",
-         "ur": "چھوٹا (30 سینٹی میٹر سے کم)",
-         "roman": "Chhota (30 cm se kam)"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "medium",
-        "label": {
-         "en": "Medium (30 cm – 1 m)",
-         "ur": "درمیانہ (30 سینٹی میٹر سے 1 میٹر)",
-         "roman": "Darmiyana (30 cm – 1 meter)"
-        },
-        "mult": 1.5
-       },
-       {
-        "v": "large",
-        "label": {
-         "en": "Large (over 1 m)",
-         "ur": "بڑا (1 میٹر سے زیادہ)",
-         "roman": "Bara (1 meter se zyada)"
-        },
-        "mult": 2.2
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "rang"
+    "trade": "rang",
+    "unit": {
+     "type": "sqft",
+     "label": {
+      "en": "Area (square feet)",
+      "ur": "رقبہ (مربع فٹ)",
+      "roman": "Raqba (square feet)"
+     },
+     "short": {
+      "en": "sq ft",
+      "ur": "مربع فٹ",
+      "roman": "sq ft"
+     },
+     "rate": 25,
+     "min": 1500,
+     "default": 50
+    },
+    "materials": true
    },
    {
     "id": "polish",
@@ -1445,7 +1388,24 @@
     "photo": "yes",
     "questions": [],
     "symptoms": [],
-    "trade": "rang"
+    "trade": "rang",
+    "unit": {
+     "type": "sqft",
+     "label": {
+      "en": "Area (square feet)",
+      "ur": "رقبہ (مربع فٹ)",
+      "roman": "Raqba (square feet)"
+     },
+     "short": {
+      "en": "sq ft",
+      "ur": "مربع فٹ",
+      "roman": "sq ft"
+     },
+     "rate": 35,
+     "min": 1500,
+     "default": 30
+    },
+    "materials": true
    }
   ],
   "gas": [
@@ -1459,7 +1419,24 @@
     "photo": "no",
     "questions": [],
     "symptoms": [],
-    "trade": "gas"
+    "trade": "gas",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1000,
+     "min": 1000,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "stove",
@@ -1471,7 +1448,24 @@
     "photo": "yes",
     "questions": [],
     "symptoms": [],
-    "trade": "gas"
+    "trade": "gas",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 800,
+     "min": 800,
+     "default": 1
+    },
+    "materials": true
    },
    {
     "id": "heater",
@@ -1481,47 +1475,26 @@
      "roman": "Gas heater / geyser fitting"
     },
     "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
+    "questions": [],
     "symptoms": [],
-    "trade": "gas"
+    "trade": "gas",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1000,
+     "min": 1000,
+     "default": 1
+    },
+    "materials": true
    }
   ],
   "computer": [
@@ -1586,7 +1559,7 @@
          "ur": "ہاں، فائلیں بچائیں",
          "roman": "Haan, files bachayen"
         },
-        "mult": 1.5
+        "mult": 1.17
        }
       ]
      },
@@ -1620,7 +1593,24 @@
      }
     ],
     "symptoms": [],
-    "trade": "computer"
+    "trade": "computer",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1500,
+     "min": 1500,
+     "default": 1
+    },
+    "materials": false
    },
    {
     "id": "slow",
@@ -1665,7 +1655,24 @@
       }
      }
     ],
-    "trade": "computer"
+    "trade": "computer",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1200,
+     "min": 1200,
+     "default": 1
+    },
+    "materials": false
    },
    {
     "id": "printer",
@@ -1702,7 +1709,24 @@
       }
      }
     ],
-    "trade": "computer"
+    "trade": "computer",
+    "unit": {
+     "type": "count",
+     "label": {
+      "en": "How many?",
+      "ur": "کتنے؟",
+      "roman": "Kitne?"
+     },
+     "short": {
+      "en": "×",
+      "ur": "×",
+      "roman": "×"
+     },
+     "rate": 1000,
+     "min": 1000,
+     "default": 1
+    },
+    "materials": false
    },
    {
     "id": "wifi",
@@ -1739,7 +1763,24 @@
       }
      }
     ],
-    "trade": "computer"
+    "trade": "computer",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 1000,
+     "min": 1000,
+     "default": 1
+    },
+    "materials": false
    },
    {
     "id": "software",
@@ -1751,7 +1792,24 @@
     "photo": "no",
     "questions": [],
     "symptoms": [],
-    "trade": "computer"
+    "trade": "computer",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 800,
+     "min": 800,
+     "default": 1
+    },
+    "materials": false
    },
    {
     "id": "data",
@@ -1763,7 +1821,24 @@
     "photo": "no",
     "questions": [],
     "symptoms": [],
-    "trade": "computer"
+    "trade": "computer",
+    "unit": {
+     "type": "job",
+     "label": {
+      "en": "Number of jobs",
+      "ur": "کتنے کام",
+      "roman": "Kitne kaam"
+     },
+     "short": {
+      "en": "job",
+      "ur": "کام",
+      "roman": "kaam"
+     },
+     "rate": 2500,
+     "min": 2500,
+     "default": 1
+    },
+    "materials": false
    }
   ]
  }

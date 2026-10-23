@@ -80,6 +80,47 @@ def material_price(item, est_pkr):
     return RATES["materials"][max(matches, key=len)]
 
 
+def estimate(trade, sub, qty, mult, materials, worker_brings, labour_hours=1.0):
+    """Price the way workers quote: quantity × per-unit labour rate (with a minimum charge).
+
+    Materials are only added when the worker brings them; otherwise they are a shopping list.
+    Falls back to Gemma's hours × hourly rate only when the problem type is unknown.
+    """
+    rate = trade_info(trade)
+    mat_rows = []
+    mat_total = 0
+    for m in materials:
+        unit_price = material_price(m.item, m.est_pkr)
+        line = unit_price * m.qty
+        mat_total += line
+        mat_rows.append({"item": m.item, "qty": m.qty, "unit_pkr": unit_price, "total_pkr": line})
+    unit = (sub or {}).get("unit")
+    if unit:
+        qty = qty if qty and qty > 0 else unit["default"]
+        labour = max(qty * unit["rate"] * mult, unit["min"])
+        visit = 0
+    else:
+        qty = None
+        labour = labour_hours * rate["labour_per_hour"]
+        visit = rate["visit_fee"]
+    base = labour + visit + (mat_total if worker_brings else 0)
+    return {
+        "materials": mat_rows,
+        "materials_total": round(mat_total),
+        "materials_included": bool(worker_brings),
+        "qty": qty,
+        "unit": unit,
+        "difficulty": mult,
+        "labour_hours": labour_hours,
+        "labour_per_hour": rate["labour_per_hour"],
+        "labour_total": round(labour),
+        "visit_fee": visit,
+        "base": round(base),
+        "fair_min": int(round(base * 0.85, -1)),
+        "fair_max": int(round(base * 1.15, -1)),
+    }
+
+
 def fair_range(trade, materials, labour_hours, mult=1.0, remote=False):
     rate = trade_info(trade)
     mat_rows = []

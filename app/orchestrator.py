@@ -8,7 +8,7 @@ import json
 import time
 
 from .agents import RouterOut, SpecialistOut, VerifierOut, call_agent, image_part
-from .pricing import SECTIONS, answers_mult, fair_range, find_sub, guide_for, safety_guard, trade_info, trade_of
+from .pricing import SECTIONS, answers_mult, estimate, find_sub, guide_for, safety_guard, trade_info, trade_of
 
 LANG_RULE = {
     "en": "Write every text field in simple, plain English.",
@@ -34,11 +34,13 @@ Diagnose the job from the customer's details{photo_note}, using this guide:
 
 {guide}
 
-Give: diagnosis and likely_cause (short and plain), the materials needed (item, qty, est_pkr per unit in
-Pakistani Rupees; keep item names in English using the guide's names where possible), realistic
-labour_hours for a SMALL/basic version of the job (size and quantity are applied separately),
-difficulty, safety (level none/caution/danger with one line of advice), and job_card_urdu: 2-3 short
-lines telling the worker what to do and what to bring. Do not give a total price.
+The customer has already told you the problem type, the amount of work (quantity) and the details:
+use them exactly and do not assume anything bigger or extra.
+Give: diagnosis and likely_cause (short and plain), the materials needed for exactly that amount of work
+(item, qty, est_pkr per unit in Pakistani Rupees; keep item names in English using the guide's names; an
+empty list if no materials are needed), labour_hours (for reference only), difficulty, safety (level
+none/caution/danger with one line of advice), and job_card_urdu: 2-3 short lines telling the worker what
+to do and what to bring. Do not give a total price.
 {lang}"""
 
 VERIFIER_SYSTEM = """You are the Verifier agent of Rozgar. The first image is BEFORE the work, the second is AFTER.
@@ -52,12 +54,16 @@ def _section_list():
     return "\n".join(f'- "{sid}": {s["name"]["en"]} -> {s["worker"]["en"]}' for sid, s in SECTIONS.items())
 
 
-def _details(section, sub_id, answers, symptoms):
+def _details(section, sub_id, answers, symptoms, qty=None, worker_brings=False):
     """Turn the guided answers into plain English context for the agents."""
     sub = find_sub(section, sub_id)
     if not sub:
         return ""
     lines = [f"Problem type: {sub['label']['en']}"]
+    if qty and sub.get("unit"):
+        lines.append(f"{sub['unit']['label']['en']}: {qty:g} {sub['unit']['short']['en']}")
+    if sub.get("materials"):
+        lines.append("Materials: " + ("the worker should bring them" if worker_brings else "the customer will buy them"))
     for q in sub["questions"]:
         chosen = next((o for o in q["options"] if o["v"] == (answers or {}).get(q["id"])), None)
         if chosen:
@@ -69,13 +75,13 @@ def _details(section, sub_id, answers, symptoms):
 
 
 def diagnose_pipeline(description, image=None, mime=None, section_hint=None, answer=None,
-                      subcategory=None, answers=None, symptoms=None, lang="en"):
+                      subcategory=None, answers=None, symptoms=None, lang="en", qty=None, worker_brings=False):
     lang = lang if lang in LANG_RULE else "en"
     trace = []
     parts = []
     if image:
         parts.append(image_part(image, mime))
-    details = _details(section_hint, subcategory, answers, symptoms) if section_hint in SECTIONS else ""
+    details = _details(section_hint, subcategory, answers, symptoms, qty, worker_brings) if section_hint in SECTIONS else ""
     text = f"Customer description: {description or '(none)'}"
     if details:
         text += f"\n{details}"
@@ -114,9 +120,9 @@ def diagnose_pipeline(description, image=None, mime=None, section_hint=None, ans
 
     t0 = time.time()
     mult = answers_mult(router.section, subcategory, answers)
-    remote = (answers or {}).get("visit") == "remote"
-    price = fair_range(trade, spec.materials, spec.labour_hours, mult, remote)
-    trace.append({"agent": "Pricing tool (rates.json + size answers)", "model": "python", "ms": int((time.time() - t0) * 1000), "output": price})
+    sub = find_sub(router.section, subcategory) if sub_known else None
+    price = estimate(trade, sub, qty, mult, spec.materials, worker_brings, spec.labour_hours)
+    trace.append({"agent": "Pricing tool (rate card × quantity)", "model": "python", "ms": int((time.time() - t0) * 1000), "output": price})
 
     t0 = time.time()
     flags = " ".join(f"{k}={v}" for k, v in (answers or {}).items()) + " " + " ".join(symptoms or [])

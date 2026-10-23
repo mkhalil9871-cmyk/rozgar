@@ -19,7 +19,7 @@ const L = (obj) => (obj && typeof obj === "object" ? obj[lang] || obj.en : obj ?
 
 let SECTIONS = {}, TRADES = {}, CATALOG = {}, AREAS = [];
 const tradeInfo = (k) => TRADES[k] || SECTIONS[k] || {};
-const sel = { section: "", sub: "", answers: {}, symptoms: [] };
+const sel = { section: "", sub: "", answers: {}, symptoms: [], qty: "", brings: null };
 let lastDiagnosis = null;
 let invited = new Set();
 const booking = { address: "", landmark: "", day: "today", slot: "morning", payment: "cash" };
@@ -192,7 +192,7 @@ function renderSections() {
   $("#sections").querySelectorAll(".sec").forEach((b) => b.addEventListener("click", () => {
     const id = b.dataset.s;
     sel.section = sel.section === id ? "" : id;
-    sel.sub = ""; sel.answers = {}; sel.symptoms = [];
+    sel.sub = ""; sel.answers = {}; sel.symptoms = []; sel.qty = ""; sel.brings = null;
     renderSections(); renderSubs(); renderDetails();
     if (sel.section) $("#subBlock").scrollIntoView({ behavior: "smooth", block: "start" });
   }));
@@ -208,7 +208,9 @@ function renderSubs() {
     `<button class="chip ${sel.sub === s.id ? "active" : ""}" data-sub="${s.id}">${icon(tradeInfo(s.trade).icon || SECTIONS[sel.section].icon, "ic chip-ic")}${esc(L(s.label))}</button>`
   ).join("");
   $("#subs").querySelectorAll(".chip").forEach((b) => b.addEventListener("click", () => {
-    sel.sub = b.dataset.sub; sel.answers = {}; sel.symptoms = [];
+    sel.sub = b.dataset.sub; sel.answers = {}; sel.symptoms = []; sel.brings = null;
+    const u = CATALOG[sel.section].find((x) => x.id === sel.sub)?.unit;
+    sel.qty = u ? String(u.default) : "";
     renderSubs(); renderDetails();
   }));
 }
@@ -216,16 +218,50 @@ function renderSubs() {
 // ---------- step 3: guided questions, symptoms, photo ----------
 const currentSub = () => (sel.section && sel.sub ? CATALOG[sel.section].find((s) => s.id === sel.sub) : null);
 
+function qtyHTML(sub) {
+  if (!sub?.unit) return "";
+  const u = sub.unit;
+  const rate = u.type === "job" ? "" : ` · ${rs(u.rate)} / ${esc(L(u.short))}`;
+  return `<div class="qlabel">${esc(L(u.label))} <span class="req">*</span></div>
+    <div class="qty-input"><input type="number" inputmode="decimal" min="0" step="any" id="qty" value="${esc(sel.qty)}"><span>${esc(L(u.short))}</span></div>
+    <p class="small muted">${esc(t("qty_hint"))}${rate}</p>`;
+}
+function materialsHTML(sub) {
+  if (!sub?.materials) return "";
+  return `<div class="qlabel">${esc(t("materials_q"))} <span class="req">*</span></div><div class="chips">${["self", "worker"].map((v) =>
+    `<button class="chip ${sel.brings === (v === "worker") ? "active" : ""}" data-brings="${v}">${esc(t(v === "self" ? "mat_self" : "mat_worker"))}</button>`).join("")}</div>`;
+}
+function missingInfo() {
+  const sub = currentSub();
+  if (!sub) return "";
+  if (sub.unit && !(+sel.qty > 0)) return t("need_qty");
+  if (sub.questions.some((q) => !sel.answers[q.id])) return t("need_answers");
+  if (sub.materials && sel.brings === null) return t("need_materials");
+  return "";
+}
+function updateDiagnoseState() {
+  const miss = missingInfo();
+  $("#diagnoseBtn").classList.toggle("muted-btn", !!miss);
+  $("#missingHint").textContent = miss;
+  $("#missingHint").classList.toggle("hidden", !miss);
+}
+
 function renderDetails() {
   const sub = currentSub();
-  $("#questions").innerHTML = (sub?.questions || []).map((q) =>
+  $("#questions").innerHTML = qtyHTML(sub) + (sub?.questions || []).map((q) =>
     `<div class="qlabel">${esc(L(q.label))}</div><div class="chips">${q.options.map((o) =>
       `<button class="chip ${sel.answers[q.id] === o.v ? "active" : ""}" data-q="${q.id}" data-v="${o.v}">${esc(L(o.label))}</button>`).join("")}</div>`
-  ).join("");
-  $("#questions").querySelectorAll(".chip").forEach((b) => b.addEventListener("click", () => {
+  ).join("") + materialsHTML(sub);
+  $("#questions").querySelectorAll("[data-q]").forEach((b) => b.addEventListener("click", () => {
     sel.answers[b.dataset.q] = b.dataset.v;
     renderDetails();
   }));
+  $("#questions").querySelectorAll("[data-brings]").forEach((b) => b.addEventListener("click", () => {
+    sel.brings = b.dataset.brings === "worker";
+    renderDetails();
+  }));
+  $("#qty")?.addEventListener("input", (e) => { sel.qty = e.target.value; updateDiagnoseState(); });
+  updateDiagnoseState();
 
   const syms = sub?.symptoms || [];
   $("#symptomsBlock").classList.toggle("hidden", !syms.length);
@@ -267,6 +303,8 @@ function showProgress(on) {
 async function diagnose(answer = "") {
   const f = $("#photo").files[0];
   if (!f && !$("#desc").value.trim() && !sel.sub) { alert(t("need_input")); return; }
+  const miss = missingInfo();
+  if (miss) { alert(miss); return; }
   const fd = new FormData();
   if (f) fd.append("photo", await shrink(f));
   fd.append("description", $("#desc").value);
@@ -275,6 +313,8 @@ async function diagnose(answer = "") {
   fd.append("answers", JSON.stringify(sel.answers));
   fd.append("symptoms", JSON.stringify(sel.symptoms));
   fd.append("lang", lang);
+  if (sel.qty) fd.append("qty", sel.qty);
+  fd.append("worker_brings", sel.brings ? "true" : "false");
   if (answer) fd.append("answer", answer);
 
   const btn = $("#diagnoseBtn");
@@ -314,11 +354,21 @@ function safetyHTML(s) {
 }
 
 function priceTable(p) {
-  const rows = p.materials.map((m) => `<tr><td>${esc(m.item)} × ${m.qty}</td><td>${rs(m.total_pkr)}</td></tr>`).join("");
-  const mult = p.size_multiplier && p.size_multiplier !== 1 ? ` (${esc(t("size_mult"))}${p.size_multiplier})` : "";
-  return `<table>${rows}
-    <tr><td>${esc(t("labour"))} ${p.labour_hours} h × ${rs(p.labour_per_hour)}${mult}</td><td>${rs(p.labour_total)}</td></tr>
-    <tr><td>${esc(t("visit_fee"))}</td><td>${rs(p.visit_fee)}</td></tr>
+  const u = p.unit;
+  let labourLine;
+  if (u) {
+    const raw = p.qty * u.rate * (p.difficulty || 1);
+    labourLine = u.type === "job" ? esc(t("labour")) : `${esc(t("labour"))}: ${p.qty} ${esc(L(u.short))} × ${rs(u.rate)}${p.difficulty && p.difficulty !== 1 ? ` × ${p.difficulty}` : ""}`;
+    if (raw < u.min) labourLine += ` <span class="muted">(${esc(t("min_charge"))})</span>`;
+  } else {
+    labourLine = `${esc(t("labour"))} ${p.labour_hours} h × ${rs(p.labour_per_hour)}`;
+  }
+  const mats = p.materials.map((m) => `<tr class="${p.materials_included ? "" : "muted"}"><td>${esc(m.item)} × ${m.qty}</td><td>${rs(m.total_pkr)}</td></tr>`).join("");
+  const matHead = p.materials.length ? `<tr><td colspan="2" class="small"><b>${esc(t(p.materials_included ? "mat_included" : "mat_shopping"))}</b></td></tr>${mats}` : "";
+  return `<table>
+    <tr><td>${labourLine}</td><td>${rs(p.labour_total)}</td></tr>
+    ${p.visit_fee ? `<tr><td>${esc(t("visit_fee"))}</td><td>${rs(p.visit_fee)}</td></tr>` : ""}
+    ${matHead}
     <tr><td><b>${esc(t("base"))}</b></td><td><b>${rs(p.base)}</b></td></tr></table>`;
 }
 
