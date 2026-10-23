@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rozgar</title>
+  <meta name="description" content="InDrive for mistris: fair repair prices with Gemma 4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">🛠️ <b>Rozgar</b> <span class="tag">روزگار</span></div>
+    <div class="roles">
+      <button class="role active" data-role="customer">Customer</button>
+      <button class="role" data-role="mistri">Mistri</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- CUSTOMER -->
+    <section id="customer">
+      <h1>Fix anything at home at a fair price</h1>
+      <p class="muted">Snap a photo. Gemma 4 finds the right worker, explains the problem and sets a fair price, so nobody overcharges and nobody gets underpaid.</p>
+
+      <h2>1. Choose a section <span class="muted small">(or skip, and Gemma will pick one)</span></h2>
+      <div id="tiles" class="tiles"></div>
+
+      <h2>2. Show the problem</h2>
+      <div class="card">
+        <label class="upload">
+          <input type="file" id="photo" accept="image/*" capture="environment">
+          <span>📷 Take or upload a photo</span>
+        </label>
+        <img id="preview" class="preview hidden" alt="">
+        <textarea id="desc" rows="3" placeholder="e.g. Deewar mein crack aa gaya hai khidki ke paas / Socket jal gaya hai"></textarea>
+        <input id="area" placeholder="Area, e.g. Madina Town, Faisalabad">
+        <button id="diagnoseBtn" class="primary">🔍 Diagnose with Gemma 4</button>
+        <div id="progress" class="progress hidden"></div>
+        <div id="clarify" class="card warn hidden"></div>
+      </div>
+
+      <div id="result" class="hidden"></div>
+
+      <h2>My jobs</h2>
+      <div id="myJobs"><p class="muted">No jobs yet.</p></div>
+    </section>
+
+    <!-- MISTRI -->
+    <section id="mistri" class="hidden">
+      <h1>Find work near you</h1>
+      <div class="card row">
+        <input id="workerName" placeholder="Your name, e.g. Usman Electrician">
+      </div>
+      <div id="mTiles" class="tiles small"></div>
+      <div id="openJobs"></div>
+    </section>
+  </main>
+
+  <footer>
+    Open source (MIT) · Powered by <b id="modelName">Gemma 4</b> via the Gemini API · <a href="/api/skill" target="_blank">Agent Skill</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

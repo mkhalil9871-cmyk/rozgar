@@ -1,0 +1,21 @@
+{
+  "_note": "Rough Faisalabad 2026 estimates in PKR for guidance only. Edit to match your city.",
+  "sections": {
+    "bijli":  {"name": "Bijli (electrical)",    "emoji": "⚡", "worker": "Electrician",   "worker_urdu": "الیکٹریشن",  "labour_per_hour": 600, "visit_fee": 500},
+    "pani":   {"name": "Pani (plumbing)",       "emoji": "🚿", "worker": "Plumber",       "worker_urdu": "پلمبر",      "labour_per_hour": 600, "visit_fee": 500},
+    "deewar": {"name": "Deewar/Chhat (masonry)", "emoji": "🧱", "worker": "Raj mistri",    "worker_urdu": "راج مستری",  "labour_per_hour": 500, "visit_fee": 500},
+    "lakri":  {"name": "Lakri (carpentry)",     "emoji": "🪵", "worker": "Carpenter",     "worker_urdu": "ترکھان",     "labour_per_hour": 600, "visit_fee": 500},
+    "rang":   {"name": "Rang (painting)",       "emoji": "🎨", "worker": "Painter",       "worker_urdu": "پینٹر",      "labour_per_hour": 450, "visit_fee": 300},
+    "ac":     {"name": "AC/Fridge",             "emoji": "❄️", "worker": "AC technician", "worker_urdu": "اے سی ٹیکنیشن", "labour_per_hour": 800, "visit_fee": 1000},
+    "gas":    {"name": "Gas",                   "emoji": "🔥", "worker": "Gas fitter",    "worker_urdu": "گیس فٹر",    "labour_per_hour": 700, "visit_fee": 700}
+  },
+  "materials": {
+    "switch": 250, "socket": 350, "circuit breaker": 900, "wire per meter": 120, "ceiling fan capacitor": 300,
+    "tap": 1200, "tap washer": 50, "pvc pipe per meter": 300, "teflon tape": 80, "ball valve": 600,
+    "cement bag": 1500, "sand per bag": 300, "wall putty kg": 150, "tile": 250, "waterproofing chemical litre": 900,
+    "door hinge": 300, "door lock": 1800, "wood screws pack": 200,
+    "emulsion paint litre": 1100, "primer litre": 700, "sandpaper sheet": 50,
+    "ac gas refill": 4500, "ac capacitor": 1500,
+    "gas pipe per meter": 450, "gas valve": 900
+  }
+}
