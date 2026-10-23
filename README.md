@@ -148,7 +148,7 @@ Two things to know about the free plan:
 
 The frontend is plain HTML, CSS and JavaScript with no frameworks.
 
-Icons are from [Lucide](https://lucide.dev) (ISC). Photos in `static/photos/` are from [Unsplash](https://unsplash.com) under the [Unsplash License](https://unsplash.com/license) (free to use). The Rozgar logo (`static/logo.svg`) was made for this project and is MIT-licensed with the code. Fonts are [Inter](https://fonts.google.com/specimen/Inter) and [Noto Nastaliq Urdu](https://fonts.google.com/noto/specimen/Noto+Nastaliq+Urdu) (SIL OFL).
+Icons are from [Lucide](https://lucide.dev) (ISC). Photos in `static/photos/` are from [Unsplash](https://unsplash.com/license) and [Pexels](https://www.pexels.com/license/) (both free to use). The Rozgar logo (`static/logo.svg`) was made for this project and is MIT-licensed with the code. Fonts are [Inter](https://fonts.google.com/specimen/Inter) and [Noto Nastaliq Urdu](https://fonts.google.com/noto/specimen/Noto+Nastaliq+Urdu) (SIL OFL).
 
 ## What's next
 

@@ -179,7 +179,7 @@ $("#logoutBtn").addEventListener("click", () => {
 // ---------- step 1: sections ----------
 function renderSections() {
   $("#sections").innerHTML = Object.entries(SECTIONS).map(([id, s]) =>
-    `<button class="sec ${sel.section === id ? "active" : ""}" data-s="${id}"><img class="sec-photo" src="/static/photos/${id}.jpg?v=14" alt="${esc(L(s.name))}" loading="lazy"><span class="sec-body"><span class="n">${esc(L(s.name))}</span><span class="w">${esc(L(s.worker))}</span></span></button>`
+    `<button class="sec ${sel.section === id ? "active" : ""}" data-s="${id}"><img class="sec-photo" src="/static/photos/${id}.jpg?v=16" alt="${esc(L(s.name))}" loading="lazy"><span class="sec-body"><span class="n">${esc(L(s.name))}</span><span class="w">${esc(L(s.worker))}</span></span></button>`
   ).join("");
   $("#sections").querySelectorAll(".sec").forEach((b) => b.addEventListener("click", () => {
     const id = b.dataset.s;
@@ -519,16 +519,6 @@ async function loadOpenJobs() {
     loadOpenJobs();
   }));
 }
-
-// ---------- colour scheme ----------
-function setScheme(name) {
-  if (name === "green") delete document.documentElement.dataset.scheme;
-  else document.documentElement.dataset.scheme = name;
-  store.set("rozgar.scheme", name);
-  document.querySelectorAll("#schemes button").forEach((b) => b.classList.toggle("active", b.dataset.scheme === name));
-}
-document.querySelectorAll("#schemes button").forEach((b) => b.addEventListener("click", () => setScheme(b.dataset.scheme)));
-setScheme(new URLSearchParams(location.search).get("scheme") || store.get("rozgar.scheme", "green"));
 
 // ---------- boot ----------
 function refresh() {
