@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rozgar</title>
   <meta name="description" content="Fair home-repair prices with Gemma 4">
-  <link rel="icon" href="/static/img/logo.svg">
+  <link rel="icon" href="/static/img3d/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=6">
+  <link rel="stylesheet" href="/static/style.css?v=7">
 </head>
 <body>
   <header>
-    <div class="brand"><span class="tile tile-md c-logo"><span class="mi" style="--i:url(/static/img/logo.svg)"></span></span><div><b>Rozgar</b><span class="tag" data-t="tagline"></span></div></div>
+    <div class="brand"><img class="logo-3d sm" src="/static/img3d/logo.png" alt=""><div><b>Rozgar</b><span class="tag" data-t="tagline"></span></div></div>
     <div class="controls">
       <div class="seg" id="langSeg">
         <button data-lang="en">English</button>
@@ -30,19 +30,19 @@
   <main>
     <section id="login" class="hidden">
       <div class="login-hero">
-        <span class="tile tile-xl c-logo"><span class="mi" style="--i:url(/static/img/logo.svg)"></span></span>
+        <img class="logo-3d" src="/static/img3d/logo.png" alt="">
         <h1 data-t="login_title"></h1>
         <p class="muted" data-t="login_sub"></p>
       </div>
 
       <div id="rolePick" class="role-cards">
         <button class="role-card" data-pick="customer">
-          <img class="role-photo" src="/static/photos/customer.jpg" alt="">
+          <span class="art art-lg c-customer"><img src="/static/img3d/customer.png" alt=""></span>
           <b data-t="as_customer"></b>
           <span class="muted small" data-t="as_customer_sub"></span>
         </button>
         <button class="role-card" data-pick="worker">
-          <img class="role-photo" src="/static/photos/worker.jpg" alt="">
+          <span class="art art-lg c-worker"><img src="/static/img3d/worker.png" alt=""></span>
           <b data-t="as_worker"></b>
           <span class="muted small" data-t="as_worker_sub"></span>
         </button>
@@ -98,7 +98,7 @@
           <h1 data-t="hero_title"></h1>
           <p class="muted" data-t="hero_sub"></p>
         </div>
-        <img class="hero-photo" src="/static/photos/bijli.jpg" alt="">
+        <img class="hero-3d" src="/static/img3d/hero.png" alt="">
       </div>
 
       <h2><span class="num">1</span><span data-t="step_section"></span></h2>
@@ -150,11 +150,11 @@
 
   <footer>
     <span data-t="footer"></span> <b id="modelName">Gemma 4</b> <span data-t="via"></span> ·
-    <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide icons</a> ·
+    <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Fluent 3D</a> · <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a> ·
     <a href="/api/skill" target="_blank" data-t="skill"></a>
   </footer>
 
-  <script src="/static/i18n.js?v=6"></script>
-  <script src="/static/app.js?v=6"></script>
+  <script src="/static/i18n.js?v=7"></script>
+  <script src="/static/app.js?v=7"></script>
 </body>
 </html>
