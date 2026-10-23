@@ -18,7 +18,7 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
 ## How it works
 
 1. **Log in as a customer or a worker**, as on Urban Company or TaskRabbit:
-   - **Customers** give their name, mobile number with a verification code, and area.
+   - **Customers** give their name, an 11-digit mobile number (03xxxxxxxxx) with a verification code, and area.
    - **Workers** sign in to their profile (demo PIN 1234), or join with name, mobile and verification code, CNIC, trade, area and experience.
 
    This is a demo login: no SMS is sent (the demo code is 1234), and the phone and CNIC numbers are only checked for format, never stored.
@@ -36,7 +36,7 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
 9. **Booking details.** Give the house address and a nearby landmark, the preferred day and time slot, and the payment method (cash after work, JazzCash or Easypaisa).
 10. **Type your own price.** The app reminds you to enter a justifiable amount and tells you live whether it's reasonable, too low (unfair to the worker), or higher than the estimate.
 11. **See workers near you.** The list is filtered by your area and shows each worker's rating, jobs done, years of experience and past projects. Invite specific workers or post to everyone nearby.
-12. **Workers send offers**, and each offer is checked the same way.
+12. **Workers send offers**, and each offer is checked the same way. Customer and worker can **chat** on each job to agree on timing, materials or the address.
 13. **The worker uploads an "after" photo.** Gemma compares it with the "before" photo and marks the job verified. The verified job is added to that worker's past projects.
 
 ## Multi-agent orchestration
