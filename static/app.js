@@ -179,7 +179,7 @@ $("#logoutBtn").addEventListener("click", () => {
 // ---------- step 1: sections ----------
 function renderSections() {
   $("#sections").innerHTML = Object.entries(SECTIONS).map(([id, s]) =>
-    `<button class="sec ${sel.section === id ? "active" : ""}" data-s="${id}"><span class="art c-${id}"><img src="/static/img3d/${id}.png" alt=""></span><span class="sec-body"><span class="n">${esc(L(s.name))}</span><span class="w">${esc(L(s.worker))}</span></span></button>`
+    `<button class="sec ${sel.section === id ? "active" : ""}" data-s="${id}"><img class="sec-photo" src="/static/photos/${id}.jpg" alt="${esc(L(s.name))}" loading="lazy"><span class="sec-body"><span class="n">${esc(L(s.name))}</span><span class="w">${esc(L(s.worker))}</span></span></button>`
   ).join("");
   $("#sections").querySelectorAll(".sec").forEach((b) => b.addEventListener("click", () => {
     const id = b.dataset.s;
