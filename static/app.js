@@ -520,6 +520,16 @@ async function loadOpenJobs() {
   }));
 }
 
+// ---------- colour scheme ----------
+function setScheme(name) {
+  if (name === "green") delete document.documentElement.dataset.scheme;
+  else document.documentElement.dataset.scheme = name;
+  store.set("rozgar.scheme", name);
+  document.querySelectorAll("#schemes button").forEach((b) => b.classList.toggle("active", b.dataset.scheme === name));
+}
+document.querySelectorAll("#schemes button").forEach((b) => b.addEventListener("click", () => setScheme(b.dataset.scheme)));
+setScheme(new URLSearchParams(location.search).get("scheme") || store.get("rozgar.scheme", "green"));
+
 // ---------- boot ----------
 function refresh() {
   if (!session) return;

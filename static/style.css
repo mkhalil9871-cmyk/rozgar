@@ -247,3 +247,24 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .art-lg { aspect-ratio: 16 / 8; }
 .art-lg img { width: 40%; max-width: 150px; }
 .art img { width: 52%; max-width: 110px; }
+
+/* colour schemes: try them with the palette dots in the footer or ?scheme=navy */
+:root[data-scheme="navy"]   { --brand: #ff7a1a; --brand-2: #0f1b3d; --brand-soft: #fff1e6; --brand-ink: #ffffff; --bg: #f5f6fa; }
+:root[data-scheme="purple"] { --brand: #6e42e5; --brand-2: #16141f; --brand-soft: #f0ebff; --brand-ink: #ffffff; --bg: #f7f6fb; }
+:root[data-scheme="blue"]   { --brand: #1d4ed8; --brand-2: #ffc83d; --brand-soft: #e8efff; --brand-ink: #ffffff; --bg: #f4f7fc; }
+:root[data-scheme="teal"]   { --brand: #0d5c63; --brand-2: #ff6b5b; --brand-soft: #e2f2f1; --brand-ink: #ffffff; --bg: #f3f7f7; }
+:root[data-scheme="navy"] header { background: #0f1b3d; color: #fff; border-color: #0f1b3d; }
+:root[data-scheme="navy"] header .tag { color: #b8c2dd; }
+:root[data-scheme="purple"] header { background: #16141f; color: #fff; border-color: #16141f; }
+:root[data-scheme="purple"] header .tag { color: #b9b3cc; }
+:root[data-scheme="navy"] header .seg, :root[data-scheme="purple"] header .seg { background: rgba(255,255,255,.1); }
+:root[data-scheme="navy"] header .seg button, :root[data-scheme="purple"] header .seg button { color: #dfe3ee; }
+:root[data-scheme="navy"] header .seg button.active, :root[data-scheme="purple"] header .seg button.active { color: #fff; }
+:root[data-scheme="blue"] .num, :root[data-scheme="teal"] .num { background: var(--brand-2); color: #1b1b1b; }
+.logo-svg { width: 40px; height: 40px; flex: none; }
+.logo-svg.lg { width: 96px; height: 96px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); }
+.logo-svg .bg1 { stop-color: var(--brand); }
+.logo-svg .bg2 { stop-color: var(--brand-2, #0b6b4a); }
+.schemes { display: inline-flex; gap: 6px; vertical-align: middle; margin-inline-start: 6px; }
+.schemes button { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--line); cursor: pointer; padding: 0; }
+.schemes button.active { box-shadow: 0 0 0 2px var(--text); }
