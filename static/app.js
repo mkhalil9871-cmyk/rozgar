@@ -92,7 +92,9 @@ document.querySelectorAll("[data-otp]").forEach((b) => b.addEventListener("click
   $(`#${k}OtpBox`).classList.remove("hidden");
   $(`#${k}Otp`).focus();
 }));
-const validPhone = (p) => /^(\+92|0)?3\d{2}[\s-]?\d{7}$/.test(p.trim());
+const validPhone = (p) => /^03\d{9}$/.test(p.trim());
+// digits only, never more than 11
+["#cPhone", "#jPhone"].forEach((id) => $(id).addEventListener("input", (e) => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 11); }));
 
 function showScreen() {
   const loggedIn = !!session;
@@ -487,11 +489,14 @@ function jobHead(j) {
     <div class="small muted">${icon("pin")}${esc(j.area || "Faisalabad")} · ${esc(t("your_offer"))} <b>${rs(j.offer)}</b> · ${esc(t("estimate"))} ${rs(j.price.fair_min)} – ${rs(j.price.fair_max)}</div></div></div>`;
 }
 
+const typingChat = () => !!document.activeElement?.dataset?.chat;
+
 async function loadMyJobs() {
+  if (typingChat()) return;
   if (!myJobIds.length) { $("#myJobs").innerHTML = `<p class="muted">${esc(t("no_jobs"))}</p>`; return; }
   const jobs = (await Promise.all(myJobIds.map((id) => api(`/api/jobs/${id}`).catch(() => null)))).filter(Boolean);
   const html = jobs.length ? jobs.map((j) => {
-    const bids = j.bids.map((b) => `<div class="bid">${workerCard(b.worker)}<div class="bid-side"><b class="price-sm">${rs(b.amount)}</b>${checkHTML(b.check.status)}
+    const bids = j.bids.map((b) => `<div class="bid">${workerCard(b.worker)}${chatHTML(j, b.worker_id, "customer")}<div class="bid-side"><b class="price-sm">${rs(b.amount)}</b>${checkHTML(b.check.status)}
       ${j.status === "open" ? `<button class="primary sm" data-accept="${j.id}:${b.id}">${esc(t("accept"))}</button>` : j.accepted?.id === b.id ? `<span class="badge ok">${esc(t("accepted"))}</span>` : ""}</div></div>`).join("");
     return `<div class="card">${jobHead(j)}
       ${bids || (j.status === "open" ? `<p class="muted small">${esc(t("waiting_bids"))}</p>` : "")}
@@ -518,7 +523,7 @@ function renderWorkerSelect() {
 }
 
 async function loadOpenJobs() {
-  if (typing) return;
+  if (typing || typingChat()) return;
   const w = WORKERS.find((x) => x.id === me);
   if (!w) return;
   let jobs = await api(`/api/jobs?section=${w.section}`).catch(() => []);
@@ -541,7 +546,7 @@ async function loadOpenJobs() {
       ${jobHead(j).replace(esc(t("your_offer")), esc(t("customer_pays")))}
       <div class="card inner"><div class="muted small">${esc(t("job_card"))}</div><div class="jobcard ${j.lang === "ur" ? "urdu" : ""}">${esc(j.job_card_urdu)}</div>
       <div class="small muted">${esc(t("bring"))}: ${j.price.materials.map((m) => esc(m.item)).join(", ") || "-"}</div></div>
-      ${action}${verificationHTML(j)}</div>`;
+      ${action}${chatHTML(j, me, "worker")}${verificationHTML(j)}</div>`;
   }).join("") : `<p class="muted">${esc(t("w_none"))}</p>`;
   if (html === lastOpenHTML) return;
   lastOpenHTML = html;
@@ -577,6 +582,30 @@ async function loadOpenJobs() {
     loadOpenJobs();
   }));
 }
+
+// ---------- chat between customer and worker ----------
+function chatHTML(j, workerId, as) {
+  const msgs = (j.messages || []).filter((m) => m.worker_id === workerId);
+  const other = as === "customer" ? L(WORKERS.find((w) => w.id === workerId)?.name) : (j.customer || t("customer"));
+  const bubbles = msgs.map((m) => `<div class="msg ${m.sender === as ? "me" : "them"}">${esc(m.text)}</div>`).join("");
+  const key = `${j.id}:${workerId}:${as}`;
+  return `<details class="chat" ${msgs.length ? "open" : ""}><summary>${icon("chat")}${esc(t("chat_with"))} ${esc(other)}${msgs.length ? ` (${msgs.length})` : ""}</summary>
+    <div class="msgs">${bubbles || `<p class="small muted">${esc(t("chat_empty"))}</p>`}</div>
+    <div class="row nowrap"><input data-chat="${key}" placeholder="${esc(t("chat_ph"))}" maxlength="500"><button class="secondary" data-chat-send="${key}">${esc(t("send"))}</button></div></details>`;
+}
+async function sendChat(key) {
+  const inp = document.querySelector(`[data-chat="${key}"]`);
+  const text = inp?.value.trim();
+  if (!text) return;
+  const [jobId, workerId, sender] = key.split(":");
+  inp.value = "";
+  inp.blur();
+  await postJSON(`/api/jobs/${jobId}/messages`, { worker_id: workerId, sender, text }).catch((e) => alert(e.message));
+  lastMyHTML = lastOpenHTML = "";
+  refresh();
+}
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-chat-send]"); if (b) sendChat(b.dataset.chatSend); });
+document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.dataset?.chat) sendChat(e.target.dataset.chat); });
 
 // ---------- boot ----------
 function refresh() {

@@ -1,6 +1,12 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    chat_with: "Chat with",
+    chat_empty: "No messages yet. Ask about timing, materials or the address.",
+    chat_ph: "Type a message…",
+    send: "Send",
+    phone_ph: "03001234567",
+    bad_phone: "Enter an 11-digit mobile number starting with 03, e.g. 03001234567.",
     qty_hint: "Measure roughly; the worker can confirm on site.",
     materials_q: "Who buys the materials?",
     mat_self: "I will buy them",
@@ -136,6 +142,12 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    chat_with: "بات کریں:",
+    chat_empty: "ابھی کوئی پیغام نہیں۔ وقت، سامان یا پتے کے بارے میں پوچھیں۔",
+    chat_ph: "پیغام لکھیں…",
+    send: "بھیجیں",
+    phone_ph: "03001234567",
+    bad_phone: "03 سے شروع ہونے والا 11 ہندسوں کا موبائل نمبر لکھیں، مثلاً 03001234567۔",
     qty_hint: "اندازاً ناپیں، کاریگر موقع پر تصدیق کر لے گا۔",
     materials_q: "سامان کون خریدے گا؟",
     mat_self: "میں خود خریدوں گا",
@@ -271,6 +283,12 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    chat_with: "Baat karein:",
+    chat_empty: "Abhi koi paigham nahi. Waqt, saamaan ya pate ke baare mein poochein.",
+    chat_ph: "Paigham likhen…",
+    send: "Bhejein",
+    phone_ph: "03001234567",
+    bad_phone: "03 se shuru hone wala 11 digit ka mobile number likhen, maslan 03001234567.",
     qty_hint: "Andazan naap lein, karigar mauqe par tasdeeq kar lega.",
     materials_q: "Saamaan kaun khareedega?",
     mat_self: "Main khud khareedunga",

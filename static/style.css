@@ -260,3 +260,12 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .warn-hint { background: var(--warn-bg); color: var(--warn); }
 button.primary.muted-btn { opacity: .55; }
 tr.muted td { color: var(--muted); }
+
+/* chat */
+.chat { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 6px; width: 100%; }
+.chat summary { display: flex; align-items: center; font-size: 14px; }
+.msgs { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; max-height: 220px; overflow-y: auto; }
+.msg { max-width: 80%; padding: 7px 12px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
+.msg.me { align-self: flex-end; background: var(--brand); color: var(--brand-ink); border-end-end-radius: 4px; }
+.msg.them { align-self: flex-start; background: var(--bg); border: 1px solid var(--line); border-end-start-radius: 4px; }
+.bid { flex-wrap: wrap; }

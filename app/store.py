@@ -85,6 +85,13 @@ def seed_demo_job(worker, section_info, worker_info):
     return create(job)
 
 
+def add_message(job_id, msg):
+    with _lock:
+        msg["time"] = time.time()
+        _jobs[job_id].setdefault("messages", []).append(msg)
+        return msg
+
+
 def add_bid(job_id, bid):
     with _lock:
         bid["id"] = uuid.uuid4().hex[:6]

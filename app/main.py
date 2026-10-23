@@ -233,6 +233,32 @@ def add_bid(job_id: str, body: BidIn):
     return store.add_bid(job_id, {"worker_id": w["id"], "worker": w, "amount": body.amount, "note": body.note, "check": check})
 
 
+class MessageIn(BaseModel):
+    worker_id: str
+    sender: str  # "customer" or "worker"
+    text: str
+
+
+DEMO_REPLY = {
+    "en": "Thanks! Please come tomorrow morning around 10. The address is in the job details.",
+    "ur": "شکریہ! کل صبح 10 بجے کے قریب آ جائیں۔ پتہ کام کی تفصیل میں ہے۔",
+}
+
+
+@app.post("/api/jobs/{job_id}/messages")
+def send_message(job_id: str, body: MessageIn):
+    """One chat thread per job and worker, visible to that worker and the customer."""
+    job = get_job(job_id)
+    text = body.text.strip()[:500]
+    if not text or body.sender not in ("customer", "worker") or not worker(body.worker_id):
+        raise HTTPException(400, "Empty message")
+    store.add_message(job_id, {"worker_id": body.worker_id, "sender": body.sender, "text": text})
+    if job.get("demo") and body.sender == "worker":
+        # the sample customer answers so the chat can be shown in a demo
+        store.add_message(job_id, {"worker_id": body.worker_id, "sender": "customer", "text": DEMO_REPLY["ur"]})
+    return store.get(job_id)
+
+
 class AcceptIn(BaseModel):
     bid_id: str
 

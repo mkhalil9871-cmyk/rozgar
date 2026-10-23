@@ -28,10 +28,10 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
    - **Walls & roof** → mason. A broken or cracked wall, seepage, a roof leak.
    - **Plumbing, Carpentry, Painting, Gas.**
    - **Computer & IT** → a technician for Windows installs, slow PCs, printers or Wi-Fi, for people who aren't technical.
-4. **Answer a few guided questions.** For example, a wall crack asks for its length (<30 cm / 30 cm–1 m / >1 m), width (hairline / coin / finger) and depth (plaster / bricks / through the wall). These answers scale the estimate.
+4. **Answer a few guided questions.** For example, a wall crack asks for its length in feet, its width (hairline / coin / finger) and depth (plaster / bricks / through the wall), and who buys the materials. The estimate can't be requested until these are answered, so nothing is guessed.
 5. **Machines you can't photograph** get a symptoms checklist ("doesn't spin", "hums but no water"). You can also add a photo of the model sticker.
 6. **Gemma 4 diagnoses the problem** and writes a job card for the worker. It works from a photo, from symptoms only, or from text.
-7. **Get an estimated cost.** It's computed from open, editable rates, and each rupee is explained.
+7. **Get an estimated cost, priced the way workers quote.** Labour is the amount of work × the worker's usual rate (per foot, per square foot, per item or per job), with a minimum charge. Materials are added only if the worker brings them; otherwise they're shown as your shopping list. Every rupee is explained, and the rates are open and editable.
 8. **Dangerous jobs are flagged first.** A gas smell, sparking or a wall about to collapse shows SNGPL 1199, FESCO 118 or Rescue 1122.
 9. **Booking details.** Give the house address and a nearby landmark, the preferred day and time slot, and the payment method (cash after work, JazzCash or Easypaisa).
 10. **Type your own price.** The app reminds you to enter a justifiable amount and tells you live whether it's reasonable, too low (unfair to the worker), or higher than the estimate.
@@ -132,6 +132,8 @@ Two things to know about the free plan:
 | POST | `/api/jobs` | post a job with the customer's offer |
 | GET | `/api/jobs?section=` | list jobs for workers |
 | POST | `/api/jobs/{id}/bids` | worker offer (`worker_id`, `amount`), checked against the estimate |
+| POST | `/api/jobs/{id}/messages` | chat message between the customer and one worker |
+| POST | `/api/workers/{id}/demo-job` | creates one labelled sample job invitation for a worker (demo) |
 | POST | `/api/jobs/{id}/accept` | customer accepts a bid |
 | POST | `/api/jobs/{id}/verify` | after photo → Gemma Verifier |
 

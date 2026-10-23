@@ -8,7 +8,7 @@
   <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=23">
+  <link rel="stylesheet" href="/static/style.css?v=24">
 </head>
 <body>
   <header>
@@ -37,12 +37,12 @@
 
       <div id="rolePick" class="role-cards">
         <button class="role-card" data-pick="customer">
-          <img class="role-photo" src="/static/photos/customer.jpg?v=23" alt="">
+          <img class="role-photo" src="/static/photos/customer.jpg?v=24" alt="">
           <b data-t="as_customer"></b>
           <span class="muted small" data-t="as_customer_sub"></span>
         </button>
         <button class="role-card" data-pick="worker">
-          <img class="role-photo" src="/static/photos/worker.jpg?v=23" alt="">
+          <img class="role-photo" src="/static/photos/worker.jpg?v=24" alt="">
           <b data-t="as_worker"></b>
           <span class="muted small" data-t="as_worker_sub"></span>
         </button>
@@ -53,7 +53,7 @@
         <div class="qlabel" data-t="your_name"></div>
         <input id="cName" autocomplete="name">
         <div class="qlabel" data-t="phone"></div>
-        <div class="row nowrap"><input id="cPhone" type="tel" inputmode="tel" data-tp="phone_ph" autocomplete="tel"><button class="secondary" data-otp="c" data-t="send_code"></button></div>
+        <div class="row nowrap"><input id="cPhone" type="tel" inputmode="numeric" maxlength="11" pattern="03[0-9]{9}" data-tp="phone_ph" autocomplete="tel"><button class="secondary" data-otp="c" data-t="send_code"></button></div>
         <div id="cOtpBox" class="hidden"><div class="qlabel" data-t="otp"></div><input id="cOtp" inputmode="numeric" maxlength="4"><p class="small muted" data-t="otp_hint"></p></div>
         <div class="qlabel" data-t="area"></div>
         <select id="cArea"></select>
@@ -76,7 +76,7 @@
           <div class="qlabel" data-t="your_name"></div>
           <input id="jName">
           <div class="qlabel" data-t="phone"></div>
-          <div class="row nowrap"><input id="jPhone" type="tel" inputmode="tel" data-tp="phone_ph"><button class="secondary" data-otp="j" data-t="send_code"></button></div>
+          <div class="row nowrap"><input id="jPhone" type="tel" inputmode="numeric" maxlength="11" pattern="03[0-9]{9}" data-tp="phone_ph"><button class="secondary" data-otp="j" data-t="send_code"></button></div>
           <div id="jOtpBox" class="hidden"><div class="qlabel" data-t="otp"></div><input id="jOtp" inputmode="numeric" maxlength="4"><p class="small muted" data-t="otp_hint"></p></div>
           <div class="qlabel" data-t="cnic"></div>
           <input id="jCnic" inputmode="numeric" maxlength="15" data-tp="cnic_ph">
@@ -98,7 +98,7 @@
           <h1 data-t="hero_title"></h1>
           <p class="muted" data-t="hero_sub"></p>
         </div>
-        <img class="hero-photo" src="/static/photos/hero.jpg?v=23" alt="">
+        <img class="hero-photo" src="/static/photos/hero.jpg?v=24" alt="">
       </div>
 
       <h2><span class="num">1</span><span data-t="step_section"></span></h2>
@@ -155,7 +155,7 @@
     <a href="/api/skill" target="_blank" data-t="skill"></a>
   </footer>
 
-  <script src="/static/i18n.js?v=23"></script>
-  <script src="/static/app.js?v=23"></script>
+  <script src="/static/i18n.js?v=24"></script>
+  <script src="/static/app.js?v=24"></script>
 </body>
 </html>

@@ -41,10 +41,10 @@ ACs, washing machines, fridges, water pumps, microwaves and small machines also 
 0. **Ask, don't guess.** If the section is known, ask the problem type and its guided questions from `catalog.json` (e.g. crack length, width and depth). For a closed machine, ask the symptoms and, optionally, a photo of the model sticker instead of a photo of the fault.
 1. **Route.** From the photo and description, pick exactly one section id from the table above. Give a one-line problem summary and a confidence from 0 to 1. If confidence is below 0.5, ask one short clarifying question instead of guessing.
 2. **Diagnose.** Read `sections/<id>.md`. Return the diagnosis, likely cause, materials (item, qty, estimated PKR each), labour hours, difficulty (easy/medium/hard), a safety level (none/caution/danger) with advice, and a short job card in Urdu for the worker.
-3. **Price.** Do not invent a total. Compute it:
-   `base = sum(qty × est_pkr) + labour_hours × mult × rates[id].labour_per_hour + rates[id].visit_fee`
-   where `mult` is the largest multiplier among the chosen guided answers (1 if none), and the visit fee is 0 for remote help.
-   `fair_min = round(base × 0.8, -1)`, `fair_max = round(base × 1.2, -1)`
+3. **Price.** Do not invent a total and do not guess the size. Ask the customer how much work there is in the problem type's unit from `catalog.json` (feet, square feet, number of items, or one job), and who buys the materials. Then compute:
+   `labour = max(quantity × unit.rate × difficulty, unit.min)` where `difficulty` is the largest `mult` among the chosen answers (1.0–1.5).
+   Add materials (priced from `rates.json`) only if the worker brings them; otherwise show them as the customer's shopping list.
+   `fair_min = round(base × 0.85, -1)`, `fair_max = round(base × 1.15, -1)`
 4. **Safety.** Force `danger` for gas smell or leak, sparking, burning smell from wiring, water near electrics, or a wall/roof that may collapse. Show helplines: SNGPL 1199 (gas), FESCO 118 (electricity), Rescue 1122 (emergency).
 5. **Check prices.** The customer types their own price and each worker sends an offer. Above `fair_max × 1.25` is "higher than the estimate". Below `fair_min × 0.75` is "too low, unfair to the worker". Otherwise it is reasonable.
 6. **Verify.** Compare the before and after photos with the diagnosis. Return `fixed` (yes/no/unclear), the visible evidence, and a confidence. If the two photos look identical, answer `no` or `unclear`.
