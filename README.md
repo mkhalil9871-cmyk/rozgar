@@ -108,6 +108,12 @@ python -m uvicorn app.main:app --port 8000
 
 Open http://localhost:8000. To demo both sides, open it in two tabs: switch one to **Customer** and the other to **Worker**, then sign in as a sample worker. On Windows you can double-click `run.bat` instead.
 
+## Deploy for free (Hugging Face Spaces, no card needed)
+
+1. Create a free account at [huggingface.co](https://huggingface.co) and click **New Space**: pick **Docker** as the SDK and **Blank** as the template, and keep it public.
+2. In the Space's **Settings → Variables and secrets**, add a **secret** named `GEMINI_API_KEY` with your key.
+3. Push this repo to the Space. The `Dockerfile` builds and serves the app on port 7860.
+
 ## Deploy for free (Render)
 
 1. Push this repo to GitHub.
