@@ -156,3 +156,5 @@ footer a { color: var(--brand); }
   .sec-ic { width: 40px; height: 40px; }
   .sec .n { font-size: 13px; }
 }
+
+.chip-ic { width: 18px; height: 18px; vertical-align: -4px; }

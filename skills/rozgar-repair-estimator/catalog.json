@@ -77,7 +77,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "bijli"
    },
    {
     "id": "breaker",
@@ -142,7 +143,8 @@
        "roman": "AC ya istri chalane par"
       }
      }
-    ]
+    ],
+    "trade": "bijli"
    },
    {
     "id": "fan",
@@ -191,7 +193,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "bijli"
    },
    {
     "id": "wiring",
@@ -240,7 +243,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "bijli"
    },
    {
     "id": "ups",
@@ -276,7 +280,354 @@
        "roman": "Charge nahi ho raha"
       }
      }
-    ]
+    ],
+    "trade": "bijli"
+   },
+   {
+    "id": "ac_cooling",
+    "label": {
+     "en": "AC not cooling",
+     "ur": "اے سی ٹھنڈا نہیں کرتا",
+     "roman": "AC thanda nahi karta"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "runs_warm",
+      "label": {
+       "en": "Runs but warm air",
+       "ur": "چلتا ہے گرم ہوا",
+       "roman": "Chalta hai garam hawa"
+      }
+     },
+     {
+      "v": "outdoor_off",
+      "label": {
+       "en": "Outdoor unit does not start",
+       "ur": "باہر والا یونٹ نہیں چلتا",
+       "roman": "Bahar wala unit nahi chalta"
+      }
+     },
+     {
+      "v": "dripping",
+      "label": {
+       "en": "Water dripping inside",
+       "ur": "اندر پانی ٹپکتا ہے",
+       "roman": "Andar pani tapakta hai"
+      }
+     },
+     {
+      "v": "ice",
+      "label": {
+       "en": "Ice on pipes",
+       "ur": "پائپ پر برف",
+       "roman": "Pipe par baraf"
+      }
+     }
+    ],
+    "trade": "ac"
+   },
+   {
+    "id": "ac_service",
+    "label": {
+     "en": "AC service / cleaning",
+     "ur": "اے سی سروس",
+     "roman": "AC service"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": [],
+    "trade": "ac"
+   },
+   {
+    "id": "ac_install",
+    "label": {
+     "en": "AC install / shifting",
+     "ur": "اے سی لگوانا / شفٹ",
+     "roman": "AC lagwana / shift"
+    },
+    "photo": "yes",
+    "questions": [
+     {
+      "id": "count",
+      "label": {
+       "en": "How many?",
+       "ur": "کتنے ہیں؟",
+       "roman": "Kitne hain?"
+      },
+      "options": [
+       {
+        "v": "1",
+        "label": {
+         "en": "One",
+         "ur": "ایک",
+         "roman": "Aik"
+        },
+        "mult": 1.0
+       },
+       {
+        "v": "2-3",
+        "label": {
+         "en": "2–3",
+         "ur": "2 سے 3",
+         "roman": "2 se 3"
+        },
+        "mult": 2.0
+       },
+       {
+        "v": "4+",
+        "label": {
+         "en": "4 or more",
+         "ur": "4 یا زیادہ",
+         "roman": "4 ya zyada"
+        },
+        "mult": 3.5
+       }
+      ]
+     }
+    ],
+    "symptoms": [],
+    "trade": "ac"
+   },
+   {
+    "id": "washing",
+    "label": {
+     "en": "Washing machine",
+     "ur": "واشنگ مشین",
+     "roman": "Washing machine"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_spin",
+      "label": {
+       "en": "Does not spin",
+       "ur": "گھومتی نہیں",
+       "roman": "Ghoomti nahi"
+      }
+     },
+     {
+      "v": "no_drain",
+      "label": {
+       "en": "Water does not drain",
+       "ur": "پانی نہیں نکلتا",
+       "roman": "Pani nahi nikalta"
+      }
+     },
+     {
+      "v": "noise",
+      "label": {
+       "en": "Loud noise / shaking",
+       "ur": "شور / ہلتی ہے",
+       "roman": "Shor / hilti hai"
+      }
+     },
+     {
+      "v": "no_power",
+      "label": {
+       "en": "Does not turn on",
+       "ur": "آن نہیں ہوتی",
+       "roman": "On nahi hoti"
+      }
+     },
+     {
+      "v": "leak",
+      "label": {
+       "en": "Leaks water",
+       "ur": "پانی لیک کرتی ہے",
+       "roman": "Pani leak karti hai"
+      }
+     }
+    ],
+    "trade": "appliance"
+   },
+   {
+    "id": "fridge",
+    "label": {
+     "en": "Fridge / freezer",
+     "ur": "فریج / فریزر",
+     "roman": "Fridge / freezer"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "not_cold",
+      "label": {
+       "en": "Not cooling",
+       "ur": "ٹھنڈا نہیں کرتا",
+       "roman": "Thanda nahi karta"
+      }
+     },
+     {
+      "v": "noise",
+      "label": {
+       "en": "Noisy",
+       "ur": "شور کرتا ہے",
+       "roman": "Shor karta hai"
+      }
+     },
+     {
+      "v": "ice",
+      "label": {
+       "en": "Too much ice",
+       "ur": "زیادہ برف",
+       "roman": "Zyada baraf"
+      }
+     },
+     {
+      "v": "leak",
+      "label": {
+       "en": "Water under fridge",
+       "ur": "نیچے پانی",
+       "roman": "Neeche pani"
+      }
+     }
+    ],
+    "trade": "appliance"
+   },
+   {
+    "id": "motor",
+    "label": {
+     "en": "Water pump / motor",
+     "ur": "پانی کی موٹر",
+     "roman": "Pani ki motor"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_start",
+      "label": {
+       "en": "Will not start",
+       "ur": "چلتی نہیں",
+       "roman": "Chalti nahi"
+      }
+     },
+     {
+      "v": "hums",
+      "label": {
+       "en": "Hums but no water",
+       "ur": "آواز آتی ہے پانی نہیں",
+       "roman": "Awaz aati hai pani nahi"
+      }
+     },
+     {
+      "v": "hot",
+      "label": {
+       "en": "Gets very hot",
+       "ur": "بہت گرم ہوتی ہے",
+       "roman": "Bohat garam hoti hai"
+      }
+     }
+    ],
+    "trade": "appliance"
+   },
+   {
+    "id": "microwave",
+    "label": {
+     "en": "Microwave / oven",
+     "ur": "مائیکرو ویو / اوون",
+     "roman": "Microwave / oven"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_heat",
+      "label": {
+       "en": "Does not heat",
+       "ur": "گرم نہیں کرتا",
+       "roman": "Garam nahi karta"
+      }
+     },
+     {
+      "v": "spark",
+      "label": {
+       "en": "Sparks inside",
+       "ur": "اندر چنگاری",
+       "roman": "Andar chingari"
+      }
+     },
+     {
+      "v": "no_power",
+      "label": {
+       "en": "Does not turn on",
+       "ur": "آن نہیں ہوتا",
+       "roman": "On nahi hota"
+      }
+     }
+    ],
+    "trade": "appliance"
+   },
+   {
+    "id": "small",
+    "label": {
+     "en": "Iron / blender / small appliance",
+     "ur": "استری / بلینڈر / چھوٹی مشین",
+     "roman": "Istri / blender / chhoti machine"
+    },
+    "photo": "label",
+    "questions": [],
+    "symptoms": [
+     {
+      "v": "no_power",
+      "label": {
+       "en": "Does not turn on",
+       "ur": "آن نہیں ہوتی",
+       "roman": "On nahi hoti"
+      }
+     },
+     {
+      "v": "burning",
+      "label": {
+       "en": "Burning smell",
+       "ur": "جلنے کی بو",
+       "roman": "Jalne ki boo"
+      }
+     }
+    ],
+    "trade": "appliance"
    }
   ],
   "pani": [
@@ -327,7 +678,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "pani"
    },
    {
     "id": "pipe",
@@ -404,7 +756,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "pani"
    },
    {
     "id": "drain",
@@ -444,88 +797,8 @@
       ]
      }
     ],
-    "symptoms": []
-   },
-   {
-    "id": "pump",
-    "label": {
-     "en": "Water pump / motor",
-     "ur": "پانی کی موٹر",
-     "roman": "Pani ki motor"
-    },
-    "photo": "label",
-    "questions": [
-     {
-      "id": "urgency",
-      "label": {
-       "en": "How urgent?",
-       "ur": "کتنی جلدی چاہیے؟",
-       "roman": "Kitni jaldi chahiye?"
-      },
-      "options": [
-       {
-        "v": "today",
-        "label": {
-         "en": "Today",
-         "ur": "آج ہی",
-         "roman": "Aaj hi"
-        },
-        "mult": 1.2
-       },
-       {
-        "v": "week",
-        "label": {
-         "en": "This week",
-         "ur": "اس ہفتے",
-         "roman": "Is haftay"
-        },
-        "mult": 1.0
-       }
-      ]
-     }
-    ],
-    "symptoms": [
-     {
-      "v": "no_start",
-      "label": {
-       "en": "Won't start",
-       "ur": "چلتی نہیں",
-       "roman": "Chalti nahi"
-      }
-     },
-     {
-      "v": "hums",
-      "label": {
-       "en": "Hums but no water",
-       "ur": "آواز آتی ہے پانی نہیں",
-       "roman": "Awaz aati hai pani nahi"
-      }
-     },
-     {
-      "v": "leak",
-      "label": {
-       "en": "Leaks water",
-       "ur": "پانی لیک کرتی ہے",
-       "roman": "Pani leak karti hai"
-      }
-     },
-     {
-      "v": "noise",
-      "label": {
-       "en": "Loud noise",
-       "ur": "زیادہ شور",
-       "roman": "Zyada shor"
-      }
-     },
-     {
-      "v": "trips",
-      "label": {
-       "en": "Trips the breaker",
-       "ur": "بریکر گراتی ہے",
-       "roman": "Breaker girati hai"
-      }
-     }
-    ]
+    "symptoms": [],
+    "trade": "pani"
    },
    {
     "id": "tank",
@@ -536,7 +809,8 @@
     },
     "photo": "yes",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "pani"
    },
    {
     "id": "geyser",
@@ -564,7 +838,8 @@
        "roman": "Garam pani nahi"
       }
      }
-    ]
+    ],
+    "trade": "pani"
    },
    {
     "id": "flush",
@@ -575,7 +850,8 @@
     },
     "photo": "yes",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "pani"
    }
   ],
   "deewar": [
@@ -700,7 +976,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "deewar"
    },
    {
     "id": "hole",
@@ -749,7 +1026,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "deewar"
    },
    {
     "id": "damp",
@@ -798,7 +1076,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "deewar"
    },
    {
     "id": "tile",
@@ -847,7 +1126,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "deewar"
    },
    {
     "id": "roof",
@@ -924,7 +1204,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "deewar"
    }
   ],
   "lakri": [
@@ -975,7 +1256,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "lakri"
    },
    {
     "id": "lock",
@@ -1024,7 +1306,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "lakri"
    },
    {
     "id": "cabinet",
@@ -1035,7 +1318,8 @@
     },
     "photo": "yes",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "lakri"
    },
    {
     "id": "furniture",
@@ -1046,7 +1330,8 @@
     },
     "photo": "yes",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "lakri"
    }
   ],
   "rang": [
@@ -1097,7 +1382,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "rang"
    },
    {
     "id": "peel",
@@ -1146,7 +1432,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "rang"
    },
    {
     "id": "polish",
@@ -1157,151 +1444,8 @@
     },
     "photo": "yes",
     "questions": [],
-    "symptoms": []
-   }
-  ],
-  "ac": [
-   {
-    "id": "ac_cooling",
-    "label": {
-     "en": "AC not cooling",
-     "ur": "اے سی ٹھنڈا نہیں کرتا",
-     "roman": "AC thanda nahi karta"
-    },
-    "photo": "label",
-    "questions": [],
-    "symptoms": [
-     {
-      "v": "runs_warm",
-      "label": {
-       "en": "Runs but warm air",
-       "ur": "چلتا ہے گرم ہوا",
-       "roman": "Chalta hai garam hawa"
-      }
-     },
-     {
-      "v": "outdoor_off",
-      "label": {
-       "en": "Outdoor unit does not start",
-       "ur": "باہر والا یونٹ نہیں چلتا",
-       "roman": "Bahar wala unit nahi chalta"
-      }
-     },
-     {
-      "v": "dripping",
-      "label": {
-       "en": "Water dripping inside",
-       "ur": "اندر پانی ٹپکتا ہے",
-       "roman": "Andar pani tapakta hai"
-      }
-     },
-     {
-      "v": "ice",
-      "label": {
-       "en": "Ice on pipes",
-       "ur": "پائپ پر برف",
-       "roman": "Pipe par baraf"
-      }
-     }
-    ]
-   },
-   {
-    "id": "ac_service",
-    "label": {
-     "en": "AC service / cleaning",
-     "ur": "اے سی سروس",
-     "roman": "AC service"
-    },
-    "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
-    "symptoms": []
-   },
-   {
-    "id": "ac_install",
-    "label": {
-     "en": "AC install / shifting",
-     "ur": "اے سی لگوانا / شفٹ",
-     "roman": "AC lagwana / shift"
-    },
-    "photo": "yes",
-    "questions": [
-     {
-      "id": "count",
-      "label": {
-       "en": "How many?",
-       "ur": "کتنے ہیں؟",
-       "roman": "Kitne hain?"
-      },
-      "options": [
-       {
-        "v": "1",
-        "label": {
-         "en": "One",
-         "ur": "ایک",
-         "roman": "Aik"
-        },
-        "mult": 1.0
-       },
-       {
-        "v": "2-3",
-        "label": {
-         "en": "2–3",
-         "ur": "2 سے 3",
-         "roman": "2 se 3"
-        },
-        "mult": 2.0
-       },
-       {
-        "v": "4+",
-        "label": {
-         "en": "4 or more",
-         "ur": "4 یا زیادہ",
-         "roman": "4 ya zyada"
-        },
-        "mult": 3.5
-       }
-      ]
-     }
-    ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "rang"
    }
   ],
   "gas": [
@@ -1314,7 +1458,8 @@
     },
     "photo": "no",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "gas"
    },
    {
     "id": "stove",
@@ -1325,7 +1470,8 @@
     },
     "photo": "yes",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "gas"
    },
    {
     "id": "heater",
@@ -1374,7 +1520,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "gas"
    }
   ],
   "computer": [
@@ -1472,7 +1619,8 @@
       ]
      }
     ],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "computer"
    },
    {
     "id": "slow",
@@ -1516,7 +1664,8 @@
        "roman": "Neeli screen"
       }
      }
-    ]
+    ],
+    "trade": "computer"
    },
    {
     "id": "printer",
@@ -1552,7 +1701,8 @@
        "roman": "Halki printing"
       }
      }
-    ]
+    ],
+    "trade": "computer"
    },
    {
     "id": "wifi",
@@ -1588,7 +1738,8 @@
        "roman": "Naya router lagana"
       }
      }
-    ]
+    ],
+    "trade": "computer"
    },
    {
     "id": "software",
@@ -1599,7 +1750,8 @@
     },
     "photo": "no",
     "questions": [],
-    "symptoms": []
+    "symptoms": [],
+    "trade": "computer"
    },
    {
     "id": "data",
@@ -1610,205 +1762,8 @@
     },
     "photo": "no",
     "questions": [],
-    "symptoms": []
-   }
-  ],
-  "appliance": [
-   {
-    "id": "washing",
-    "label": {
-     "en": "Washing machine",
-     "ur": "واشنگ مشین",
-     "roman": "Washing machine"
-    },
-    "photo": "label",
-    "questions": [],
-    "symptoms": [
-     {
-      "v": "no_spin",
-      "label": {
-       "en": "Does not spin",
-       "ur": "گھومتی نہیں",
-       "roman": "Ghoomti nahi"
-      }
-     },
-     {
-      "v": "no_drain",
-      "label": {
-       "en": "Water does not drain",
-       "ur": "پانی نہیں نکلتا",
-       "roman": "Pani nahi nikalta"
-      }
-     },
-     {
-      "v": "noise",
-      "label": {
-       "en": "Loud noise / shaking",
-       "ur": "شور / ہلتی ہے",
-       "roman": "Shor / hilti hai"
-      }
-     },
-     {
-      "v": "no_power",
-      "label": {
-       "en": "Does not turn on",
-       "ur": "آن نہیں ہوتی",
-       "roman": "On nahi hoti"
-      }
-     },
-     {
-      "v": "leak",
-      "label": {
-       "en": "Leaks water",
-       "ur": "پانی لیک کرتی ہے",
-       "roman": "Pani leak karti hai"
-      }
-     }
-    ]
-   },
-   {
-    "id": "fridge",
-    "label": {
-     "en": "Fridge / freezer",
-     "ur": "فریج / فریزر",
-     "roman": "Fridge / freezer"
-    },
-    "photo": "label",
-    "questions": [],
-    "symptoms": [
-     {
-      "v": "not_cold",
-      "label": {
-       "en": "Not cooling",
-       "ur": "ٹھنڈا نہیں کرتا",
-       "roman": "Thanda nahi karta"
-      }
-     },
-     {
-      "v": "noise",
-      "label": {
-       "en": "Noisy",
-       "ur": "شور کرتا ہے",
-       "roman": "Shor karta hai"
-      }
-     },
-     {
-      "v": "ice",
-      "label": {
-       "en": "Too much ice",
-       "ur": "زیادہ برف",
-       "roman": "Zyada baraf"
-      }
-     },
-     {
-      "v": "leak",
-      "label": {
-       "en": "Water under fridge",
-       "ur": "نیچے پانی",
-       "roman": "Neeche pani"
-      }
-     }
-    ]
-   },
-   {
-    "id": "motor",
-    "label": {
-     "en": "Water pump / motor",
-     "ur": "پانی کی موٹر",
-     "roman": "Pani ki motor"
-    },
-    "photo": "label",
-    "questions": [],
-    "symptoms": [
-     {
-      "v": "no_start",
-      "label": {
-       "en": "Will not start",
-       "ur": "چلتی نہیں",
-       "roman": "Chalti nahi"
-      }
-     },
-     {
-      "v": "hums",
-      "label": {
-       "en": "Hums but no water",
-       "ur": "آواز آتی ہے پانی نہیں",
-       "roman": "Awaz aati hai pani nahi"
-      }
-     },
-     {
-      "v": "hot",
-      "label": {
-       "en": "Gets very hot",
-       "ur": "بہت گرم ہوتی ہے",
-       "roman": "Bohat garam hoti hai"
-      }
-     }
-    ]
-   },
-   {
-    "id": "microwave",
-    "label": {
-     "en": "Microwave / oven",
-     "ur": "مائیکرو ویو / اوون",
-     "roman": "Microwave / oven"
-    },
-    "photo": "label",
-    "questions": [],
-    "symptoms": [
-     {
-      "v": "no_heat",
-      "label": {
-       "en": "Does not heat",
-       "ur": "گرم نہیں کرتا",
-       "roman": "Garam nahi karta"
-      }
-     },
-     {
-      "v": "spark",
-      "label": {
-       "en": "Sparks inside",
-       "ur": "اندر چنگاری",
-       "roman": "Andar chingari"
-      }
-     },
-     {
-      "v": "no_power",
-      "label": {
-       "en": "Does not turn on",
-       "ur": "آن نہیں ہوتا",
-       "roman": "On nahi hota"
-      }
-     }
-    ]
-   },
-   {
-    "id": "small",
-    "label": {
-     "en": "Iron / blender / small appliance",
-     "ur": "استری / بلینڈر / چھوٹی مشین",
-     "roman": "Istri / blender / chhoti machine"
-    },
-    "photo": "label",
-    "questions": [],
-    "symptoms": [
-     {
-      "v": "no_power",
-      "label": {
-       "en": "Does not turn on",
-       "ur": "آن نہیں ہوتی",
-       "roman": "On nahi hoti"
-      }
-     },
-     {
-      "v": "burning",
-      "label": {
-       "en": "Burning smell",
-       "ur": "جلنے کی بو",
-       "roman": "Jalne ki boo"
-      }
-     }
-    ]
+    "symptoms": [],
+    "trade": "computer"
    }
   ]
  }

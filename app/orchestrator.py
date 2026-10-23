@@ -8,7 +8,7 @@ import json
 import time
 
 from .agents import RouterOut, SpecialistOut, VerifierOut, call_agent, image_part
-from .pricing import GUIDES, SECTIONS, answers_mult, fair_range, find_sub, safety_guard
+from .pricing import SECTIONS, answers_mult, fair_range, find_sub, guide_for, safety_guard, trade_info, trade_of
 
 LANG_RULE = {
     "en": "Write every text field in simple, plain English.",
@@ -21,10 +21,10 @@ Look at the photo (if any) and the customer's description (Urdu, Roman Urdu or E
 Choose exactly ONE section id for the worker who should do the job:
 {sections}
 Rules: anything with wires, switches, sockets, breakers, fans, lights, UPS or solar wiring is "bijli".
+ACs, washing machines, fridges, water pumps/motors, microwaves and other home machines are also "bijli".
 Broken or cracked walls, plaster, holes, seepage/damp, tiles, floors and roof leaks are "deewar".
 Gas smell, gas pipes, stoves and gas heaters are "gas".
 Computers, laptops, Windows, printers, Wi-Fi and software are "computer".
-Washing machines, fridges, water pumps/motors, microwaves and small machines are "appliance".
 problem_summary: one short sentence. confidence: 0 to 1. If the input is too unclear to choose, set
 confidence below 0.5 and write one short clarifying_question; otherwise clarifying_question is null.
 {lang}"""
@@ -97,13 +97,16 @@ def diagnose_pipeline(description, image=None, mime=None, section_hint=None, ans
             return {"status": "clarify", "question": router.clarifying_question, "router": router.model_dump(), "trace": trace}
 
     sec = SECTIONS[router.section]
+    sub_known = router.section == section_hint and find_sub(router.section, subcategory) is not None
+    trade = trade_of(router.section, subcategory) if sub_known else router.section
+    worker = trade_info(trade)["worker"] if sub_known or router.section != "bijli" else sec["worker"]
     if image:
         photo_note = " and the photo (it may be a photo of the problem or of the machine's model sticker)"
     else:
         photo_note = " (there is NO photo: the problem cannot be photographed, so diagnose from the symptoms and description)"
     spec, step = call_agent(
-        f"{sec['worker']['en']} specialist",
-        SPECIALIST_SYSTEM.format(worker=sec["worker"]["en"], guide=GUIDES[router.section], photo_note=photo_note, lang=LANG_RULE[lang]),
+        f"{worker['en']} specialist",
+        SPECIALIST_SYSTEM.format(worker=worker["en"], guide=guide_for(router.section, trade, sub_known), photo_note=photo_note, lang=LANG_RULE[lang]),
         parts,
         SpecialistOut,
     )
@@ -112,7 +115,7 @@ def diagnose_pipeline(description, image=None, mime=None, section_hint=None, ans
     t0 = time.time()
     mult = answers_mult(router.section, subcategory, answers)
     remote = (answers or {}).get("visit") == "remote"
-    price = fair_range(router.section, spec.materials, spec.labour_hours, mult, remote)
+    price = fair_range(trade, spec.materials, spec.labour_hours, mult, remote)
     trace.append({"agent": "Pricing tool (rates.json + size answers)", "model": "python", "ms": int((time.time() - t0) * 1000), "output": price})
 
     t0 = time.time()
@@ -125,6 +128,8 @@ def diagnose_pipeline(description, image=None, mime=None, section_hint=None, ans
         "lang": lang,
         "section": router.section,
         "section_info": sec,
+        "trade": trade,
+        "worker_info": {**trade_info(trade), "worker": worker},
         "subcategory": subcategory,
         "answers": answers or {},
         "symptoms": symptoms or [],

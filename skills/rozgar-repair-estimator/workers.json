@@ -60,7 +60,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "bijli"
   },
   {
    "id": "w02",
@@ -121,7 +122,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "bijli"
   },
   {
    "id": "w03",
@@ -182,7 +184,8 @@
       "roman": "Aik hi baar mein theek kar diya"
      }
     }
-   ]
+   ],
+   "trade": "bijli"
   },
   {
    "id": "w04",
@@ -243,7 +246,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "pani"
   },
   {
    "id": "w05",
@@ -304,7 +308,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "pani"
   },
   {
    "id": "w06",
@@ -365,7 +370,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "pani"
   },
   {
    "id": "w07",
@@ -426,7 +432,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "deewar"
   },
   {
    "id": "w08",
@@ -487,7 +494,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "deewar"
   },
   {
    "id": "w09",
@@ -548,7 +556,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "deewar"
   },
   {
    "id": "w10",
@@ -609,7 +618,8 @@
       "roman": "Acha kaam, munasib qeemat"
      }
     }
-   ]
+   ],
+   "trade": "lakri"
   },
   {
    "id": "w11",
@@ -670,7 +680,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "lakri"
   },
   {
    "id": "w12",
@@ -731,7 +742,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "lakri"
   },
   {
    "id": "w13",
@@ -792,7 +804,8 @@
       "roman": "Acha kaam, munasib qeemat"
      }
     }
-   ]
+   ],
+   "trade": "rang"
   },
   {
    "id": "w14",
@@ -853,7 +866,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "rang"
   },
   {
    "id": "w15",
@@ -914,7 +928,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "rang"
   },
   {
    "id": "w16",
@@ -923,7 +938,7 @@
     "ur": "فیصل رضا",
     "roman": "Faisal Raza"
    },
-   "section": "ac",
+   "section": "bijli",
    "area": "Madina Town",
    "rating": 4.5,
    "jobs_done": 212,
@@ -975,7 +990,8 @@
       "roman": "Aik hi baar mein theek kar diya"
      }
     }
-   ]
+   ],
+   "trade": "ac"
   },
   {
    "id": "w17",
@@ -984,7 +1000,7 @@
     "ur": "وقاص احمد",
     "roman": "Waqas Ahmed"
    },
-   "section": "ac",
+   "section": "bijli",
    "area": "Samanabad",
    "rating": 4.4,
    "jobs_done": 365,
@@ -1036,7 +1052,8 @@
       "roman": "Aik hi baar mein theek kar diya"
      }
     }
-   ]
+   ],
+   "trade": "ac"
   },
   {
    "id": "w18",
@@ -1045,7 +1062,7 @@
     "ur": "عدنان سلیم",
     "roman": "Adnan Saleem"
    },
-   "section": "ac",
+   "section": "bijli",
    "area": "Madina Town",
    "rating": 4.8,
    "jobs_done": 375,
@@ -1097,7 +1114,8 @@
       "roman": "Waqt par aaye, saaf kaam"
      }
     }
-   ]
+   ],
+   "trade": "ac"
   },
   {
    "id": "w19",
@@ -1158,7 +1176,8 @@
       "roman": "Aik hi baar mein theek kar diya"
      }
     }
-   ]
+   ],
+   "trade": "gas"
   },
   {
    "id": "w20",
@@ -1219,7 +1238,8 @@
       "roman": "Acha kaam, munasib qeemat"
      }
     }
-   ]
+   ],
+   "trade": "gas"
   },
   {
    "id": "w21",
@@ -1280,7 +1300,8 @@
       "roman": "Aik hi baar mein theek kar diya"
      }
     }
-   ]
+   ],
+   "trade": "gas"
   },
   {
    "id": "w22",
@@ -1341,7 +1362,8 @@
       "roman": "Acha kaam, munasib qeemat"
      }
     }
-   ]
+   ],
+   "trade": "computer"
   },
   {
    "id": "w23",
@@ -1402,7 +1424,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "computer"
   },
   {
    "id": "w24",
@@ -1463,7 +1486,8 @@
       "roman": "Aik hi baar mein theek kar diya"
      }
     }
-   ]
+   ],
+   "trade": "computer"
   },
   {
    "id": "w25",
@@ -1472,7 +1496,7 @@
     "ur": "شکیل احمد",
     "roman": "Shakeel Ahmad"
    },
-   "section": "appliance",
+   "section": "bijli",
    "area": "Gulberg",
    "rating": 4.8,
    "jobs_done": 122,
@@ -1524,7 +1548,8 @@
       "roman": "Masla achi tarah samjhaya"
      }
     }
-   ]
+   ],
+   "trade": "appliance"
   },
   {
    "id": "w26",
@@ -1533,7 +1558,7 @@
     "ur": "رضوان حیدر",
     "roman": "Rizwan Haider"
    },
-   "section": "appliance",
+   "section": "bijli",
    "area": "Batala Colony",
    "rating": 4.5,
    "jobs_done": 265,
@@ -1585,7 +1610,8 @@
       "roman": "Acha kaam, munasib qeemat"
      }
     }
-   ]
+   ],
+   "trade": "appliance"
   },
   {
    "id": "w27",
@@ -1594,7 +1620,7 @@
     "ur": "مدثر نذیر",
     "roman": "Mudassar Nazir"
    },
-   "section": "appliance",
+   "section": "bijli",
    "area": "Gulberg",
    "rating": 4.8,
    "jobs_done": 132,
@@ -1646,7 +1672,8 @@
       "roman": "Acha kaam, munasib qeemat"
      }
     }
-   ]
+   ],
+   "trade": "appliance"
   }
  ]
 }

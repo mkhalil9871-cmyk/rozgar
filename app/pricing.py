@@ -16,9 +16,10 @@ def _load(name):
 
 RATES = _load("rates.json")
 SECTIONS = RATES["sections"]
+TRADES = RATES["trades"]
 CATALOG = _load("catalog.json")["sections"]
 WORKERS = _load("workers.json")["workers"]
-GUIDES = {sid: (SKILL_DIR / "sections" / f"{sid}.md").read_text(encoding="utf-8") for sid in SECTIONS}
+GUIDES = {f.stem: f.read_text(encoding="utf-8") for f in (SKILL_DIR / "sections").glob("*.md")}
 SKILL_MD = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
 
 HELPLINES = {
@@ -32,8 +33,24 @@ DANGER_PATTERNS = {
               r"دھواں", r"shock", r"current lag", r"کرنٹ", r"pani.*(wire|socket|board)", r"water.*(wire|socket|board)"],
     "deewar": [r"collapse", r"girne wal", r"gir sakt", r"گرنے", r"bulg", r"lean", r"jhuk", r"depth=through"],
     "pani": [r"pani.*(wire|socket|board|bijli)", r"water.*(wire|socket|board)"],
-    "appliance": [r"spark", r"chingari", r"چنگاری", r"burning", r"jalne", r"جلنے", r"smoke"],
 }
+
+
+def trade_info(trade):
+    """Worker type, rates and icon for a trade (bijli, ac, appliance, or a section id)."""
+    return TRADES.get(trade) or SECTIONS[trade]
+
+
+def trade_of(section, sub_id):
+    sub = find_sub(section, sub_id)
+    return (sub or {}).get("trade") or section
+
+
+def guide_for(section, trade, sub_known):
+    """The specialist guide; the merged electrical section gets all three guides when the problem type is unknown."""
+    if section == "bijli" and not sub_known:
+        return "\n\n".join(GUIDES[g] for g in ("bijli", "ac", "appliance"))
+    return GUIDES[trade]
 
 
 def find_sub(section, sub_id):
@@ -63,8 +80,8 @@ def material_price(item, est_pkr):
     return RATES["materials"][max(matches, key=len)]
 
 
-def fair_range(section, materials, labour_hours, mult=1.0, remote=False):
-    rate = SECTIONS[section]
+def fair_range(trade, materials, labour_hours, mult=1.0, remote=False):
+    rate = trade_info(trade)
     mat_rows = []
     mat_total = 0
     for m in materials:
@@ -120,9 +137,9 @@ def bid_check(amount, fair_min, fair_max):
     return {"status": "fair"}
 
 
-def workers_for(section, area=""):
+def workers_for(section, area="", trade=""):
     ws = [w for w in WORKERS if w["section"] == section]
-    return sorted(ws, key=lambda w: (w["area"] != area, -w["rating"]))
+    return sorted(ws, key=lambda w: (bool(trade) and w["trade"] != trade, w["area"] != area, -w["rating"]))
 
 
 def worker(worker_id):

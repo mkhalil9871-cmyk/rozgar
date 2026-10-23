@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from . import store
 from .agents import AgentError, health
 from .orchestrator import diagnose_pipeline, verify_pipeline
-from .pricing import CATALOG, SECTIONS, SKILL_MD, WORKERS, bid_check, worker, workers_for
+from .pricing import CATALOG, SECTIONS, SKILL_MD, TRADES, WORKERS, bid_check, worker, workers_for
 
 STATIC = Path(__file__).resolve().parent.parent / "static"
 MAX_IMAGE = 8 * 1024 * 1024
@@ -57,14 +57,19 @@ def sections():
     return SECTIONS
 
 
+@app.get("/api/trades")
+def trades():
+    return TRADES
+
+
 @app.get("/api/catalog")
 def catalog():
     return CATALOG
 
 
 @app.get("/api/workers")
-def list_workers(section: str = "", area: str = ""):
-    return workers_for(section, area) if section else WORKERS
+def list_workers(section: str = "", area: str = "", trade: str = ""):
+    return workers_for(section, area, trade) if section else WORKERS
 
 
 @app.get("/api/areas")
@@ -121,6 +126,8 @@ def create_job(body: JobIn):
         "lang": d.get("lang", "en"),
         "section": d["section"],
         "section_info": d["section_info"],
+        "trade": d.get("trade", d["section"]),
+        "worker_info": d.get("worker_info", d["section_info"]),
         "subcategory": d.get("subcategory"),
         "answers": d.get("answers", {}),
         "symptoms": d.get("symptoms", []),

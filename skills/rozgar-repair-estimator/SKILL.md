@@ -23,20 +23,18 @@ It is the same logic the Rozgar app runs; the app loads these files at startup.
 
 | id | Section | Worker |
 |---|---|---|
-| `bijli` | Electrical (Bijli) | Electrician |
+| `bijli` | Electrical & appliances (Bijli) | Electrician, AC technician or appliance technician, set by the problem type's `trade` |
 | `pani` | Plumbing (Pani) | Plumber |
 | `deewar` | Walls & roof (Deewar/Chhat) | Mason (raj mistri) |
 | `lakri` | Carpentry (Lakri) | Carpenter |
 | `rang` | Painting (Rang) | Painter |
-| `ac` | AC | AC technician |
 | `gas` | Gas | Gas fitter |
 | `computer` | Computer & IT | Computer technician |
-| `appliance` | Home appliances | Appliance technician |
 
 Anything with wires, switches, sockets, breakers, fans, UPS or solar wiring goes to `bijli`.
 Broken or cracked walls, plaster, seepage, tiles and roof leaks go to `deewar`.
 Windows installs, slow PCs, printers, Wi-Fi and software go to `computer`.
-Washing machines, fridges, water pumps, microwaves and small machines go to `appliance`.
+ACs, washing machines, fridges, water pumps, microwaves and small machines also go to `bijli`. Their problem types carry `trade: "ac"` or `trade: "appliance"`, which picks the worker, the rate (`rates.json` → `trades`) and the guide (`sections/ac.md`, `sections/appliance.md`).
 
 ## Procedure
 

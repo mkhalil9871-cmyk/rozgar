@@ -58,7 +58,7 @@ def _client(i):
 
 # ---------- schemas ----------
 
-SectionId = Literal["bijli", "pani", "deewar", "lakri", "rang", "ac", "gas", "computer", "appliance"]
+SectionId = Literal["bijli", "pani", "deewar", "lakri", "rang", "gas", "computer"]
 
 
 class RouterOut(BaseModel):

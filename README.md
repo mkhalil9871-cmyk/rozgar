@@ -18,12 +18,11 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
 ## How it works
 
 1. **Choose your language.** The whole app switches between English, اردو (right-to-left) and Roman Urdu, and Gemma's answers come back in that language too.
-2. **Pick what you need.** There are 9 sections, each with its own problem types:
-   - **Electrical** → electrician. Anything with switches, wiring or breakers.
+2. **Pick what you need.** There are 7 sections, each with its own problem types:
+   - **Electrical & Appliances** → electrician, AC technician or appliance technician, depending on the problem. Switches, wiring, fans, UPS/solar, ACs, washing machines, fridges and water motors are all in one place.
    - **Walls & roof** → mason. A broken or cracked wall, seepage, a roof leak.
-   - **Plumbing, Carpentry, Painting, AC, Gas.**
+   - **Plumbing, Carpentry, Painting, Gas.**
    - **Computer & IT** → a technician for Windows installs, slow PCs, printers or Wi-Fi, for people who aren't technical.
-   - **Home appliances** → a washing machine, fridge or water pump technician.
 3. **Answer a few guided questions.** For example, a wall crack asks for its length (<30 cm / 30 cm–1 m / >1 m), width (hairline / coin / finger) and depth (plaster / bricks / through the wall). These answers scale the estimate.
 4. **Machines you can't photograph** get a symptoms checklist ("doesn't spin", "hums but no water"). You can also add a photo of the model sticker.
 5. **Gemma 4 diagnoses the problem** and writes a job card for the worker. It works from a photo, from symptoms only, or from text.
@@ -46,7 +45,7 @@ Rozgar puts **Gemma 4 between both sides as a neutral helper**, in the language 
  └──────────────┘                              ▼
                                ┌─────────────────────────────┐
                                │ Section specialist agent    │  loads skills/…/sections/<id>.md
-                               │ Gemma 4 (9 trade experts)   │  → diagnosis, materials, hours,
+                               │ Gemma 4 (trade experts)     │  → diagnosis, materials, hours,
                                └─────────────────────────────┘    safety, Urdu job card
                                               │
                     ┌─────────────────────────┼──────────────────────────┐
@@ -86,7 +85,7 @@ Only Gemma 4 models are used. No closed models.
 [skills/rozgar-repair-estimator/SKILL.md](skills/rozgar-repair-estimator/SKILL.md) follows the [Agent Skills open standard](https://agentskills.io). It packages the whole method (route → diagnose → price → safety → bid check → verify) together with:
 
 - [rates.json](skills/rozgar-repair-estimator/rates.json): labour rates, visit fees and material prices (Faisalabad 2026 estimates; edit them for your city)
-- [catalog.json](skills/rozgar-repair-estimator/catalog.json): 41 problem types across 9 sections, each with guided questions and symptoms, all in 3 languages
+- [catalog.json](skills/rozgar-repair-estimator/catalog.json): 40 problem types across 7 sections, each with guided questions and symptoms, all in 3 languages
 - [workers.json](skills/rozgar-repair-estimator/workers.json): **sample** worker profiles for the demo. These are not real people.
 - [sections/](skills/rozgar-repair-estimator/sections/): one guide per trade, covering common faults, materials and safety rules
 

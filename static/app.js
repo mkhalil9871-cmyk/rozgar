@@ -12,7 +12,8 @@ let role = store.get("rozgar.role", "customer");
 const t = (k) => I18N[lang][k] ?? I18N.en[k] ?? k;
 const L = (obj) => (obj && typeof obj === "object" ? obj[lang] || obj.en : obj ?? "");
 
-let SECTIONS = {}, CATALOG = {}, AREAS = [];
+let SECTIONS = {}, TRADES = {}, CATALOG = {}, AREAS = [];
+const tradeInfo = (k) => TRADES[k] || SECTIONS[k] || {};
 const sel = { section: "", sub: "", answers: {}, symptoms: [] };
 let lastDiagnosis = null;
 let invited = new Set();
@@ -96,7 +97,7 @@ function renderSubs() {
   $("#notSure").classList.toggle("hidden", !!sel.section);
   if (!sel.section) return;
   $("#subs").innerHTML = CATALOG[sel.section].map((s) =>
-    `<button class="chip ${sel.sub === s.id ? "active" : ""}" data-sub="${s.id}">${esc(L(s.label))}</button>`
+    `<button class="chip ${sel.sub === s.id ? "active" : ""}" data-sub="${s.id}">${icon(tradeInfo(s.trade).icon || SECTIONS[sel.section].icon, "ic chip-ic")}${esc(L(s.label))}</button>`
   ).join("");
   $("#subs").querySelectorAll(".chip").forEach((b) => b.addEventListener("click", () => {
     sel.sub = b.dataset.sub; sel.answers = {}; sel.symptoms = [];
@@ -243,15 +244,15 @@ function workerCard(w, { inviteBtn = false } = {}) {
 }
 
 async function renderResult(d) {
-  const s = d.section_info, p = d.price;
+  const s = d.section_info, p = d.price, wi = d.worker_info || s;
   const danger = d.safety.level === "danger";
   const prevPrice = $("#offer")?.value || "";
   const area = $("#area").value;
-  const workers = await api(`/api/workers?section=${d.section}&area=${encodeURIComponent(area)}`).catch(() => []);
+  const workers = await api(`/api/workers?section=${d.section}&trade=${d.trade || ""}&area=${encodeURIComponent(area)}`).catch(() => []);
   $("#result").innerHTML = `
     ${safetyHTML(d.safety)}
     <div class="card">
-      <div class="row-ic">${icon(s.icon, "ic-lg")}<div><span class="muted small">${esc(t("goes_to"))}</span><br><b>${esc(L(s.worker))}</b> · ${esc(L(s.name))}</div></div>
+      <div class="row-ic">${icon(wi.icon || s.icon, "ic-lg")}<div><span class="muted small">${esc(t("goes_to"))}</span><br><b>${esc(L(wi.worker))}</b> · ${esc(L(s.name))}</div></div>
       <h3>${esc(d.diagnosis)}</h3>
       <p class="muted">${esc(d.likely_cause)} · ${esc(t("difficulty"))}: ${esc(t(d.difficulty))}</p>
       <div class="estimate row-ic">${icon("money", "ic-lg")}<div><div class="muted small">${esc(t("estimate"))}</div><div class="price">${rs(p.fair_min)} – ${rs(p.fair_max)}</div></div></div>
@@ -312,7 +313,7 @@ function verificationHTML(j) {
 }
 
 function jobHead(j) {
-  const s = j.section_info;
+  const s = j.worker_info || j.section_info;
   return `<div class="row-ic">${j.photo ? `<img class="thumb" src="${imgSrc(j.photo)}">` : icon(s.icon, "thumb ic-box")}<div class="grow">
     <span class="badge">${esc(L(s.worker))}</span> <span class="small status ${j.status}">${esc(statusText(j))}</span>
     <h3>${esc(j.diagnosis)}</h3>
@@ -346,8 +347,9 @@ let me = store.get("rozgar.workerId", "");
 function renderWorkerSelect() {
   if (!WORKERS.length) return;
   if (!me) me = WORKERS[0].id;
-  $("#workerSel").innerHTML = Object.entries(SECTIONS).map(([sid, s]) =>
-    `<optgroup label="${esc(L(s.worker))}">${WORKERS.filter((w) => w.section === sid).map((w) =>
+  const trades = [...new Set(WORKERS.map((w) => w.trade))];
+  $("#workerSel").innerHTML = trades.map((tr) =>
+    `<optgroup label="${esc(L(tradeInfo(tr).worker))}">${WORKERS.filter((w) => w.trade === tr).map((w) =>
       `<option value="${w.id}" ${w.id === me ? "selected" : ""}>${esc(L(w.name))} · ${esc(w.area)}</option>`).join("")}</optgroup>`
   ).join("");
   const w = WORKERS.find((x) => x.id === me);
@@ -366,6 +368,8 @@ async function loadOpenJobs() {
   const w = WORKERS.find((x) => x.id === me);
   if (!w) return;
   let jobs = await api(`/api/jobs?section=${w.section}`).catch(() => []);
+  // AC and appliance technicians share the electrical section: show each their own trade
+  jobs = jobs.filter((j) => (j.trade || j.section) === w.trade || ((j.trade || j.section) === j.section && j.section === w.section));
   jobs = jobs.sort((a, b) => (b.invited || []).includes(me) - (a.invited || []).includes(me));
   const html = jobs.length ? jobs.map((j) => {
     const mine = j.accepted && j.accepted.worker_id === me;
@@ -427,7 +431,7 @@ function refresh() {
 }
 
 (async () => {
-  [SECTIONS, CATALOG, AREAS, WORKERS] = await Promise.all([api("/api/sections"), api("/api/catalog"), api("/api/areas"), api("/api/workers")]);
+  [SECTIONS, TRADES, CATALOG, AREAS, WORKERS] = await Promise.all([api("/api/sections"), api("/api/trades"), api("/api/catalog"), api("/api/areas"), api("/api/workers")]);
   $("#area").innerHTML = AREAS.map((a) => `<option>${esc(a)}</option>`).join("");
   $("#area").value = store.get("rozgar.area", AREAS[0]);
   $("#area").addEventListener("change", () => { store.set("rozgar.area", $("#area").value); if (lastDiagnosis) renderResult(lastDiagnosis); });
