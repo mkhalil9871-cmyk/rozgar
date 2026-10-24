@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+import secrets
+
+from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -182,7 +184,9 @@ def create_job(body: JobIn):
     if body.offer <= 0:
         raise HTTPException(400, "Enter your price")
     price = d["price"]
+    token = secrets.token_hex(16)
     job = store.create({
+        "owner_token": token,
         "lang": d.get("lang", "en"),
         "section": d["section"],
         "section_info": d["section_info"],
@@ -207,7 +211,7 @@ def create_job(body: JobIn):
         "trace": d.get("trace", []),
     })
     store.schedule_sample_offers(job["id"])
-    return public(job)
+    return {**public(job), "owner_token": token}
 
 
 def _job(job_id):
@@ -220,6 +224,7 @@ def _job(job_id):
 def public(job):
     """What the browser gets: photos as small URLs instead of base64, and distance on every offer."""
     job = dict(job)
+    job.pop("owner_token", None)  # only the poster's browser ever sees this
     if job.get("photo"):
         job["photo"] = {"url": f"/api/jobs/{job['id']}/photo/before"}
     if job.get("verification") and job["verification"].get("after_photo"):
@@ -238,6 +243,16 @@ def list_jobs(section: str = ""):
 @app.get("/api/jobs/{job_id}")
 def get_job(job_id: str):
     return public(_job(job_id))
+
+
+@app.delete("/api/jobs/{job_id}")
+def delete_job(job_id: str, x_owner_token: str = Header("")):
+    """Only the customer who posted the job (holding its private token) can delete it."""
+    job = _job(job_id)
+    if not job.get("owner_token") or not secrets.compare_digest(job["owner_token"], x_owner_token):
+        raise HTTPException(403, "Only the customer who posted this job can delete it")
+    store.delete_job(job_id)
+    return {"deleted": job_id}
 
 
 @app.get("/api/jobs/{job_id}/photo/{which}")

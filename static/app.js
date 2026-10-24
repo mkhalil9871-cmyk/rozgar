@@ -34,6 +34,10 @@ function bookingHTML() {
     <div class="qlabel">${esc(t("payment"))}</div>${chipRow("payment", PAYS)}`;
 }
 let myJobIds = store.get("rozgar.myJobs", []);
+let ownerTokens = store.get("rozgar.tokens", {});
+let cTab = "new", wTab = "jobs";
+let myJobsCache = [], workerJobsCache = [];
+let seen = store.get("rozgar.seen", {});
 let lastMyHTML = "", lastOpenHTML = "", typing = false;
 
 async function api(path, opts = {}) {
@@ -41,6 +45,22 @@ async function api(path, opts = {}) {
   const data = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(data.error || data.detail || `Request failed (${r.status})`);
   return data;
+}
+// small non-blocking message at the bottom of the screen
+let toastTimer;
+function toast(msg, kind = "") {
+  const el = $("#toast");
+  el.textContent = msg;
+  el.className = `toast ${kind}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add("hidden"), 3500);
+}
+// disable a button while its action runs, so a double tap can't send twice
+async function busy(btn, fn) {
+  if (!btn || btn.disabled) return;
+  btn.disabled = true;
+  btn.classList.add("is-busy");
+  try { return await fn(); } finally { btn.disabled = false; btn.classList.remove("is-busy"); }
 }
 const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 const imgSrc = (p) => (!p ? "" : p.url ? p.url : `data:${p.mime};base64,${p.b64}`);
@@ -88,7 +108,7 @@ const validCnic = (c) => /^\d{5}-?\d{7}-?\d$/.test(c.trim());
 const DEMO_OTP = "1234";
 document.querySelectorAll("[data-otp]").forEach((b) => b.addEventListener("click", () => {
   const k = b.dataset.otp;
-  if (!validPhone($(`#${k}Phone`).value)) return alert(t("bad_phone"));
+  if (!validPhone($(`#${k}Phone`).value)) return toast(t("bad_phone"));
   $(`#${k}OtpBox`).classList.remove("hidden");
   $(`#${k}Otp`).focus();
 }));
@@ -126,8 +146,10 @@ function startSession(s) {
   if (s.role === "worker") { me = s.workerId; seedDemoJob(); }
   if (s.area) { store.set("rozgar.area", s.area); $("#area").value = s.area; }
   lastMyHTML = lastOpenHTML = "";
+  activeThread = "";
   showScreen();
   applyLang();
+  if (s.role === "customer") showCTab("new"); else showWTab("jobs");
 }
 
 function renderLoginSelects() {
@@ -160,34 +182,64 @@ document.querySelectorAll("[data-wtab]").forEach((b) => b.addEventListener("clic
 }));
 $("#cLogin").addEventListener("click", () => {
   const name = $("#cName").value.trim();
-  if (!name) return alert(t("need_name"));
-  if (!validPhone($("#cPhone").value)) return alert(t("bad_phone"));
-  if ($("#cOtp").value !== DEMO_OTP) { $("#cOtpBox").classList.remove("hidden"); return alert(t("wrong_otp")); }
+  if (!name) return toast(t("need_name"));
+  if (!validPhone($("#cPhone").value)) return toast(t("bad_phone"));
+  if ($("#cOtp").value !== DEMO_OTP) { $("#cOtpBox").classList.remove("hidden"); return toast(t("wrong_otp")); }
   startSession({ role: "customer", name, area: $("#cArea").value });
 });
 $("#wLogin").addEventListener("click", () => {
-  if ($("#wPin").value !== "1234") return alert(t("wrong_pin"));
+  if ($("#wPin").value !== "1234") return toast(t("wrong_pin"));
   const w = WORKERS.find((x) => x.id === $("#wPick").value);
   startSession({ role: "worker", name: L(w.name), workerId: w.id, area: w.area });
 });
 $("#wJoinBtn").addEventListener("click", async () => {
   const name = $("#jName").value.trim();
-  if (!name) return alert(t("need_name"));
-  if (!validPhone($("#jPhone").value)) return alert(t("bad_phone"));
-  if ($("#jOtp").value !== DEMO_OTP) { $("#jOtpBox").classList.remove("hidden"); return alert(t("wrong_otp")); }
-  if (!validCnic($("#jCnic").value)) return alert(t("bad_cnic"));
+  if (!name) return toast(t("need_name"));
+  if (!validPhone($("#jPhone").value)) return toast(t("bad_phone"));
+  if ($("#jOtp").value !== DEMO_OTP) { $("#jOtpBox").classList.remove("hidden"); return toast(t("wrong_otp")); }
+  if (!validCnic($("#jCnic").value)) return toast(t("bad_cnic"));
   try {
     const w = await postJSON("/api/workers", { name, phone: $("#jPhone").value, trade: $("#jTrade").value, area: $("#jArea").value, years: +$("#jYears").value || 0 });
     WORKERS.push(w);
     startSession({ role: "worker", name, workerId: w.id, area: w.area });
-  } catch (e) { alert(e.message); }
+  } catch (e) { toast(e.message); }
 });
 $("#logoutBtn").addEventListener("click", () => {
   session = null;
+  activeThread = "";
+  document.querySelectorAll(".inbox").forEach((b) => { b.innerHTML = ""; delete b.dataset.ready; });
   store.set("rozgar.session", null);
   lastMyHTML = lastOpenHTML = "";
   showScreen();
 });
+
+// ---------- tabs ----------
+const TAB_HASH = { new: "#new", jobs: "#jobs", msgs: "#messages" };
+function showCTab(tab) {
+  cTab = tab;
+  history.replaceState(null, "", TAB_HASH[tab]);
+  document.querySelectorAll("[data-ctab]").forEach((b) => b.classList.toggle("active", b.dataset.ctab === tab));
+  $("#cNew").classList.toggle("hidden", tab !== "new");
+  $("#cJobs").classList.toggle("hidden", tab !== "jobs");
+  $("#cMsgs").classList.toggle("hidden", tab !== "msgs");
+  if (tab === "msgs") renderInbox();
+  window.scrollTo({ top: 0 });
+}
+function showWTab(tab) {
+  wTab = tab;
+  history.replaceState(null, "", TAB_HASH[tab]);
+  document.querySelectorAll("[data-wv]").forEach((b) => b.classList.toggle("active", b.dataset.wv === tab));
+  $("#wJobsTab").classList.toggle("hidden", tab !== "jobs");
+  $("#wMsgs").classList.toggle("hidden", tab !== "msgs");
+  if (tab === "msgs") renderInbox();
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll("[data-ctab]").forEach((b) => b.addEventListener("click", () => showCTab(b.dataset.ctab)));
+document.querySelectorAll("[data-wv]").forEach((b) => b.addEventListener("click", () => showWTab(b.dataset.wv)));
+function setCount(id, n) {
+  $(id).textContent = n;
+  $(id).classList.toggle("hidden", !n);
+}
 
 // ---------- step 1: sections ----------
 function renderSections() {
@@ -309,9 +361,9 @@ function showProgress(on) {
 
 async function diagnose(answer = "") {
   const f = $("#photo").files[0];
-  if (!f && !$("#desc").value.trim() && !sel.sub) { alert(t("need_input")); return; }
+  if (!f && !$("#desc").value.trim() && !sel.sub) { toast(t("need_input")); return; }
   const miss = missingInfo();
-  if (miss) { alert(miss); return; }
+  if (miss) { toast(miss); return; }
   const fd = new FormData();
   if (f) fd.append("photo", await shrink(f));
   fd.append("description", $("#desc").value);
@@ -483,23 +535,30 @@ async function renderResult(d) {
     invited.has(id) ? invited.delete(id) : invited.add(id);
     renderResult(d);
   }));
-  $("#postBtn").addEventListener("click", postJob);
+  $("#postBtn").addEventListener("click", (e) => busy(e.currentTarget, postJob));
 }
 
 async function postJob() {
   const offer = +$("#offer").value;
-  if (!offer) { alert(t("enter_price")); $("#offer").focus(); return; }
-  if (!booking.address.trim()) { alert(t("need_address")); $("#bkAddress").focus(); return; }
+  if (!offer) { toast(t("enter_price")); $("#offer").focus(); return; }
+  if (!booking.address.trim()) { toast(t("need_address")); $("#bkAddress").focus(); return; }
   if (lastDiagnosis.safety.level === "danger" && !confirm(t("confirm_danger"))) return;
   try {
     const job = await postJSON("/api/jobs", { diagnosis: lastDiagnosis, offer, area: $("#area").value, invited: [...invited], customer: session?.name || "", booking: { ...booking } });
     myJobIds.unshift(job.id);
     store.set("rozgar.myJobs", myJobIds);
-    $("#result").innerHTML = `<div class="card ok row-ic">${icon("check", "ic-lg")}<b>${esc(t("posted"))}</b></div>`;
+    ownerTokens[job.id] = job.owner_token;
+    store.set("rozgar.tokens", ownerTokens);
+    $("#result").classList.add("hidden");
     $("#photo").value = ""; $("#desc").value = ""; $("#preview").classList.add("hidden");
     lastDiagnosis = null;
+    sel.section = ""; sel.sub = ""; sel.answers = {}; sel.symptoms = []; sel.qty = ""; sel.brings = null;
+    renderSections(); renderSubs(); renderDetails();
+    toast(t("posted"), "ok");
+    showCTab("jobs");
+    lastMyHTML = "";
     loadMyJobs();
-  } catch (e) { alert(e.message); }
+  } catch (e) { toast(e.message); }
 }
 
 // ---------- my jobs ----------
@@ -523,7 +582,7 @@ function jobHead(j) {
     <div class="small muted">${icon("pin")}${esc(j.area || "Faisalabad")} · ${esc(t("your_offer"))} <b>${rs(j.offer)}</b> · ${esc(t("estimate"))} ${rs(j.price.fair_min)} – ${rs(j.price.fair_max)}</div></div></div>`;
 }
 
-const typingChat = () => !!document.activeElement?.dataset?.chat;
+const typingChat = () => false;
 
 let declined = new Set(store.get("rozgar.declined", []));
 
@@ -540,8 +599,10 @@ function offerCard(j, b) {
         <div class="small muted">${stars(w.rating)} · ${w.jobs_done} ${esc(t("jobs_done"))} · ${icon("pin")}${far}</div></div>
       <div class="offer-price"><b>${rs(b.amount)}</b>${checkHTML(b.check.status)}</div>
     </div>
-    ${open ? `<div class="offer-actions"><button class="secondary" data-decline="${b.id}">${esc(t("decline"))}</button><button class="primary sm" data-accept="${j.id}:${b.id}">${esc(t("accept"))} ${rs(b.amount)}</button></div>` : ""}
-    ${chatHTML(j, b.worker_id, "customer")}
+    <div class="offer-actions">
+      ${chatBtn(`${j.id}:${b.worker_id}:customer`, j)}
+      ${open ? `<button class="secondary" data-decline="${b.id}">${esc(t("decline"))}</button><button class="primary sm" data-accept="${j.id}:${b.id}">${esc(t("accept"))} ${rs(b.amount)}</button>` : ""}
+    </div>
   </div>`;
 }
 
@@ -551,48 +612,73 @@ function customerJobHTML(j) {
   const talkers = [...new Set([...(j.invited || []), ...(j.messages || []).map((m) => m.worker_id)])].filter((id) => !bidders.has(id));
   const talkCards = talkers.filter((id) => (j.messages || []).some((m) => m.worker_id === id)).map((id) => {
     const w = WORKERS.find((x) => x.id === id) || { name: { en: id }, area: "" };
-    return `<div class="offer"><div class="offer-top"><span class="avatar-badge worker">${esc((L(w.name) || "?")[0])}</span><div class="grow"><b>${esc(L(w.name))}</b><div class="small muted">${esc(t("no_offer_yet"))}</div></div></div>${chatHTML(j, id, "customer")}</div>`;
+    return `<div class="offer"><div class="offer-top"><span class="avatar-badge worker">${esc((L(w.name) || "?")[0])}</span><div class="grow"><b>${esc(L(w.name))}</b><div class="small muted">${esc(t("no_offer_yet"))}</div></div>${chatBtn(`${j.id}:${id}:customer`, j)}</div></div>`;
   }).join("");
 
   if (j.status === "open") {
     const offers = j.bids.filter((b) => !declined.has(b.id)).sort((a, b) => a.amount - b.amount);
-    return `<div class="card">${jobHead(j)}
-      <div class="searching"><span class="pulse"></span>${esc(t(offers.length ? "offers_coming" : "finding_workers"))}</div>
-      ${offers.length ? `<div class="small muted">${offers.length} ${esc(t("offers_count"))}</div>` : ""}
+    const fresh = Date.now() / 1000 - j.created < 90;
+    const status = offers.length
+      ? `<div class="offers-head">${offers.length} ${esc(t("offers_count"))}</div>`
+      : fresh ? `<div class="searching"><span class="pulse"></span>${esc(t("finding_workers"))}</div>`
+      : `<p class="small muted">${esc(t("waiting_bids"))}</p>`;
+    return `<div class="card">${jobHead(j)}${deleteBtn(j)}
+      ${status}
       ${offers.map((b) => offerCard(j, b)).join("")}
       ${talkCards}
       ${traceHTML(j.trace)}</div>`;
   }
   // a worker has been chosen: show them with an always-open chat
   const acc = j.bids.find((b) => b.id === j.accepted?.id) || { ...j.accepted, worker: WORKERS.find((x) => x.id === j.accepted?.worker_id), check: { status: "fair" } };
-  return `<div class="card">${jobHead(j)}
+  return `<div class="card">${jobHead(j)}${deleteBtn(j)}
     <h3>${esc(t("your_worker"))}</h3>
-    ${offerCard(j, acc).replace('<details class="chat"', '<details class="chat" open')}
+    ${offerCard(j, acc)}
     ${verificationHTML(j)}${traceHTML(j.trace)}</div>`;
 }
 
+function deleteBtn(j) {
+  return ownerTokens[j.id] ? `<button class="link-danger" data-del="${j.id}">${icon("cross")}${esc(t("delete_job"))}</button>` : "";
+}
+
 async function loadMyJobs() {
-  if (typingChat()) return;
-  if (!myJobIds.length) { $("#myJobs").innerHTML = `<p class="muted">${esc(t("no_jobs"))}</p>`; return; }
-  const jobs = (await Promise.all(myJobIds.map((id) => api(`/api/jobs/${id}`).catch(() => null)))).filter(Boolean);
-  const html = jobs.length ? jobs.map(customerJobHTML).join("") : `<p class="muted">${esc(t("no_jobs"))}</p>`;
+  const jobs = myJobIds.length ? (await Promise.all(myJobIds.map((id) => api(`/api/jobs/${id}`).catch((e) => (/not found/i.test(e.message) ? "gone" : null))))) : [];
+  // forget jobs that were deleted elsewhere
+  const gone = myJobIds.filter((_, n) => jobs[n] === "gone");
+  if (gone.length) { myJobIds = myJobIds.filter((id) => !gone.includes(id)); store.set("rozgar.myJobs", myJobIds); }
+  myJobsCache = jobs.filter((x) => x && x !== "gone");
+  setCount("#cJobsCount", myJobsCache.filter((j) => j.status !== "verified").length);
+  renderInbox();
+  const html = myJobsCache.length ? myJobsCache.map(customerJobHTML).join("") : `<div class="empty">${icon("clipboard", "ic-lg")}<p>${esc(t("no_jobs"))}</p><button class="primary sm" data-ctab-go="new">${esc(t("tab_new"))}</button></div>`;
   if (html === lastMyHTML) return;
-  // keep chats the user opened open across refreshes
-  const openChats = [...document.querySelectorAll("#myJobs details.chat[open] [data-chat]")].map((x) => x.dataset.chat);
   lastMyHTML = html;
   $("#myJobs").innerHTML = html;
-  openChats.forEach((k) => document.querySelector(`[data-chat="${k}"]`)?.closest("details")?.setAttribute("open", ""));
-  $("#myJobs").querySelectorAll("[data-accept]").forEach((b) => b.addEventListener("click", async () => {
+  $("#myJobs").querySelector("[data-ctab-go]")?.addEventListener("click", () => showCTab("new"));
+  $("#myJobs").querySelectorAll("[data-accept]").forEach((b) => b.addEventListener("click", () => busy(b, async () => {
     const [jobId, bidId] = b.dataset.accept.split(":");
-    await postJSON(`/api/jobs/${jobId}/accept`, { bid_id: bidId }).catch((e) => alert(e.message));
+    try { await postJSON(`/api/jobs/${jobId}/accept`, { bid_id: bidId }); toast(t("accepted_toast"), "ok"); }
+    catch (e) { toast(e.message, "err"); }
     lastMyHTML = "";
     loadMyJobs();
-  }));
+  })));
   $("#myJobs").querySelectorAll("[data-decline]").forEach((b) => b.addEventListener("click", () => {
     declined.add(b.dataset.decline);
     store.set("rozgar.declined", [...declined]);
     lastMyHTML = "";
     loadMyJobs();
+  }));
+  $("#myJobs").querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => {
+    if (!confirm(t("confirm_delete"))) return;
+    busy(b, async () => {
+      const id = b.dataset.del;
+      try {
+        await api(`/api/jobs/${id}`, { method: "DELETE", headers: { "X-Owner-Token": ownerTokens[id] || "" } });
+        myJobIds = myJobIds.filter((x) => x !== id); store.set("rozgar.myJobs", myJobIds);
+        delete ownerTokens[id]; store.set("rozgar.tokens", ownerTokens);
+        toast(t("deleted"), "ok");
+      } catch (e) { toast(e.message, "err"); }
+      lastMyHTML = "";
+      loadMyJobs();
+    });
   }));
 }
 
@@ -610,12 +696,16 @@ async function loadOpenJobs() {
   if (typing || typingChat()) return;
   const w = WORKERS.find((x) => x.id === me);
   if (!w) return;
-  let jobs = await api(`/api/jobs?section=${w.section}`).catch(() => []);
+  let jobs = await api(`/api/jobs?section=${w.section}`).catch(() => null);
+  if (!jobs) return;
   // AC and appliance technicians share the electrical section: show each their own trade
   jobs = jobs.filter((j) => (j.trade || j.section) === w.trade || ((j.trade || j.section) === j.section && j.section === w.section));
   // jobs another worker already got are hidden
   jobs = jobs.filter((j) => j.status === "open" || j.accepted?.worker_id === me);
   jobs = jobs.sort((a, b) => (b.invited || []).includes(me) - (a.invited || []).includes(me));
+  workerJobsCache = jobs;
+  setCount("#wJobsCount", jobs.filter((j) => j.status === "open" && !j.bids.some((b) => b.worker_id === me)).length);
+  renderInbox();
   const html = jobs.length ? jobs.map((j) => {
     const mine = j.accepted && j.accepted.worker_id === me;
     const myBid = j.bids.find((b) => b.worker_id === me);
@@ -633,7 +723,7 @@ async function loadOpenJobs() {
       ${jobHead(j).replace(esc(t("your_offer")), esc(t("customer_pays")))}
       <div class="card inner"><div class="muted small">${esc(t("job_card"))}</div><div class="jobcard ${j.lang === "ur" ? "urdu" : ""}">${esc(j.job_card_urdu)}</div>
       <div class="small muted">${esc(t("bring"))}: ${j.price.materials.map((m) => esc(m.item)).join(", ") || "-"}</div></div>
-      ${action}${(j.accepted && j.accepted.worker_id !== me) ? "" : (mine ? chatHTML(j, me, "worker").replace('<details class="chat"', '<details class="chat" open') : chatHTML(j, me, "worker"))}${verificationHTML(j)}</div>`;
+      ${action}<div class="offer-actions">${chatBtn(`${j.id}:${me}:worker`, j)}</div>${verificationHTML(j)}</div>`;
   }).join("") : `<p class="muted">${esc(t("w_none"))}</p>`;
   if (html === lastOpenHTML) return;
   lastOpenHTML = html;
@@ -648,21 +738,23 @@ async function loadOpenJobs() {
       $(`[data-bidchk="${j.id}"]`).innerHTML = v ? checkHTML(priceStatus(v, j.price)) : "";
     });
   });
-  $("#openJobs").querySelectorAll("[data-send]").forEach((b) => b.addEventListener("click", async () => {
+  $("#openJobs").querySelectorAll("[data-send]").forEach((b) => b.addEventListener("click", () => busy(b, async () => {
     const id = b.dataset.send;
     const amount = +$(`[data-bid="${id}"]`).value;
-    if (!amount) { alert(t("enter_price")); return; }
+    if (!amount) { toast(t("enter_price"), "err"); return; }
     typing = false;
-    await postJSON(`/api/jobs/${id}/bids`, { worker_id: me, amount }).catch((e) => alert(e.message));
+    try { await postJSON(`/api/jobs/${id}/bids`, { worker_id: me, amount }); toast(t("bid_sent"), "ok"); }
+    catch (e) { toast(e.message, "err"); }
+    lastOpenHTML = "";
     loadOpenJobs();
-  }));
+  })));
   $("#openJobs").querySelectorAll("[data-after]").forEach((inp) => inp.addEventListener("change", async () => {
     const fd = new FormData();
     fd.append("photo", await shrink(inp.files[0]));
     typing = true;
     inp.nextElementSibling.textContent = t("verifying");
     try { await api(`/api/jobs/${inp.dataset.after}/verify`, { method: "POST", body: fd }); }
-    catch (e) { alert(e.message); }
+    catch (e) { toast(e.message); }
     typing = false;
     WORKERS = await api("/api/workers").catch(() => WORKERS);
     renderWorkerSelect();
@@ -670,28 +762,110 @@ async function loadOpenJobs() {
   }));
 }
 
-// ---------- chat between customer and worker ----------
-function chatHTML(j, workerId, as) {
-  const msgs = (j.messages || []).filter((m) => m.worker_id === workerId);
-  const other = as === "customer" ? L(WORKERS.find((w) => w.id === workerId)?.name) : (j.customer || t("customer"));
-  const bubbles = msgs.map((m) => `<div class="msg ${m.sender === as ? "me" : "them"}">${esc(m.text)}</div>`).join("");
-  const key = `${j.id}:${workerId}:${as}`;
-  return `<details class="chat" ${msgs.length ? "open" : ""}><summary>${icon("chat")}${esc(t("chat_with"))} ${esc(other)}${msgs.length ? ` (${msgs.length})` : ""}</summary>
-    <div class="msgs">${bubbles || `<p class="small muted">${esc(t("chat_empty"))}</p>`}</div>
-    <div class="row nowrap"><input data-chat="${key}" placeholder="${esc(t("chat_ph"))}" maxlength="500"><button class="secondary" data-chat-send="${key}">${esc(t("send"))}</button></div></details>`;
+// ---------- messages: one inbox per user, one thread per job + worker ----------
+let activeThread = "";
+const otherMsgs = (msgs, as) => msgs.filter((m) => m.sender !== as);
+
+function threadsFor() {
+  const as = role;
+  const out = [];
+  if (as === "customer") {
+    for (const j of myJobsCache) {
+      const ids = new Set([...j.bids.map((b) => b.worker_id), ...(j.messages || []).map((m) => m.worker_id)]);
+      if (j.accepted) ids.add(j.accepted.worker_id);
+      for (const wid of ids) {
+        const w = WORKERS.find((x) => x.id === wid) || j.bids.find((b) => b.worker_id === wid)?.worker || { name: { en: wid } };
+        out.push({ key: `${j.id}:${wid}:customer`, who: L(w.name), job: j, msgs: (j.messages || []).filter((m) => m.worker_id === wid) });
+      }
+    }
+  } else {
+    for (const j of workerJobsCache) {
+      const msgs = (j.messages || []).filter((m) => m.worker_id === me);
+      const involved = msgs.length || j.bids.some((b) => b.worker_id === me) || (j.invited || []).includes(me) || j.accepted?.worker_id === me;
+      if (involved) out.push({ key: `${j.id}:${me}:worker`, who: j.customer || t("customer"), job: j, msgs });
+    }
+  }
+  for (const th of out) {
+    th.last = th.msgs.length ? th.msgs[th.msgs.length - 1] : null;
+    th.unread = Math.max(0, otherMsgs(th.msgs, role).length - (seen[th.key] || 0));
+  }
+  return out.sort((a, b) => (b.last?.time || 0) - (a.last?.time || 0));
 }
+
+function renderInbox() {
+  if (!session) return;
+  const threads = threadsFor();
+  const unread = threads.reduce((n, th) => n + (th.key === activeThread && visibleInbox() ? 0 : th.unread), 0);
+  setCount(role === "customer" ? "#cMsgCount" : "#wMsgCount", unread);
+  if (!visibleInbox()) return;
+  const box = role === "customer" ? $("#cInbox") : $("#wInbox");
+  if (!box.dataset.ready) {
+    box.innerHTML = `<div class="threads"></div><div class="thread">
+      <div class="thread-head"></div><div class="msgs"></div>
+      <div class="thread-input row nowrap"><input maxlength="500"><button class="primary sm">${esc(t("send"))}</button></div></div>`;
+    box.dataset.ready = "1";
+    box.querySelector(".thread-head").addEventListener("click", (e) => { if (e.target.closest("[data-back-list]")) { activeThread = ""; renderInbox(); } });
+  }
+  if (activeThread && !threads.some((th) => th.key === activeThread)) activeThread = "";
+  if (!activeThread && threads.length && innerWidth > 700) activeThread = threads[0].key;
+  box.classList.toggle("has-thread", !!activeThread);
+  box.querySelector(".threads").innerHTML = threads.length ? threads.map((th) => `
+    <button class="thread-row ${th.key === activeThread ? "active" : ""}" data-thread="${th.key}">
+      <span class="avatar-badge ${role === "customer" ? "worker" : "customer"}">${esc((th.who || "?")[0].toUpperCase())}</span>
+      <span class="grow"><b>${esc(th.who)}</b><span class="small muted ellipsis">${esc(th.job.diagnosis)}</span>
+        <span class="small ellipsis">${th.last ? esc((th.last.sender === role ? t("you") + ": " : "") + th.last.text) : `<i class="muted">${esc(t("chat_empty_short"))}</i>`}</span></span>
+      ${th.unread && th.key !== activeThread ? `<span class="count">${th.unread}</span>` : ""}
+    </button>`).join("") : `<div class="empty">${icon("chat", "ic-lg")}<p>${esc(t("no_threads"))}</p></div>`;
+  box.querySelectorAll("[data-thread]").forEach((b) => b.addEventListener("click", () => openThread(b.dataset.thread)));
+  const th = threads.find((x) => x.key === activeThread);
+  const pane = box.querySelector(".thread");
+  pane.classList.toggle("hidden-pane", !th);
+  if (!th) { pane.querySelector(".thread-head").innerHTML = `<p class="muted">${esc(t("pick_thread"))}</p>`; pane.querySelector(".msgs").innerHTML = ""; return; }
+  pane.querySelector(".thread-head").innerHTML = `<button class="link" data-back-list>‹ ${esc(t("back"))}</button>
+    <b>${esc(th.who)}</b><span class="small muted ellipsis">${esc(th.job.diagnosis)} · ${rs(th.job.offer)}</span>`;
+  const msgsEl = pane.querySelector(".msgs");
+  const html = th.msgs.length ? th.msgs.map((m) => `<div class="msg ${m.sender === role ? "me" : "them"}">${esc(m.text)}<span class="time">${new Date(m.time * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span></div>`).join("")
+    : `<p class="small muted">${esc(t("chat_empty"))}</p>`;
+  if (msgsEl.dataset.html !== html) {
+    msgsEl.innerHTML = html;
+    msgsEl.dataset.html = html;
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  }
+  const input = pane.querySelector(".thread-input input");
+  input.placeholder = t("chat_ph");
+  input.dataset.chat = th.key;
+  pane.querySelector(".thread-input button").dataset.chatSend = th.key;
+  seen[th.key] = otherMsgs(th.msgs, role).length;
+  store.set("rozgar.seen", seen);
+}
+const visibleInbox = () => (role === "customer" ? cTab === "msgs" : wTab === "msgs");
+
+function openThread(key) {
+  activeThread = key;
+  if (role === "customer") showCTab("msgs"); else showWTab("msgs");
+  renderInbox();
+  setTimeout(() => document.querySelector(`[data-chat="${key}"]`)?.focus(), 50);
+}
+function chatBtn(key, j) {
+  const msgs = (j.messages || []).filter((m) => m.worker_id === key.split(":")[1]);
+  const unread = Math.max(0, otherMsgs(msgs, role).length - (seen[key] || 0));
+  return `<button class="secondary chat-btn" data-open-thread="${key}">${icon("chat")}${esc(t("chat"))}${unread ? ` <span class="count">${unread}</span>` : ""}</button>`;
+}
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-open-thread]"); if (b) openThread(b.dataset.openThread); });
+
 async function sendChat(key) {
   const inp = document.querySelector(`[data-chat="${key}"]`);
   const text = inp?.value.trim();
   if (!text) return;
   const [jobId, workerId, sender] = key.split(":");
   inp.value = "";
-  inp.blur();
-  await postJSON(`/api/jobs/${jobId}/messages`, { worker_id: workerId, sender, text }).catch((e) => alert(e.message));
+  try { await postJSON(`/api/jobs/${jobId}/messages`, { worker_id: workerId, sender, text }); }
+  catch (e) { inp.value = text; toast(e.message, "err"); return; }
   lastMyHTML = lastOpenHTML = "";
-  refresh();
+  await (role === "customer" ? loadMyJobs() : loadOpenJobs());
+  inp.focus();
 }
-document.addEventListener("click", (e) => { const b = e.target.closest("[data-chat-send]"); if (b) sendChat(b.dataset.chatSend); });
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-chat-send]"); if (b?.dataset.chatSend) sendChat(b.dataset.chatSend); });
 document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.dataset?.chat) sendChat(e.target.dataset.chat); });
 
 // ---------- light / dark mode ----------
@@ -724,6 +898,9 @@ function goHome() {
     $("#photo").value = ""; $("#preview").classList.add("hidden"); $("#desc").value = "";
     $("#result").classList.add("hidden"); $("#clarify").classList.add("hidden");
     renderSections(); renderSubs(); renderDetails();
+    showCTab("new");
+  } else {
+    showWTab("jobs");
   }
   lastMyHTML = lastOpenHTML = "";
   refresh();
@@ -737,7 +914,7 @@ $("#brandHome").addEventListener("keydown", (e) => { if (e.key === "Enter") goHo
 
 // ---------- boot ----------
 function refresh() {
-  if (!session) return;
+  if (!session || document.hidden) return;
   if (role === "customer") loadMyJobs();
   else loadOpenJobs();
 }
@@ -753,4 +930,8 @@ function refresh() {
   api("/api/health").then((h) => ($("#modelName").textContent = h.model)).catch(() => {});
   applyLang();
   setInterval(refresh, 4000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+  const fromHash = Object.keys(TAB_HASH).find((k) => TAB_HASH[k] === location.hash);
+  if (session?.role === "customer") showCTab(fromHash || (myJobIds.length ? "jobs" : "new"));
+  else if (session) showWTab(fromHash === "msgs" ? "msgs" : "jobs");
 })();

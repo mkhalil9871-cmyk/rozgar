@@ -62,7 +62,8 @@ Built at **Hacktoberfest Hack Day Faisalabad 2026** for the *Best Open-Source AI
 - A live check on the price you enter: reasonable, too low, or above the estimate.
 - InDrive-style offers: while the job is open, offers from nearby workers arrive as cards with rating, distance in km and price, cheapest first, each with Accept and Decline. In the demo, a few labelled sample workers respond within seconds (`ROZGAR_SAMPLE_OFFERS=0` turns this off).
 - Nearby workers with ratings, experience and past projects; invite specific workers or post to all.
-- Chat with any worker who messages you or sends an offer, before and after accepting. After accepting, a "Your worker" panel keeps the chat open.
+- A **Messages** inbox: one conversation per job and worker, with unread badges, timestamps and a chat button on every offer. It works before and after accepting.
+- Delete a posted job at any time. Only the browser that posted it holds the job's private delete key.
 
 **For workers**
 - Sign in, or join with trade, area, experience and CNIC.
@@ -71,6 +72,8 @@ Built at **Hacktoberfest Hack Day Faisalabad 2026** for the *Best Open-Source AI
 - Before/after photo verification; verified jobs are added to the worker's portfolio.
 
 **For everyone**
+- Simple tabs: New job · My jobs · Messages for customers, and Jobs · Messages for workers. The address bar remembers the tab (`#jobs`, `#messages`).
+- Non-blocking notifications, buttons that can't be pressed twice, and automatic refresh that pauses while the browser tab is hidden.
 - Full interface in English, Urdu (right-to-left) and Roman Urdu; Gemma answers in the same language.
 - Light and dark mode.
 - An **Agent trace** panel showing every AI step, the model used and its output.
@@ -209,6 +212,7 @@ Dockerfile           Container for Hugging Face Spaces and other hosts
 | `POST` | `/api/jobs/{id}/bids` | Send a worker offer |
 | `POST` | `/api/jobs/{id}/accept` | Accept an offer |
 | `POST` | `/api/jobs/{id}/messages` | Send a chat message |
+| `DELETE` | `/api/jobs/{id}` | Delete a job (requires the `X-Owner-Token` returned when it was posted) |
 | `POST` | `/api/jobs/{id}/verify` | Verify the work from an after photo |
 
 ## Agent Skill

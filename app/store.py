@@ -201,6 +201,14 @@ def update(job_id, **fields):
         return get(job_id)
 
 
+def delete_job(job_id):
+    with _lock:
+        _db.execute("DELETE FROM messages WHERE job_id = ?", (job_id,))
+        _db.execute("DELETE FROM bids WHERE job_id = ?", (job_id,))
+        _db.execute("DELETE FROM jobs WHERE id = ?", (job_id,))
+        _db.commit()
+
+
 def add_bid(job_id, bid):
     with _lock:
         bid_id = uuid.uuid4().hex[:6]
