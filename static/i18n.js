@@ -1,6 +1,11 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    busy_title: "Gemma 4 is busy right now",
+    busy_text: "Lots of people are using the AI at the moment, so it couldn't finish your diagnosis. Your answers are saved. Please try again in a few seconds.",
+    try_again: "Try again",
+    details: "Technical details",
+    busy_toast: "Gemma 4 is busy right now. Please upload the photo again in a few seconds.",
     choose_profile: "Choose your profile",
     switch_role: "Switch role",
     remove_from_list: "Remove from my list",
@@ -159,6 +164,11 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    busy_title: "جیما 4 اس وقت مصروف ہے",
+    busy_text: "اس وقت بہت سے لوگ اے آئی استعمال کر رہے ہیں، اس لیے آپ کی تشخیص مکمل نہیں ہو سکی۔ آپ کے جوابات محفوظ ہیں۔ براہ کرم چند سیکنڈ بعد دوبارہ کوشش کریں۔",
+    try_again: "دوبارہ کوشش کریں",
+    details: "تکنیکی تفصیل",
+    busy_toast: "جیما 4 اس وقت مصروف ہے۔ براہ کرم چند سیکنڈ بعد تصویر دوبارہ لگائیں۔",
     choose_profile: "اپنی پروفائل منتخب کریں",
     switch_role: "کردار بدلیں",
     remove_from_list: "میری فہرست سے ہٹائیں",
@@ -317,6 +327,11 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    busy_title: "Gemma 4 is waqt busy hai",
+    busy_text: "Is waqt bohat se log AI istemal kar rahe hain, is liye aap ki tashkhees mukammal nahi ho saki. Aap ke jawabat mehfooz hain. Barah-e-karam chand second baad dobara koshish karein.",
+    try_again: "Dobara koshish karein",
+    details: "Technical tafseel",
+    busy_toast: "Gemma 4 is waqt busy hai. Barah-e-karam chand second baad tasveer dobara lagayen.",
     choose_profile: "Apni profile chunein",
     switch_role: "Role badlein",
     remove_from_list: "Meri list se hatayen",

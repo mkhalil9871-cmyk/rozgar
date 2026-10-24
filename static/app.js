@@ -43,7 +43,7 @@ let lastMyHTML = "", lastOpenHTML = "", typing = false;
 async function api(path, opts = {}) {
   const r = await fetch(path, opts);
   const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(data.error || data.detail || `Request failed (${r.status})`);
+  if (!r.ok) { const e = new Error(data.error || data.detail || `Request failed (${r.status})`); e.status = r.status; throw e; }
   return data;
 }
 // small non-blocking message at the bottom of the screen
@@ -62,6 +62,8 @@ async function busy(btn, fn) {
   btn.classList.add("is-busy");
   try { return await fn(); } finally { btn.disabled = false; btn.classList.remove("is-busy"); }
 }
+// Gemma overloaded, a timeout or a dropped connection: worth trying again
+const isBusy = (e) => !e.status || e.status >= 500 || e.status === 429;
 const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 const imgSrc = (p) => (!p ? "" : p.url ? p.url : `data:${p.mime};base64,${p.b64}`);
 
@@ -379,7 +381,12 @@ async function diagnose(answer = "") {
     renderResult(d);
     $("#result").scrollIntoView({ behavior: "smooth" });
   } catch (e) {
-    $("#result").innerHTML = `<div class="card danger">${icon("cross")}<b>${esc(t("err_title"))}</b> ${esc(e.message)}<br><span class="small">${esc(t("err_hint"))}</span></div>`;
+    $("#result").innerHTML = isBusy(e)
+      ? `<div class="card busy-note"><div class="row-ic">${icon("warning", "ic-lg")}<div><b>${esc(t("busy_title"))}</b><br>${esc(t("busy_text"))}</div></div>
+          <button class="primary sm" id="retryBtn">${esc(t("try_again"))}</button>
+          <details><summary>${esc(t("details"))}</summary>${esc(e.message)}</details></div>`
+      : `<div class="card danger">${icon("cross")}<b>${esc(t("err_title"))}</b> ${esc(e.message)}</div>`;
+    $("#retryBtn")?.addEventListener("click", () => diagnose(answer));
     $("#result").classList.remove("hidden");
   } finally {
     btn.disabled = false;
@@ -745,7 +752,7 @@ async function loadOpenJobs() {
     typing = true;
     inp.nextElementSibling.textContent = t("verifying");
     try { await api(`/api/jobs/${inp.dataset.after}/verify`, { method: "POST", body: fd }); }
-    catch (e) { toast(e.message); }
+    catch (e) { toast(isBusy(e) ? t("busy_toast") : e.message, "err"); }
     typing = false;
     WORKERS = await api("/api/workers").catch(() => WORKERS);
     renderWorkerSelect();

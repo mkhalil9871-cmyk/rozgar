@@ -221,8 +221,8 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .c-warning { --c: linear-gradient(135deg, #f5a623, #d9531a); }
 .c-cross { --c: linear-gradient(135deg, #ef4d4d, #b91c1c); }
 .c-brain { --c: linear-gradient(135deg, #5b6cff, #3341c9); }
-.tile { background: var(--c); }
-.ic-box { padding: 0; background: var(--c); }
+.tile { background: var(--c, linear-gradient(135deg, #18a873, #0e7a55)); }
+.ic-box { padding: 0; background: var(--c, linear-gradient(135deg, #18a873, #0e7a55)); }
 .brand .tile { margin-inline-end: 2px; }
 .login-hero .tile, .role-card .tile, .hero .tile { margin: 0 auto 8px; }
 
@@ -341,3 +341,10 @@ button.is-busy { opacity: .6; cursor: progress; }
 .wcard .small.muted { overflow-wrap: anywhere; }
 /* the problem description box keeps one fixed size and scrolls inside */
 #desc { resize: none; height: 110px; overflow-y: auto; }
+
+/* empty-state icons sit on a soft brand circle so they never blend into the page */
+.empty .tile { background: var(--brand-soft); color: var(--brand); box-shadow: none; border-radius: 50%; }
+/* "Gemma is busy" note */
+.busy-note { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.busy-note .primary { width: auto; margin-top: 10px; }
+.busy-note details { margin-top: 8px; font-size: 12px; opacity: .8; }
