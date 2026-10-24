@@ -293,3 +293,8 @@ tr.muted td { color: var(--muted); }
 .theme-btn .mi { width: 18px; height: 18px; margin: 0; }
 :root[data-theme="dark"] .photo-dim, :root[data-theme="dark"] .sec-photo, :root[data-theme="dark"] .role-photo, :root[data-theme="dark"] .hero-photo { filter: brightness(.88); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sec-photo, :root:not([data-theme="light"]) .role-photo, :root:not([data-theme="light"]) .hero-photo { filter: brightness(.88); } }
+
+#brandHome { cursor: pointer; }
+.home-btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.home-btn .mi { width: 16px; height: 16px; margin: 0; }
+@media (max-width: 520px) { .home-btn span:last-child { display: none; } .home-btn { padding: 0 10px; } }

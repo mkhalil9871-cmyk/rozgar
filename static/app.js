@@ -654,6 +654,29 @@ $("#themeBtn").addEventListener("click", () => {
 });
 paintThemeBtn();
 
+// ---------- home ----------
+function goHome() {
+  if (!session) {
+    // back to the two login cards
+    $("#customerForm").classList.add("hidden");
+    $("#workerForm").classList.add("hidden");
+    $("#rolePick").classList.remove("hidden");
+  } else if (role === "customer") {
+    // start a fresh job request
+    sel.section = ""; sel.sub = ""; sel.answers = {}; sel.symptoms = []; sel.qty = ""; sel.brings = null;
+    lastDiagnosis = null;
+    $("#photo").value = ""; $("#preview").classList.add("hidden"); $("#desc").value = "";
+    $("#result").classList.add("hidden"); $("#clarify").classList.add("hidden");
+    renderSections(); renderSubs(); renderDetails();
+  }
+  lastMyHTML = lastOpenHTML = "";
+  refresh();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+$("#homeBtn").addEventListener("click", goHome);
+$("#brandHome").addEventListener("click", goHome);
+$("#brandHome").addEventListener("keydown", (e) => { if (e.key === "Enter") goHome(); });
+
 // ---------- boot ----------
 function refresh() {
   if (!session) return;

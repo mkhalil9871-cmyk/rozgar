@@ -1,6 +1,7 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    home: "Home",
     mm_photo: "This photo doesn't match the problem you chose",
     mm_details: "Your details don't match the problem you chose",
     mm_not_job: "This doesn't look like a home job",
@@ -151,6 +152,7 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    home: "ہوم",
     mm_photo: "یہ تصویر آپ کے منتخب کردہ مسئلے سے مطابقت نہیں رکھتی",
     mm_details: "آپ کی تفصیل منتخب کردہ مسئلے سے مطابقت نہیں رکھتی",
     mm_not_job: "یہ گھر کا کوئی کام نہیں لگتا",
@@ -301,6 +303,7 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    home: "Home",
     mm_photo: "Yeh tasveer aap ke chune hue masle se match nahi karti",
     mm_details: "Aap ki tafseel chune hue masle se match nahi karti",
     mm_not_job: "Yeh ghar ka koi kaam nahi lagta",
