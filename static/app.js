@@ -43,7 +43,7 @@ async function api(path, opts = {}) {
   return data;
 }
 const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-const imgSrc = (p) => (p ? `data:${p.mime};base64,${p.b64}` : "");
+const imgSrc = (p) => (!p ? "" : p.url ? p.url : `data:${p.mime};base64,${p.b64}`);
 
 // Phone photos are 3-8 MB; Gemma only needs ~1024 px, so shrink before upload.
 async function shrink(file, max = 1024) {
@@ -525,23 +525,73 @@ function jobHead(j) {
 
 const typingChat = () => !!document.activeElement?.dataset?.chat;
 
+let declined = new Set(store.get("rozgar.declined", []));
+
+// InDrive-style offer card: who, how far, how good, how much
+function offerCard(j, b) {
+  const w = b.worker || {};
+  const initial = (L(w.name) || "?").trim()[0].toUpperCase();
+  const far = b.km != null ? `${b.km} km · ${esc(w.area)}` : esc(w.area || "");
+  const open = j.status === "open";
+  return `<div class="offer">
+    <div class="offer-top">
+      <span class="avatar-badge worker">${esc(initial)}</span>
+      <div class="grow"><b>${esc(L(w.name))}</b>${w.verified ? ` <span class="badge ok">${icon("check")}${esc(t("verified"))}</span>` : ""}${b.note === "sample" ? ` <span class="badge">${esc(t("sample_offer"))}</span>` : ""}
+        <div class="small muted">${stars(w.rating)} · ${w.jobs_done} ${esc(t("jobs_done"))} · ${icon("pin")}${far}</div></div>
+      <div class="offer-price"><b>${rs(b.amount)}</b>${checkHTML(b.check.status)}</div>
+    </div>
+    ${open ? `<div class="offer-actions"><button class="secondary" data-decline="${b.id}">${esc(t("decline"))}</button><button class="primary sm" data-accept="${j.id}:${b.id}">${esc(t("accept"))} ${rs(b.amount)}</button></div>` : ""}
+    ${chatHTML(j, b.worker_id, "customer")}
+  </div>`;
+}
+
+function customerJobHTML(j) {
+  const bidders = new Set(j.bids.map((b) => b.worker_id));
+  // anyone who wrote to the customer or was invited can be chatted with, even before an offer
+  const talkers = [...new Set([...(j.invited || []), ...(j.messages || []).map((m) => m.worker_id)])].filter((id) => !bidders.has(id));
+  const talkCards = talkers.filter((id) => (j.messages || []).some((m) => m.worker_id === id)).map((id) => {
+    const w = WORKERS.find((x) => x.id === id) || { name: { en: id }, area: "" };
+    return `<div class="offer"><div class="offer-top"><span class="avatar-badge worker">${esc((L(w.name) || "?")[0])}</span><div class="grow"><b>${esc(L(w.name))}</b><div class="small muted">${esc(t("no_offer_yet"))}</div></div></div>${chatHTML(j, id, "customer")}</div>`;
+  }).join("");
+
+  if (j.status === "open") {
+    const offers = j.bids.filter((b) => !declined.has(b.id)).sort((a, b) => a.amount - b.amount);
+    return `<div class="card">${jobHead(j)}
+      <div class="searching"><span class="pulse"></span>${esc(t(offers.length ? "offers_coming" : "finding_workers"))}</div>
+      ${offers.length ? `<div class="small muted">${offers.length} ${esc(t("offers_count"))}</div>` : ""}
+      ${offers.map((b) => offerCard(j, b)).join("")}
+      ${talkCards}
+      ${traceHTML(j.trace)}</div>`;
+  }
+  // a worker has been chosen: show them with an always-open chat
+  const acc = j.bids.find((b) => b.id === j.accepted?.id) || { ...j.accepted, worker: WORKERS.find((x) => x.id === j.accepted?.worker_id), check: { status: "fair" } };
+  return `<div class="card">${jobHead(j)}
+    <h3>${esc(t("your_worker"))}</h3>
+    ${offerCard(j, acc).replace('<details class="chat"', '<details class="chat" open')}
+    ${verificationHTML(j)}${traceHTML(j.trace)}</div>`;
+}
+
 async function loadMyJobs() {
   if (typingChat()) return;
   if (!myJobIds.length) { $("#myJobs").innerHTML = `<p class="muted">${esc(t("no_jobs"))}</p>`; return; }
   const jobs = (await Promise.all(myJobIds.map((id) => api(`/api/jobs/${id}`).catch(() => null)))).filter(Boolean);
-  const html = jobs.length ? jobs.map((j) => {
-    const bids = j.bids.map((b) => `<div class="bid">${workerCard(b.worker)}${chatHTML(j, b.worker_id, "customer")}<div class="bid-side"><b class="price-sm">${rs(b.amount)}</b>${checkHTML(b.check.status)}
-      ${j.status === "open" ? `<button class="primary sm" data-accept="${j.id}:${b.id}">${esc(t("accept"))}</button>` : j.accepted?.id === b.id ? `<span class="badge ok">${esc(t("accepted"))}</span>` : ""}</div></div>`).join("");
-    return `<div class="card">${jobHead(j)}
-      ${bids || (j.status === "open" ? `<p class="muted small">${esc(t("waiting_bids"))}</p>` : "")}
-      ${verificationHTML(j)}${traceHTML(j.trace)}</div>`;
-  }).join("") : `<p class="muted">${esc(t("no_jobs"))}</p>`;
+  const html = jobs.length ? jobs.map(customerJobHTML).join("") : `<p class="muted">${esc(t("no_jobs"))}</p>`;
   if (html === lastMyHTML) return;
+  // keep chats the user opened open across refreshes
+  const openChats = [...document.querySelectorAll("#myJobs details.chat[open] [data-chat]")].map((x) => x.dataset.chat);
   lastMyHTML = html;
   $("#myJobs").innerHTML = html;
+  openChats.forEach((k) => document.querySelector(`[data-chat="${k}"]`)?.closest("details")?.setAttribute("open", ""));
   $("#myJobs").querySelectorAll("[data-accept]").forEach((b) => b.addEventListener("click", async () => {
     const [jobId, bidId] = b.dataset.accept.split(":");
     await postJSON(`/api/jobs/${jobId}/accept`, { bid_id: bidId }).catch((e) => alert(e.message));
+    lastMyHTML = "";
+    loadMyJobs();
+  }));
+  $("#myJobs").querySelectorAll("[data-decline]").forEach((b) => b.addEventListener("click", () => {
+    declined.add(b.dataset.decline);
+    store.set("rozgar.declined", [...declined]);
+    lastMyHTML = "";
     loadMyJobs();
   }));
 }
@@ -563,6 +613,8 @@ async function loadOpenJobs() {
   let jobs = await api(`/api/jobs?section=${w.section}`).catch(() => []);
   // AC and appliance technicians share the electrical section: show each their own trade
   jobs = jobs.filter((j) => (j.trade || j.section) === w.trade || ((j.trade || j.section) === j.section && j.section === w.section));
+  // jobs another worker already got are hidden
+  jobs = jobs.filter((j) => j.status === "open" || j.accepted?.worker_id === me);
   jobs = jobs.sort((a, b) => (b.invited || []).includes(me) - (a.invited || []).includes(me));
   const html = jobs.length ? jobs.map((j) => {
     const mine = j.accepted && j.accepted.worker_id === me;
@@ -572,15 +624,16 @@ async function loadOpenJobs() {
       action = `<div class="price-input"><span>Rs</span><input type="number" inputmode="numeric" placeholder="${esc(t("bid_ph"))}" data-bid="${j.id}"></div><div data-bidchk="${j.id}"></div><button class="primary" data-send="${j.id}">${esc(t("send_bid"))}</button>`;
     } else if (myBid && j.status === "open") {
       action = `<p class="small">${esc(t("bid_sent"))} <b>${rs(myBid.amount)}</b> ${checkHTML(myBid.check.status)}</p>`;
-    } else if (j.status === "in_progress" && mine) {
-      action = `<label class="upload">${icon("camera")}<input type="file" accept="image/*" data-after="${j.id}"><span>${esc(t("upload_after"))}</span></label>`;
+    } else if (mine && j.status !== "open") {
+      action = `<div class="card ok row-ic">${icon("check", "ic-lg")}<b>${esc(t("you_got_job"))}</b></div>` + (j.status === "in_progress"
+        ? `<label class="upload">${icon("camera")}<input type="file" accept="image/*" data-after="${j.id}"><span>${esc(t("upload_after"))}</span></label>` : "");
     }
     return `<div class="card">${(j.invited || []).includes(me) ? `<span class="badge ok">${esc(t("invited_you"))}</span>` : ""}${j.demo ? ` <span class="badge">${esc(t("sample_job"))}</span>` : ""}
       ${j.safety.level === "danger" ? `<div class="card danger row-ic">${icon("warning")}<b>${esc(t("danger"))}</b></div>` : ""}
       ${jobHead(j).replace(esc(t("your_offer")), esc(t("customer_pays")))}
       <div class="card inner"><div class="muted small">${esc(t("job_card"))}</div><div class="jobcard ${j.lang === "ur" ? "urdu" : ""}">${esc(j.job_card_urdu)}</div>
       <div class="small muted">${esc(t("bring"))}: ${j.price.materials.map((m) => esc(m.item)).join(", ") || "-"}</div></div>
-      ${action}${chatHTML(j, me, "worker")}${verificationHTML(j)}</div>`;
+      ${action}${(j.accepted && j.accepted.worker_id !== me) ? "" : (mine ? chatHTML(j, me, "worker").replace('<details class="chat"', '<details class="chat" open') : chatHTML(j, me, "worker"))}${verificationHTML(j)}</div>`;
   }).join("") : `<p class="muted">${esc(t("w_none"))}</p>`;
   if (html === lastOpenHTML) return;
   lastOpenHTML = html;

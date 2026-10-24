@@ -60,8 +60,9 @@ Built at **Hacktoberfest Hack Day Faisalabad 2026** for the *Best Open-Source AI
 - Safety warnings with helplines for gas, electrical and structural danger.
 - Booking details: address, landmark, preferred day, time slot and payment method.
 - A live check on the price you enter: reasonable, too low, or above the estimate.
+- InDrive-style offers: while the job is open, offers from nearby workers arrive as cards with rating, distance in km and price, cheapest first, each with Accept and Decline. In the demo, a few labelled sample workers respond within seconds (`ROZGAR_SAMPLE_OFFERS=0` turns this off).
 - Nearby workers with ratings, experience and past projects; invite specific workers or post to all.
-- Chat with each worker on a job.
+- Chat with any worker who messages you or sends an offer, before and after accepting. After accepting, a "Your worker" panel keeps the chat open.
 
 **For workers**
 - Sign in, or join with trade, area, experience and CNIC.
@@ -162,6 +163,7 @@ To see both sides, open two tabs: choose **Hire a worker** in one and **Find wor
 | `GEMMA_MODEL` | No | Primary model (default `gemma-4-31b-it`) |
 | `GEMMA_FALLBACK_MODEL` | No | Fallback model (default `gemma-4-26b-a4b-it`) |
 | `ROZGAR_DB` | No | Path of the SQLite database (default `data/rozgar.db`) |
+| `ROZGAR_SAMPLE_OFFERS` | No | `1` (default) lets sample workers send offers in the demo; `0` turns it off |
 
 ## Deployment
 

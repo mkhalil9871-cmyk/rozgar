@@ -302,3 +302,19 @@ tr.muted td { color: var(--muted); }
 .avatar-badge { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); font-weight: 700; font-size: 14px; }
 .avatar-badge.worker { background: #d9771a; color: #fff; }
 #userIc, #userName { cursor: pointer; }
+
+/* InDrive-style offers */
+.searching { display: flex; align-items: center; gap: 10px; background: var(--brand-soft); color: var(--text); border-radius: 12px; padding: 10px 14px; margin: 12px 0 8px; font-weight: 600; font-size: 14px; }
+.pulse { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); position: relative; flex: none; }
+.pulse::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--brand); animation: ping 1.4s ease-out infinite; }
+@keyframes ping { from { transform: scale(1); opacity: .6; } to { transform: scale(2.8); opacity: 0; } }
+.offer { border: 1px solid var(--line); border-radius: 16px; padding: 12px; margin: 10px 0; background: var(--card); animation: slidein .35s ease-out; }
+@keyframes slidein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.offer-top { display: flex; align-items: center; gap: 12px; }
+.offer-top .avatar-badge { width: 42px; height: 42px; font-size: 17px; }
+.offer-price { text-align: end; display: flex; flex-direction: column; align-items: flex-end; }
+.offer-price b { font-size: 20px; color: var(--brand); }
+.offer-price .check { font-size: 12px; margin-top: 2px; }
+.offer-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+.offer-actions .secondary { padding: 8px 14px; }
+@media (prefers-reduced-motion: reduce) { .pulse::after, .offer { animation: none; } }

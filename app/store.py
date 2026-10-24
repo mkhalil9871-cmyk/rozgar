@@ -7,7 +7,9 @@ column; offers and messages have their own tables.
 """
 
 import json
+import math
 import os
+import random
 import sqlite3
 import threading
 import time
@@ -216,6 +218,57 @@ def add_message(job_id, msg):
                     (job_id, msg["worker_id"], msg["sender"], msg["text"], time.time()))
         _db.commit()
     return msg
+
+
+# ---------- distance between Faisalabad areas ----------
+
+# approximate centre of each area, enough to show "2.4 km away" on an offer
+AREA_COORDS = {
+    "Madina Town": (31.4211, 73.1160), "Peoples Colony": (31.4002, 73.1034), "D Ground": (31.4045, 73.0927),
+    "Gulberg": (31.4268, 73.0950), "Samanabad": (31.3966, 73.0646), "Jinnah Colony": (31.4255, 73.0786),
+    "Satiana Road": (31.3905, 73.0990), "Batala Colony": (31.4330, 73.1080),
+}
+
+
+def km_between(a, b):
+    if a not in AREA_COORDS or b not in AREA_COORDS:
+        return None
+    (la1, lo1), (la2, lo2) = AREA_COORDS[a], AREA_COORDS[b]
+    x = math.radians(lo2 - lo1) * math.cos(math.radians((la1 + la2) / 2))
+    y = math.radians(la2 - la1)
+    return round(max(0.6, 6371 * math.hypot(x, y)), 1)
+
+
+# ---------- sample offers (demo) ----------
+
+SAMPLE_OFFERS = os.getenv("ROZGAR_SAMPLE_OFFERS", "1") == "1"
+
+
+def schedule_sample_offers(job_id):
+    """Like InDrive: a few nearby sample workers answer a new job within seconds.
+
+    Offers are labelled as samples. Turn off with ROZGAR_SAMPLE_OFFERS=0.
+    """
+    if not SAMPLE_OFFERS:
+        return
+    job = get(job_id)
+    if not job or job.get("demo"):
+        return
+    invited = job.get("invited", [])
+    candidates = workers_for(job["section"], job.get("area") or "", job.get("trade") or "")
+    candidates = sorted(candidates, key=lambda w: w["id"] not in invited)[:3]
+    lo, hi = job["price"]["fair_min"], job["price"]["fair_max"]
+
+    def offer(w):
+        j = get(job_id)
+        if not j or j["status"] != "open" or any(b["worker_id"] == w["id"] for b in j["bids"]):
+            return
+        amount = int(round(random.uniform(lo, hi * 1.05) / 50) * 50) or lo
+        status = "high" if amount > hi * 1.25 else "low" if amount < lo * 0.75 else "fair"
+        add_bid(job_id, {"worker_id": w["id"], "amount": amount, "note": "sample", "check": {"status": status}})
+
+    for delay, w in zip((3, 7, 12), candidates):
+        threading.Timer(delay, offer, args=(w,)).start()
 
 
 # ---------- demo ----------

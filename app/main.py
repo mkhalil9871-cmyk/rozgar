@@ -5,7 +5,7 @@ from typing import Optional
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -114,7 +114,7 @@ def demo_job(worker_id: str):
         raise HTTPException(404, "Worker not found")
     sec = SECTIONS[w["section"]]
     wi = TRADES.get(w["trade"]) or sec
-    return store.seed_demo_job(w, sec, wi)
+    return public(store.seed_demo_job(w, sec, wi))
 
 
 @app.get("/api/areas")
@@ -182,7 +182,7 @@ def create_job(body: JobIn):
     if body.offer <= 0:
         raise HTTPException(400, "Enter your price")
     price = d["price"]
-    return store.create({
+    job = store.create({
         "lang": d.get("lang", "en"),
         "section": d["section"],
         "section_info": d["section_info"],
@@ -206,19 +206,48 @@ def create_job(body: JobIn):
         "booking": {k: str(v)[:120] for k, v in body.booking.items()},
         "trace": d.get("trace", []),
     })
+    store.schedule_sample_offers(job["id"])
+    return public(job)
 
 
-@app.get("/api/jobs")
-def list_jobs(section: str = ""):
-    return store.all_jobs(section or None)
-
-
-@app.get("/api/jobs/{job_id}")
-def get_job(job_id: str):
+def _job(job_id):
     job = store.get(job_id)
     if not job:
         raise HTTPException(404, "Job not found")
     return job
+
+
+def public(job):
+    """What the browser gets: photos as small URLs instead of base64, and distance on every offer."""
+    job = dict(job)
+    if job.get("photo"):
+        job["photo"] = {"url": f"/api/jobs/{job['id']}/photo/before"}
+    if job.get("verification") and job["verification"].get("after_photo"):
+        job["verification"] = {**job["verification"], "after_photo": {"url": f"/api/jobs/{job['id']}/photo/after"}}
+    for b in job.get("bids", []):
+        if b.get("worker"):
+            b["km"] = store.km_between(job.get("area") or "", b["worker"]["area"])
+    return job
+
+
+@app.get("/api/jobs")
+def list_jobs(section: str = ""):
+    return [public(j) for j in store.all_jobs(section or None)]
+
+
+@app.get("/api/jobs/{job_id}")
+def get_job(job_id: str):
+    return public(_job(job_id))
+
+
+@app.get("/api/jobs/{job_id}/photo/{which}")
+def job_photo(job_id: str, which: str):
+    job = _job(job_id)
+    photo = job.get("photo") if which == "before" else (job.get("verification") or {}).get("after_photo")
+    if not photo:
+        raise HTTPException(404, "No photo")
+    return Response(base64.b64decode(photo["b64"]), media_type=photo["mime"] or "image/jpeg",
+                    headers={"Cache-Control": "public, max-age=86400"})
 
 
 class BidIn(BaseModel):
@@ -229,14 +258,15 @@ class BidIn(BaseModel):
 
 @app.post("/api/jobs/{job_id}/bids")
 def add_bid(job_id: str, body: BidIn):
-    job = get_job(job_id)
+    job = _job(job_id)
     w = worker(body.worker_id)
     if not w:
         raise HTTPException(404, "Worker not found")
     if job["status"] != "open":
         raise HTTPException(400, "This job is no longer open")
     check = bid_check(body.amount, job["price"]["fair_min"], job["price"]["fair_max"])
-    return store.add_bid(job_id, {"worker_id": w["id"], "worker": w, "amount": body.amount, "note": body.note, "check": check})
+    store.add_bid(job_id, {"worker_id": w["id"], "worker": w, "amount": body.amount, "note": body.note, "check": check})
+    return get_job(job_id)
 
 
 class MessageIn(BaseModel):
@@ -254,7 +284,7 @@ DEMO_REPLY = {
 @app.post("/api/jobs/{job_id}/messages")
 def send_message(job_id: str, body: MessageIn):
     """One chat thread per job and worker, visible to that worker and the customer."""
-    job = get_job(job_id)
+    job = _job(job_id)
     text = body.text.strip()[:500]
     if not text or body.sender not in ("customer", "worker") or not worker(body.worker_id):
         raise HTTPException(400, "Empty message")
@@ -262,7 +292,7 @@ def send_message(job_id: str, body: MessageIn):
     if job.get("demo") and body.sender == "worker":
         # the sample customer answers so the chat can be shown in a demo
         store.add_message(job_id, {"worker_id": body.worker_id, "sender": "customer", "text": DEMO_REPLY["ur"]})
-    return store.get(job_id)
+    return get_job(job_id)
 
 
 class AcceptIn(BaseModel):
@@ -271,16 +301,18 @@ class AcceptIn(BaseModel):
 
 @app.post("/api/jobs/{job_id}/accept")
 def accept(job_id: str, body: AcceptIn):
-    job = get_job(job_id)
+    job = _job(job_id)
     bid = next((b for b in job["bids"] if b["id"] == body.bid_id), None)
     if not bid:
         raise HTTPException(404, "Bid not found")
-    return store.update(job_id, status="in_progress", accepted=bid)
+    if job["status"] != "open":
+        raise HTTPException(400, "This job already has a worker")
+    return public(store.update(job_id, status="in_progress", accepted={k: v for k, v in bid.items() if k != "worker"}))
 
 
 @app.post("/api/jobs/{job_id}/verify")
 async def verify(job_id: str, photo: UploadFile = File(...)):
-    job = get_job(job_id)
+    job = _job(job_id)
     after, after_mime = await _read_image(photo)
     if not after:
         raise HTTPException(400, "Upload the after photo")
@@ -303,9 +335,9 @@ async def verify(job_id: str, photo: UploadFile = File(...)):
             "verified_by_gemma": True,
             "after_photo": after_photo,
         })
-    return store.update(
+    return public(store.update(
         job_id,
         status=status,
         verification={**result, "after_photo": after_photo},
         trace=job["trace"] + trace,
-    )
+    ))
