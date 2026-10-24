@@ -54,7 +54,7 @@ def index():
 
 @app.get("/api/health")
 def api_health():
-    return health()
+    return {**health(), "storage": "postgres" if store.PG else "sqlite"}
 
 
 @app.get("/api/sections")
