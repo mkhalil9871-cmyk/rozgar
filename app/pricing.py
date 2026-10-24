@@ -120,33 +120,6 @@ def estimate(trade, sub, qty, mult, materials, worker_brings, labour_hours=1.0):
     }
 
 
-def fair_range(trade, materials, labour_hours, mult=1.0, remote=False):
-    rate = trade_info(trade)
-    mat_rows = []
-    mat_total = 0
-    for m in materials:
-        unit = material_price(m.item, m.est_pkr)
-        line = unit * m.qty
-        mat_total += line
-        mat_rows.append({"item": m.item, "qty": m.qty, "unit_pkr": unit, "total_pkr": line})
-    hours = round(labour_hours * mult, 1)
-    labour = hours * rate["labour_per_hour"]
-    visit = 0 if remote else rate["visit_fee"]
-    base = mat_total + labour + visit
-    return {
-        "materials": mat_rows,
-        "materials_total": round(mat_total),
-        "labour_hours": hours,
-        "size_multiplier": mult,
-        "labour_per_hour": rate["labour_per_hour"],
-        "labour_total": round(labour),
-        "visit_fee": visit,
-        "base": round(base),
-        "fair_min": int(round(base * 0.8, -1)),
-        "fair_max": int(round(base * 1.2, -1)),
-    }
-
-
 def safety_guard(section, description, model_level, model_advice):
     """Combine the specialist's safety flag with hard rules."""
     text = (description or "").lower()

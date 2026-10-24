@@ -52,7 +52,6 @@
   --ok: #71d8a6;
   --shadow: none;
 }
-:root[data-theme="dark"] .art { filter: saturate(.85) brightness(.9); }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 body.urdu-ui { font-family: "Noto Nastaliq Urdu", Inter, system-ui, sans-serif; line-height: 2.1; }
@@ -217,7 +216,7 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .c-rang { --c: linear-gradient(135deg, #a46bf5, #6d3fd1); }
 .c-gas { --c: linear-gradient(135deg, #ff6a3d, #d62f2f); }
 .c-computer { --c: linear-gradient(135deg, #5b6cff, #3341c9); }
-.c-logo, .c-wrench, .c-customer, .c-money, .c-check { --c: linear-gradient(135deg, #18a873, #0e7a55); }
+.c-customer, .c-money, .c-check { --c: linear-gradient(135deg, #18a873, #0e7a55); }
 .c-worker { --c: linear-gradient(135deg, #f5a623, #d9771a); }
 .c-warning { --c: linear-gradient(135deg, #f5a623, #d9531a); }
 .c-cross { --c: linear-gradient(135deg, #ef4d4d, #b91c1c); }
@@ -243,29 +242,7 @@ button.link { background: none; border: 0; color: var(--brand); font: inherit; f
 .role-card img.role-photo { width: 100%; height: auto; aspect-ratio: 16 / 9; }
 .hero img.hero-photo { width: 220px; height: 150px; }
 
-/* 3D renders on soft gradient cards */
-.art { display: grid; place-items: center; width: 100%; aspect-ratio: 16 / 10; background: var(--soft); position: relative; overflow: hidden; }
-.art::after { content: ""; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.45); filter: blur(18px); }
-.art img { width: 46%; max-width: 96px; position: relative; z-index: 1; filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); transition: transform .2s; }
-.sec:hover .art img, .role-card:hover .art img { transform: translateY(-4px) scale(1.05); }
-.art-lg img { width: 34%; max-width: 130px; }
-.c-bijli { --soft: linear-gradient(135deg, #fff4cc, #ffd98a); }
-.c-pani { --soft: linear-gradient(135deg, #dcebff, #a9cbff); }
-.c-deewar { --soft: linear-gradient(135deg, #ffe3d6, #f7b79b); }
-.c-lakri { --soft: linear-gradient(135deg, #f3e6d6, #dcbf9b); }
-.c-rang { --soft: linear-gradient(135deg, #efe3ff, #cdb2ff); }
-.c-gas { --soft: linear-gradient(135deg, #ffe1d9, #ffab94); }
-.c-computer { --soft: linear-gradient(135deg, #e0e4ff, #b5bdff); }
-.c-customer { --soft: linear-gradient(135deg, #dff5ea, #a8e3c5); }
-.c-worker { --soft: linear-gradient(135deg, #fff0d6, #ffcf87); }
-@media (prefers-color-scheme: dark) { .art { filter: saturate(.85) brightness(.9); } }
-.logo-3d { width: 96px; height: 96px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); }
-.logo-3d.sm { width: 40px; height: 40px; filter: none; }
-.hero-3d { width: 120px; height: 120px; flex: none; filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); }
 .role-card b { margin-top: 14px; }
-.art-lg { aspect-ratio: 16 / 8; }
-.art-lg img { width: 40%; max-width: 150px; }
-.art img { width: 52%; max-width: 110px; }
 
 .logo-svg { width: 40px; height: 40px; flex: none; }
 .logo-svg.lg { width: 96px; height: 96px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); }
@@ -291,7 +268,7 @@ tr.muted td { color: var(--muted); }
 
 .theme-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--text); display: grid; place-items: center; cursor: pointer; padding: 0; }
 .theme-btn .mi { width: 18px; height: 18px; margin: 0; }
-:root[data-theme="dark"] .photo-dim, :root[data-theme="dark"] .sec-photo, :root[data-theme="dark"] .role-photo, :root[data-theme="dark"] .hero-photo { filter: brightness(.88); }
+:root[data-theme="dark"] .sec-photo, :root[data-theme="dark"] .role-photo, :root[data-theme="dark"] .hero-photo { filter: brightness(.88); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sec-photo, :root:not([data-theme="light"]) .role-photo, :root:not([data-theme="light"]) .hero-photo { filter: brightness(.88); } }
 
 #brandHome { cursor: pointer; }

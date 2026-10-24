@@ -12,6 +12,8 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688.svg)](https://fastapi.tiangolo.com/)
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-open%20standard-6e42e5.svg)](skills/rozgar-repair-estimator/SKILL.md)
 
+**[Live demo → rozgar-cracked4.vercel.app](https://rozgar-cracked4.vercel.app)**
+
 English · اردو · Roman Urdu
 
 <img src="docs/screenshot.png" width="760" alt="Rozgar login screen">
@@ -177,7 +179,7 @@ To see both sides, open two tabs: choose **Hire a worker** in one and **Find wor
 3. Under **Storage**, create a free **Neon Postgres** database and connect it to the project. This sets `DATABASE_URL`, so workers, jobs, offers and chats are kept across requests.
 4. Deploy. [`vercel.json`](vercel.json) allows each request up to 300 seconds, enough for slow Gemma replies.
 
-**Docker.** The included [`Dockerfile`](Dockerfile) runs on any container host (port 7860 by default). A [`render.yaml`](render.yaml) is included for Render.
+**Docker.** The included [`Dockerfile`](Dockerfile) runs on any container host (port 7860 by default).
 
 **Storage.** With `DATABASE_URL` set, the app uses Postgres; otherwise it uses a local SQLite file (`data/rozgar.db`). Serverless hosts need Postgres, because their disk is temporary and not shared between requests.
 
