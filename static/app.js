@@ -637,7 +637,10 @@ function customerJobHTML(j) {
 }
 
 function deleteBtn(j) {
-  return ownerTokens[j.id] ? `<button class="link-danger" data-del="${j.id}">${icon("cross")}${esc(t("delete_job"))}</button>` : "";
+  // jobs posted before delete keys existed can only be removed from this browser's list
+  return ownerTokens[j.id]
+    ? `<button class="link-danger" data-del="${j.id}">${icon("cross")}${esc(t("delete_job"))}</button>`
+    : `<button class="link-danger" data-forget="${j.id}">${icon("cross")}${esc(t("remove_from_list"))}</button>`;
 }
 
 async function loadMyJobs() {
@@ -663,6 +666,14 @@ async function loadMyJobs() {
   $("#myJobs").querySelectorAll("[data-decline]").forEach((b) => b.addEventListener("click", () => {
     declined.add(b.dataset.decline);
     store.set("rozgar.declined", [...declined]);
+    lastMyHTML = "";
+    loadMyJobs();
+  }));
+  $("#myJobs").querySelectorAll("[data-forget]").forEach((b) => b.addEventListener("click", () => {
+    if (!confirm(t("confirm_forget"))) return;
+    myJobIds = myJobIds.filter((x) => x !== b.dataset.forget);
+    store.set("rozgar.myJobs", myJobIds);
+    toast(t("removed"), "ok");
     lastMyHTML = "";
     loadMyJobs();
   }));

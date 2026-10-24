@@ -1,6 +1,9 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    remove_from_list: "Remove from my list",
+    confirm_forget: "This older job can't be deleted from the server. Remove it from your list?",
+    removed: "Removed from your list.",
     tab_new: "New job",
     tab_jobs: "My jobs",
     tab_msgs: "Messages",
@@ -173,6 +176,9 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    remove_from_list: "میری فہرست سے ہٹائیں",
+    confirm_forget: "یہ پرانا کام سرور سے حذف نہیں ہو سکتا۔ اپنی فہرست سے ہٹا دیں؟",
+    removed: "آپ کی فہرست سے ہٹا دیا گیا۔",
     tab_new: "نیا کام",
     tab_jobs: "میرے کام",
     tab_msgs: "پیغامات",
@@ -345,6 +351,9 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    remove_from_list: "Meri list se hatayen",
+    confirm_forget: "Yeh purana kaam server se delete nahi ho sakta. Apni list se hata dein?",
+    removed: "Aap ki list se hata diya gaya.",
     tab_new: "Naya kaam",
     tab_jobs: "Mere kaam",
     tab_msgs: "Paighamat",
