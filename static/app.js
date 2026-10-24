@@ -225,7 +225,7 @@ function qtyHTML(sub) {
   const u = sub.unit;
   const rate = u.type === "job" ? "" : ` · ${rs(u.rate)} / ${esc(L(u.short))}`;
   return `<div class="qlabel">${esc(L(u.label))} <span class="req">*</span></div>
-    <div class="qty-input"><input type="number" inputmode="decimal" min="0" step="any" id="qty" value="${esc(sel.qty)}"><span>${esc(L(u.short))}</span></div>
+    <div class="qty-input"><input type="number" inputmode="decimal" min="0" max="${QTY_LIMITS[u.type] || 1000}" step="any" id="qty" value="${esc(sel.qty)}"><span>${esc(L(u.short))}</span></div>
     <p class="small muted">${esc(t("qty_hint"))}${rate}</p>`;
 }
 function materialsHTML(sub) {
@@ -233,10 +233,12 @@ function materialsHTML(sub) {
   return `<div class="qlabel">${esc(t("materials_q"))} <span class="req">*</span></div><div class="chips">${["self", "worker"].map((v) =>
     `<button class="chip ${sel.brings === (v === "worker") ? "active" : ""}" data-brings="${v}">${esc(t(v === "self" ? "mat_self" : "mat_worker"))}</button>`).join("")}</div>`;
 }
+const QTY_LIMITS = { ft: 300, sqft: 5000, count: 50, job: 5 };
 function missingInfo() {
   const sub = currentSub();
   if (!sub) return "";
   if (sub.unit && !(+sel.qty > 0)) return t("need_qty");
+  if (sub.unit && +sel.qty > (QTY_LIMITS[sub.unit.type] || 1000)) return t("qty_too_big").replace("{max}", QTY_LIMITS[sub.unit.type] || 1000);
   if (sub.questions.some((q) => !sel.answers[q.id])) return t("need_answers");
   if (sub.materials && sel.brings === null) return t("need_materials");
   return "";
@@ -327,6 +329,10 @@ async function diagnose(answer = "") {
   showProgress(true);
   try {
     const d = await api("/api/diagnose", { method: "POST", body: fd });
+    if (d.status === "mismatch") {
+      showMismatch(d);
+      return;
+    }
     if (d.status === "clarify") {
       $("#clarify").innerHTML = `<b>${esc(t("clarify"))}</b> ${esc(d.question)}<input id="clarifyAns" placeholder="${esc(t("your_answer"))}"><button class="secondary" id="clarifyBtn">${esc(t("clarify_btn"))}</button>`;
       $("#clarify").classList.remove("hidden");
@@ -347,6 +353,31 @@ async function diagnose(answer = "") {
   }
 }
 $("#diagnoseBtn").addEventListener("click", () => diagnose());
+
+// ---------- wrong photo or details ----------
+function showMismatch(d) {
+  const title = t({ photo_mismatch: "mm_photo", details_mismatch: "mm_details", not_a_job: "mm_not_job" }[d.check] || "mm_details");
+  const sug = d.suggested_section && d.suggested_section !== sel.section ? SECTIONS[d.suggested_section] : null;
+  $("#result").innerHTML = `<div class="card warn">
+    <div class="row-ic">${icon("warning", "ic-lg")}<div><b>${esc(title)}</b><br>${esc(d.issue)}<br><span class="small">${esc(t("mm_hint"))}</span></div></div>
+    <div class="row" style="margin-top:10px">
+      ${$("#photo").files[0] ? `<button class="secondary" id="mmPhoto">${esc(t("mm_remove_photo"))}</button>` : ""}
+      ${sug ? `<button class="secondary" id="mmSection">${esc(t("mm_go_to"))} ${esc(L(sug.name))}</button>` : ""}
+    </div>
+    ${traceHTML(d.trace)}</div>`;
+  $("#result").classList.remove("hidden");
+  $("#mmPhoto")?.addEventListener("click", () => {
+    $("#photo").value = ""; $("#preview").classList.add("hidden");
+    $("#result").classList.add("hidden");
+  });
+  $("#mmSection")?.addEventListener("click", () => {
+    sel.section = d.suggested_section; sel.sub = ""; sel.answers = {}; sel.symptoms = []; sel.qty = ""; sel.brings = null;
+    renderSections(); renderSubs(); renderDetails();
+    $("#result").classList.add("hidden");
+    $("#subBlock").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("#result").scrollIntoView({ behavior: "smooth" });
+}
 
 // ---------- result ----------
 function safetyHTML(s) {

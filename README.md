@@ -52,6 +52,7 @@ Built at **Hacktoberfest Hack Day Faisalabad 2026** for the *Best Open-Source AI
 ## Features
 
 **For customers**
+- Input checking: Gemma rejects a photo or description that doesn't match the chosen problem (for example a plumbing photo under "Burnt socket") and suggests the right section. Unrealistic quantities are refused.
 - 7 trade sections and 40 problem types, each with short guided questions (size, depth, symptoms).
 - A quantity field in the unit workers charge by: feet, square feet, items or jobs.
 - A symptoms checklist for machines that can't be photographed, with an optional photo of the model sticker.
@@ -87,7 +88,7 @@ Gemma 4 runs three agents:
 | Agent | Input | Output |
 |---|---|---|
 | **Router** | Photo and description | The trade section and a confidence score; asks a clarifying question when unsure |
-| **Specialist** | Photo or symptoms, guided answers, quantity, and the trade's guide | Diagnosis, likely cause, materials, safety level and a job card in the chosen language |
+| **Specialist** | Photo or symptoms, guided answers, quantity, and the trade's guide | First checks that the photo and details match the chosen problem; then diagnosis, likely cause, materials, safety level and a job card in the chosen language |
 | **Verifier** | Before and after photos | Whether the job is fixed, the visible evidence and a confidence score |
 
 Only Gemma 4 models are used. Gemma never sets the price; see [Pricing model](#pricing-model).
@@ -100,15 +101,20 @@ flowchart TD
     B -- no --> R[Router agent<br/>Gemma 4]
     B -- yes --> S
     R --> S[Specialist agent<br/>Gemma 4 + trade guide]
-    S --> P[Pricing tool<br/>rate card × quantity]
-    S --> G[Safety guard<br/>rules + helplines]
+    S --> C{Input matches<br/>the problem?}
+    C -- no --> X[Ask the customer to fix<br/>photo or details]
+    C -- yes --> P[Pricing tool<br/>rate card × quantity]
+    C -- yes --> G[Safety guard<br/>rules + helplines]
     P --> J[Job posted]
     G --> J
     J --> O[Worker offers<br/>fairness check]
     O --> V[Verifier agent<br/>Gemma 4, before/after]
+    J & O & V --> D[(SQLite database<br/>workers · jobs · bids · messages)]
 ```
 
 - **AI for understanding, rules for money and safety.** Gemma 4 handles images, language and diagnosis. Prices and safety rules are plain Python, so every number can be checked.
+- **Input checking.** No estimate is made on mismatched photos or details, and quantities have sensible limits (for example at most 300 ft for a crack).
+- **Persistent storage.** Workers, jobs, offers and chat messages are stored in SQLite (`data/rozgar.db`), created automatically on first run and seeded with the sample workers.
 - **Validated output.** Each agent must return JSON matching a Pydantic schema; invalid replies are repaired once.
 - **Resilience.** The app retries busy or failed calls, alternating between the two Gemma 4 models with a short cooldown. It also rotates API keys on rate limits and shows clear errors instead of crashing.
 
@@ -155,6 +161,7 @@ To see both sides, open two tabs: choose **Hire a worker** in one and **Find wor
 | `GEMINI_API_KEYS` | No | Extra keys, comma-separated, used when one hits a rate limit |
 | `GEMMA_MODEL` | No | Primary model (default `gemma-4-31b-it`) |
 | `GEMMA_FALLBACK_MODEL` | No | Fallback model (default `gemma-4-26b-a4b-it`) |
+| `ROZGAR_DB` | No | Path of the SQLite database (default `data/rozgar.db`) |
 
 ## Deployment
 
@@ -165,7 +172,7 @@ To see both sides, open two tabs: choose **Hire a worker** in one and **Find wor
 
 **Other hosts.** The Dockerfile runs on any container host. A [`render.yaml`](render.yaml) is included for Render.
 
-The app keeps jobs in memory and needs a single, always-on process. Serverless platforms such as Vercel would need an external database.
+The app stores data in a SQLite file and needs a single, always-on process. On hosts with temporary disks (including free Hugging Face Spaces), the database resets when the container restarts unless persistent storage is attached. Serverless platforms such as Vercel would need an external database.
 
 ## Project structure
 
@@ -175,7 +182,7 @@ app/
   orchestrator.py    Multi-agent pipeline (Router, Specialist, Verifier)
   agents.py          Gemma 4 calls, schemas, retries and failover
   pricing.py         Rate card, safety rules, fairness check, worker matching
-  store.py           In-memory jobs, offers and chat
+  store.py           SQLite database: workers, jobs, offers (bids) and chat messages
 static/              Frontend (HTML, CSS, JavaScript, translations, images)
 skills/rozgar-repair-estimator/
   SKILL.md           Agent Skill definition
@@ -214,7 +221,7 @@ This is a hackathon prototype.
 
 - **Worker profiles are samples** and are labelled as such. Each worker also sees one labelled sample job.
 - **Login is a demo.** No SMS is sent (code `1234`, worker PIN `1234`). Phone and CNIC numbers are checked for format only and are never stored.
-- **Data is kept in memory** and resets when the server restarts.
+- **Data is stored in a local SQLite file.** It survives restarts on your machine, but a free cloud host may reset it when the container is rebuilt.
 - **Rates are estimates** for Faisalabad and should be adjusted locally.
 - **Photo verification is a helpful check**, not proof; the customer makes the final decision.
 

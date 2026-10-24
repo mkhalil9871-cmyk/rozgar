@@ -34,6 +34,17 @@ Diagnose the job from the customer's details{photo_note}, using this guide:
 
 {guide}
 
+FIRST check the customer's input in input_check, before diagnosing:
+- "photo_mismatch": ONLY when the photo clearly belongs to a different trade (for example plumbing pipes or a
+  wall crack when the problem is electrical) or is not a home-repair photo at all (a selfie, pet, food,
+  screenshot, landscape). If the photo shows the right kind of thing (wiring, a board, an appliance, a
+  room, or someone doing that trade's work) but the exact fault is not clearly visible, that is "ok".
+  A photo of a machine's model sticker is fine for appliance problems.
+- "details_mismatch": the description clearly describes a different problem or trade than the one chosen
+  (for example "pipe is leaking" under "Burnt switch / socket"). Put the right section id in suggested_section.
+- "not_a_job": the input is not a home-repair or home-service request at all, or is meaningless text.
+- "ok": everything fits, or you are unsure. Do not reject over small doubts.
+For any status other than "ok", write issue: one short, polite sentence telling the customer what is wrong.
 The customer has already told you the problem type, the amount of work (quantity) and the details:
 use them exactly and do not assume anything bigger or extra.
 Give: diagnosis and likely_cause (short and plain), the materials needed for exactly that amount of work
@@ -117,6 +128,16 @@ def diagnose_pipeline(description, image=None, mime=None, section_hint=None, ans
         SpecialistOut,
     )
     trace.append(step)
+
+    if spec.input_check.status != "ok":
+        # wrong photo or details: stop here, no estimate on bad input
+        return {
+            "status": "mismatch",
+            "check": spec.input_check.status,
+            "issue": spec.input_check.issue,
+            "suggested_section": spec.input_check.suggested_section,
+            "trace": trace,
+        }
 
     t0 = time.time()
     mult = answers_mult(router.section, subcategory, answers)

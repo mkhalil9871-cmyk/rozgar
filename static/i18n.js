@@ -1,6 +1,13 @@
 // UI text in English, Urdu and Roman Urdu. Gemma's answers use the same language.
 const I18N = {
   en: {
+    mm_photo: "This photo doesn't match the problem you chose",
+    mm_details: "Your details don't match the problem you chose",
+    mm_not_job: "This doesn't look like a home job",
+    mm_hint: "Please fix it and press the button again. We don't give an estimate on wrong information.",
+    mm_remove_photo: "Remove this photo",
+    mm_go_to: "Go to",
+    qty_too_big: "That amount looks too large (maximum {max}). Please check the number.",
     dark_mode: "Dark mode",
     light_mode: "Light mode",
     chat_with: "Chat with",
@@ -144,6 +151,13 @@ const I18N = {
     via: "via the Gemini API", skill: "Agent Skill",
   },
   ur: {
+    mm_photo: "یہ تصویر آپ کے منتخب کردہ مسئلے سے مطابقت نہیں رکھتی",
+    mm_details: "آپ کی تفصیل منتخب کردہ مسئلے سے مطابقت نہیں رکھتی",
+    mm_not_job: "یہ گھر کا کوئی کام نہیں لگتا",
+    mm_hint: "براہ کرم درست کریں اور بٹن دوبارہ دبائیں۔ غلط معلومات پر اندازہ نہیں دیا جاتا۔",
+    mm_remove_photo: "یہ تصویر ہٹائیں",
+    mm_go_to: "جائیں:",
+    qty_too_big: "یہ مقدار بہت زیادہ لگتی ہے (زیادہ سے زیادہ {max})۔ نمبر چیک کریں۔",
     dark_mode: "ڈارک موڈ",
     light_mode: "لائٹ موڈ",
     chat_with: "بات کریں:",
@@ -287,6 +301,13 @@ const I18N = {
     via: "جیمنائی API کے ذریعے", skill: "ایجنٹ اسکل",
   },
   roman: {
+    mm_photo: "Yeh tasveer aap ke chune hue masle se match nahi karti",
+    mm_details: "Aap ki tafseel chune hue masle se match nahi karti",
+    mm_not_job: "Yeh ghar ka koi kaam nahi lagta",
+    mm_hint: "Barah-e-karam durust karein aur button dobara dabayen. Ghalat maloomat par andaza nahi diya jata.",
+    mm_remove_photo: "Yeh tasveer hatayen",
+    mm_go_to: "Jayen:",
+    qty_too_big: "Yeh miqdar bohat zyada lagti hai (zyada se zyada {max}). Number check karein.",
     dark_mode: "Dark mode",
     light_mode: "Light mode",
     chat_with: "Baat karein:",

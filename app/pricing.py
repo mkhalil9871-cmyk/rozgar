@@ -18,7 +18,6 @@ RATES = _load("rates.json")
 SECTIONS = RATES["sections"]
 TRADES = RATES["trades"]
 CATALOG = _load("catalog.json")["sections"]
-WORKERS = _load("workers.json")["workers"]
 GUIDES = {f.stem: f.read_text(encoding="utf-8") for f in (SKILL_DIR / "sections").glob("*.md")}
 SKILL_MD = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
 
@@ -176,12 +175,3 @@ def bid_check(amount, fair_min, fair_max):
     if amount < fair_min * 0.75:
         return {"status": "low"}
     return {"status": "fair"}
-
-
-def workers_for(section, area="", trade=""):
-    ws = [w for w in WORKERS if w["section"] == section]
-    return sorted(ws, key=lambda w: (bool(trade) and w["trade"] != trade, w["area"] != area, -w["rating"]))
-
-
-def worker(worker_id):
-    return next((w for w in WORKERS if w["id"] == worker_id), None)

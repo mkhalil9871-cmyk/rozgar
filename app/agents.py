@@ -79,7 +79,15 @@ class Safety(BaseModel):
     advice: str = ""
 
 
+class InputCheck(BaseModel):
+    """Does what the customer sent actually match the problem they picked?"""
+    status: Literal["ok", "photo_mismatch", "details_mismatch", "not_a_job"] = "ok"
+    issue: str = ""
+    suggested_section: Optional[SectionId] = None
+
+
 class SpecialistOut(BaseModel):
+    input_check: InputCheck = InputCheck()
     diagnosis: str
     likely_cause: str = ""
     materials: list[Material] = []

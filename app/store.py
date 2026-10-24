@@ -1,38 +1,224 @@
-"""In-memory job store. Fine for a single-instance free deploy; resets on restart."""
+"""SQLite storage for workers, jobs, offers (bids) and chat messages.
 
+The database file lives at ROZGAR_DB (default data/rozgar.db) and is created on
+first run. Sample workers are loaded from the skill's workers.json the first time.
+Jobs keep their flexible details (diagnosis, price, trace, photos) as JSON in one
+column; offers and messages have their own tables.
+"""
+
+import json
+import os
+import sqlite3
 import threading
 import time
 import uuid
+from pathlib import Path
 
-_jobs = {}
-_lock = threading.Lock()
+ROOT = Path(__file__).resolve().parent.parent
+DB_PATH = Path(os.getenv("ROZGAR_DB", ROOT / "data" / "rozgar.db"))
+SEED_WORKERS = ROOT / "skills" / "rozgar-repair-estimator" / "workers.json"
+
+_lock = threading.RLock()
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+_db = sqlite3.connect(DB_PATH, check_same_thread=False)
+_db.row_factory = sqlite3.Row
+
+SCHEMA = """
+CREATE TABLE IF NOT EXISTS workers (
+    id        TEXT PRIMARY KEY,
+    section   TEXT NOT NULL,
+    trade     TEXT NOT NULL,
+    area      TEXT NOT NULL,
+    rating    REAL NOT NULL DEFAULT 0,
+    jobs_done INTEGER NOT NULL DEFAULT 0,
+    created   REAL NOT NULL,
+    data      TEXT NOT NULL            -- name, years, verified, past_projects (JSON)
+);
+CREATE TABLE IF NOT EXISTS jobs (
+    id       TEXT PRIMARY KEY,
+    created  REAL NOT NULL,
+    status   TEXT NOT NULL,            -- open, in_progress, verified
+    section  TEXT NOT NULL,
+    trade    TEXT NOT NULL,
+    area     TEXT,
+    offer    INTEGER,
+    demo     INTEGER NOT NULL DEFAULT 0,
+    data     TEXT NOT NULL             -- diagnosis, price, booking, photo, trace... (JSON)
+);
+CREATE TABLE IF NOT EXISTS bids (
+    id        TEXT PRIMARY KEY,
+    job_id    TEXT NOT NULL REFERENCES jobs(id),
+    worker_id TEXT NOT NULL REFERENCES workers(id),
+    amount    INTEGER NOT NULL,
+    check_status TEXT NOT NULL,        -- fair, high, low
+    note      TEXT,
+    time      REAL NOT NULL
+);
+CREATE TABLE IF NOT EXISTS messages (
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    job_id    TEXT NOT NULL REFERENCES jobs(id),
+    worker_id TEXT NOT NULL REFERENCES workers(id),
+    sender    TEXT NOT NULL,           -- customer or worker
+    text      TEXT NOT NULL,
+    time      REAL NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_jobs_section ON jobs(section, created);
+CREATE INDEX IF NOT EXISTS idx_bids_job ON bids(job_id);
+CREATE INDEX IF NOT EXISTS idx_messages_job ON messages(job_id, worker_id);
+"""
+
+# columns stored outside the JSON blob
+WORKER_COLS = ("id", "section", "trade", "area", "rating", "jobs_done")
+JOB_COLS = ("id", "created", "status", "section", "trade", "area", "offer", "demo")
 
 
-def create(job):
-    job_id = uuid.uuid4().hex[:8]
+def _init():
     with _lock:
-        job.update({"id": job_id, "created": time.time(), "status": "open", "bids": [], "accepted": None, "verification": None})
-        _jobs[job_id] = job
+        _db.executescript(SCHEMA)
+        if _db.execute("SELECT COUNT(*) FROM workers").fetchone()[0] == 0:
+            for w in json.loads(SEED_WORKERS.read_text(encoding="utf-8"))["workers"]:
+                add_worker(w)
+        _db.commit()
+
+
+# ---------- workers ----------
+
+def _row_to_worker(row):
+    w = json.loads(row["data"])
+    w.update({k: row[k] for k in WORKER_COLS})
+    return w
+
+
+def add_worker(w):
+    data = {k: v for k, v in w.items() if k not in WORKER_COLS}
+    with _lock:
+        _db.execute(
+            "INSERT INTO workers (id, section, trade, area, rating, jobs_done, created, data) VALUES (?,?,?,?,?,?,?,?)",
+            (w["id"], w["section"], w["trade"], w["area"], w.get("rating", 0), w.get("jobs_done", 0), time.time(),
+             json.dumps(data, ensure_ascii=False)),
+        )
+        _db.commit()
+    return w
+
+
+def new_worker_id():
+    with _lock:
+        n = _db.execute("SELECT COUNT(*) FROM workers").fetchone()[0]
+    return f"n{n + 1:03d}-{uuid.uuid4().hex[:4]}"
+
+
+def worker(worker_id):
+    with _lock:
+        row = _db.execute("SELECT * FROM workers WHERE id = ?", (worker_id,)).fetchone()
+    return _row_to_worker(row) if row else None
+
+
+def all_workers():
+    with _lock:
+        rows = _db.execute("SELECT * FROM workers ORDER BY created").fetchall()
+    return [_row_to_worker(r) for r in rows]
+
+
+def workers_for(section, area="", trade=""):
+    with _lock:
+        rows = _db.execute("SELECT * FROM workers WHERE section = ?", (section,)).fetchall()
+    ws = [_row_to_worker(r) for r in rows]
+    return sorted(ws, key=lambda w: (bool(trade) and w["trade"] != trade, w["area"] != area, -w["rating"]))
+
+
+def areas():
+    with _lock:
+        return [r[0] for r in _db.execute("SELECT DISTINCT area FROM workers ORDER BY area")]
+
+
+def add_project(worker_id, project):
+    """A Gemma-verified job joins the worker's public portfolio."""
+    with _lock:
+        w = worker(worker_id)
+        if not w:
+            return None
+        w["past_projects"].insert(0, project)
+        data = {k: v for k, v in w.items() if k not in WORKER_COLS}
+        _db.execute("UPDATE workers SET jobs_done = jobs_done + 1, data = ? WHERE id = ?",
+                    (json.dumps(data, ensure_ascii=False), worker_id))
+        _db.commit()
+    return worker(worker_id)
+
+
+# ---------- jobs ----------
+
+def _assemble(row):
+    job = json.loads(row["data"])
+    job.update({k: row[k] for k in JOB_COLS})
+    job["demo"] = bool(row["demo"])
+    bids = _db.execute("SELECT * FROM bids WHERE job_id = ? ORDER BY time", (row["id"],)).fetchall()
+    job["bids"] = [{"id": b["id"], "worker_id": b["worker_id"], "worker": worker(b["worker_id"]), "amount": b["amount"],
+                    "note": b["note"], "check": {"status": b["check_status"]}, "time": b["time"]} for b in bids]
+    msgs = _db.execute("SELECT * FROM messages WHERE job_id = ? ORDER BY id", (row["id"],)).fetchall()
+    job["messages"] = [{"worker_id": m["worker_id"], "sender": m["sender"], "text": m["text"], "time": m["time"]} for m in msgs]
     return job
 
 
+def _save(job):
+    data = {k: v for k, v in job.items() if k not in JOB_COLS and k not in ("bids", "messages")}
+    _db.execute(
+        "INSERT OR REPLACE INTO jobs (id, created, status, section, trade, area, offer, demo, data) VALUES (?,?,?,?,?,?,?,?,?)",
+        (job["id"], job["created"], job["status"], job["section"], job.get("trade") or job["section"], job.get("area"),
+         job.get("offer"), int(bool(job.get("demo"))), json.dumps(data, ensure_ascii=False)),
+    )
+    _db.commit()
+
+
+def create(job):
+    with _lock:
+        job.update({"id": uuid.uuid4().hex[:8], "created": time.time(), "status": "open", "accepted": None, "verification": None})
+        _save(job)
+        return get(job["id"])
+
+
 def get(job_id):
-    return _jobs.get(job_id)
+    with _lock:
+        row = _db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
+        return _assemble(row) if row else None
 
 
 def all_jobs(section=None):
     with _lock:
-        jobs = list(_jobs.values())
-    if section:
-        jobs = [j for j in jobs if j["section"] == section]
-    return sorted(jobs, key=lambda j: j["created"], reverse=True)
+        if section:
+            rows = _db.execute("SELECT * FROM jobs WHERE section = ? ORDER BY created DESC", (section,)).fetchall()
+        else:
+            rows = _db.execute("SELECT * FROM jobs ORDER BY created DESC").fetchall()
+        return [_assemble(r) for r in rows]
 
 
 def update(job_id, **fields):
     with _lock:
-        _jobs[job_id].update(fields)
-        return _jobs[job_id]
+        job = get(job_id)
+        job.update(fields)
+        _save(job)
+        return get(job_id)
 
+
+def add_bid(job_id, bid):
+    with _lock:
+        bid_id = uuid.uuid4().hex[:6]
+        _db.execute(
+            "INSERT INTO bids (id, job_id, worker_id, amount, check_status, note, time) VALUES (?,?,?,?,?,?,?)",
+            (bid_id, job_id, bid["worker_id"], bid["amount"], bid["check"]["status"], bid.get("note", ""), time.time()),
+        )
+        _db.commit()
+        return next(b for b in get(job_id)["bids"] if b["id"] == bid_id)
+
+
+def add_message(job_id, msg):
+    with _lock:
+        _db.execute("INSERT INTO messages (job_id, worker_id, sender, text, time) VALUES (?,?,?,?,?)",
+                    (job_id, msg["worker_id"], msg["sender"], msg["text"], time.time()))
+        _db.commit()
+    return msg
+
+
+# ---------- demo ----------
 
 DEMO_JOBS = {
     "bijli": ("Two burnt sockets in the living room", "Sockets are black around the pins; loose wires overheated.", "دو جلے ہوئے ساکٹ تبدیل کریں، تاریں کس دیں۔ دو نئے ساکٹ ساتھ لائیں۔", [("socket", 2, 350)], 1300, 1800, 1500),
@@ -48,53 +234,41 @@ DEMO_JOBS = {
 DEMO_ADDRESSES = ["House 14, Street 3", "House 7-B, Street 9", "Flat 2, Al-Noor Plaza"]
 
 
-def seed_demo_job(worker, section_info, worker_info):
+def seed_demo_job(w, section_info, worker_info):
     """One clearly labelled sample job inviting this worker, so the worker view is never empty in a demo."""
     with _lock:
-        for j in _jobs.values():
-            if j.get("demo") and worker["id"] in j.get("invited", []) and j["status"] == "open":
+        for j in all_jobs(w["section"]):
+            if j["demo"] and w["id"] in j.get("invited", []) and j["status"] == "open":
                 return j
-    trade = worker["trade"]
-    summary, cause, card, mats, lo, hi, offer = DEMO_JOBS.get(trade, DEMO_JOBS["bijli"])
-    materials = [{"item": i, "qty": q, "unit_pkr": p, "total_pkr": q * p} for i, q, p in mats]
-    job = {
-        "demo": True,
-        "lang": "ur",
-        "section": worker["section"],
-        "section_info": section_info,
-        "trade": trade,
-        "worker_info": worker_info,
-        "subcategory": None,
-        "answers": {},
-        "symptoms": [],
-        "problem_summary": summary,
-        "diagnosis": summary,
-        "likely_cause": cause,
-        "job_card_urdu": card,
-        "price": {"materials": materials, "fair_min": lo, "fair_max": hi},
-        "safety": {"level": "none", "advice": "", "rule_reasons": [], "helplines": []},
-        "photo": None,
-        "offer": offer,
-        "offer_check": {"status": "fair"},
-        "area": worker["area"],
-        "invited": [worker["id"]],
-        "customer": "Sample customer",
-        "booking": {"address": DEMO_ADDRESSES[len(_jobs) % len(DEMO_ADDRESSES)], "landmark": "near Jamia Masjid", "day": "tomorrow", "slot": "morning", "payment": "cash"},
-        "trace": [],
-    }
-    return create(job)
+        summary, cause, card, mats, lo, hi, offer = DEMO_JOBS.get(w["trade"], DEMO_JOBS["bijli"])
+        materials = [{"item": i, "qty": q, "unit_pkr": p, "total_pkr": q * p} for i, q, p in mats]
+        n = _db.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
+        return create({
+            "demo": True,
+            "lang": "ur",
+            "section": w["section"],
+            "section_info": section_info,
+            "trade": w["trade"],
+            "worker_info": worker_info,
+            "subcategory": None,
+            "answers": {},
+            "symptoms": [],
+            "problem_summary": summary,
+            "diagnosis": summary,
+            "likely_cause": cause,
+            "job_card_urdu": card,
+            "price": {"materials": materials, "fair_min": lo, "fair_max": hi},
+            "safety": {"level": "none", "advice": "", "rule_reasons": [], "helplines": []},
+            "photo": None,
+            "offer": offer,
+            "offer_check": {"status": "fair"},
+            "area": w["area"],
+            "invited": [w["id"]],
+            "customer": "Sample customer",
+            "booking": {"address": DEMO_ADDRESSES[n % len(DEMO_ADDRESSES)], "landmark": "near Jamia Masjid",
+                        "day": "tomorrow", "slot": "morning", "payment": "cash"},
+            "trace": [],
+        })
 
 
-def add_message(job_id, msg):
-    with _lock:
-        msg["time"] = time.time()
-        _jobs[job_id].setdefault("messages", []).append(msg)
-        return msg
-
-
-def add_bid(job_id, bid):
-    with _lock:
-        bid["id"] = uuid.uuid4().hex[:6]
-        bid["time"] = time.time()
-        _jobs[job_id]["bids"].append(bid)
-        return bid
+_init()

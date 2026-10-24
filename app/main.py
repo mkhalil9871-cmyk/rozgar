@@ -12,10 +12,13 @@ from pydantic import BaseModel
 from . import store
 from .agents import AgentError, health
 from .orchestrator import diagnose_pipeline, verify_pipeline
-from .pricing import CATALOG, SECTIONS, SKILL_MD, TRADES, WORKERS, bid_check, find_sub, worker, workers_for
+from .pricing import CATALOG, SECTIONS, SKILL_MD, TRADES, bid_check, find_sub
+from .store import worker, workers_for
 
 STATIC = Path(__file__).resolve().parent.parent / "static"
 MAX_IMAGE = 8 * 1024 * 1024
+# a sensible upper bound per unit, to catch typing mistakes like 5000 ft for a crack
+QTY_LIMITS = {"ft": 300, "sqft": 5000, "count": 50, "job": 5}
 
 app = FastAPI(title="Rozgar", description="Fair home-repair prices, powered by Gemma 4")
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
@@ -69,7 +72,7 @@ def catalog():
 
 @app.get("/api/workers")
 def list_workers(section: str = "", area: str = "", trade: str = ""):
-    return workers_for(section, area, trade) if section else WORKERS
+    return workers_for(section, area, trade) if section else store.all_workers()
 
 
 class WorkerIn(BaseModel):
@@ -88,7 +91,7 @@ def join_worker(body: WorkerIn):
     if not body.name.strip():
         raise HTTPException(400, "Enter your name")
     new = {
-        "id": f"n{len(WORKERS) + 1:03d}",
+        "id": store.new_worker_id(),
         "name": {"en": body.name.strip(), "ur": body.name.strip(), "roman": body.name.strip()},
         "section": "bijli" if body.trade in ("ac", "appliance") else body.trade,
         "trade": body.trade,
@@ -100,8 +103,8 @@ def join_worker(body: WorkerIn):
         "new": True,
         "past_projects": [],
     }
-    WORKERS.append(new)  # in memory, like jobs; phone and CNIC are only format-checked, never stored
-    return new
+    # phone and CNIC are only format-checked by the app, never stored
+    return store.add_worker(new)
 
 
 @app.post("/api/workers/{worker_id}/demo-job")
@@ -116,7 +119,7 @@ def demo_job(worker_id: str):
 
 @app.get("/api/areas")
 def areas():
-    return sorted({w["area"] for w in WORKERS})
+    return store.areas()
 
 
 @app.get("/api/skill", response_class=JSONResponse)
@@ -147,6 +150,9 @@ async def diagnose(
         # ask before estimating: the amount of work and every guided question are required
         if qty <= 0:
             raise HTTPException(400, "Enter how much work there is")
+        limit = QTY_LIMITS.get(sub.get("unit", {}).get("type"), 1000)
+        if qty > limit:
+            raise HTTPException(400, f"That amount looks too large (maximum {limit}). Please check the number.")
         missing = [q["id"] for q in sub["questions"] if q["id"] not in ans]
         if missing:
             raise HTTPException(400, f"Answer all questions first: {', '.join(missing)}")
@@ -288,18 +294,15 @@ async def verify(job_id: str, photo: UploadFile = File(...)):
     after_photo = {"mime": after_mime, "b64": base64.b64encode(after).decode()}
     status = "verified" if result["fixed"] == "yes" else "in_progress"
     if status == "verified" and job.get("accepted"):
-        w = worker(job["accepted"]["worker_id"])
-        if w:
-            # a Gemma-verified job becomes part of the worker's public portfolio
-            w["jobs_done"] += 1
-            w["past_projects"].insert(0, {
-                "title": {"en": job["problem_summary"], "ur": job["problem_summary"], "roman": job["problem_summary"]},
-                "area": job.get("area") or "Faisalabad",
-                "price": job["accepted"]["amount"],
-                "rating": 5,
-                "verified_by_gemma": True,
-                "after_photo": after_photo,
-            })
+        # a Gemma-verified job becomes part of the worker's public portfolio
+        store.add_project(job["accepted"]["worker_id"], {
+            "title": {"en": job["problem_summary"], "ur": job["problem_summary"], "roman": job["problem_summary"]},
+            "area": job.get("area") or "Faisalabad",
+            "price": job["accepted"]["amount"],
+            "rating": 5,
+            "verified_by_gemma": True,
+            "after_photo": after_photo,
+        })
     return store.update(
         job_id,
         status=status,
