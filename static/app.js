@@ -104,18 +104,6 @@ document.querySelectorAll("#langSeg button").forEach((b) => b.addEventListener("
   applyLang();
 }));
 // ---------- login ----------
-const validCnic = (c) => /^\d{5}-?\d{7}-?\d$/.test(c.trim());
-const DEMO_OTP = "1234";
-document.querySelectorAll("[data-otp]").forEach((b) => b.addEventListener("click", () => {
-  const k = b.dataset.otp;
-  if (!validPhone($(`#${k}Phone`).value)) return toast(t("bad_phone"));
-  $(`#${k}OtpBox`).classList.remove("hidden");
-  $(`#${k}Otp`).focus();
-}));
-const validPhone = (p) => /^03\d{9}$/.test(p.trim());
-// digits only, never more than 11
-["#cPhone", "#jPhone"].forEach((id) => $(id).addEventListener("input", (e) => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 11); }));
-
 function showScreen() {
   const loggedIn = !!session;
   $("#login").classList.toggle("hidden", loggedIn);
@@ -123,7 +111,7 @@ function showScreen() {
   $("#worker").classList.toggle("hidden", !loggedIn || role !== "worker");
   $("#userBox").classList.toggle("hidden", !loggedIn);
   if (loggedIn) {
-    $("#userName").textContent = session.name;
+    $("#userName").textContent = role === "customer" ? t("customer") : session.name;
     // initial in a circle: a profile badge, not a house icon that looks like a Home button
     const initial = (session.name.trim()[0] || "?").toUpperCase();
     $("#userIc").innerHTML = `<span class="avatar-badge ${role}">${esc(initial)}</span>`;
@@ -154,7 +142,7 @@ function startSession(s) {
 
 function renderLoginSelects() {
   const areaOpts = AREAS.map((a) => `<option>${esc(a)}</option>`).join("");
-  for (const id of ["#cArea", "#jArea"]) { const v = $(id).value; $(id).innerHTML = areaOpts; if (v) $(id).value = v; }
+  const av = $("#jArea").value; $("#jArea").innerHTML = areaOpts; if (av) $("#jArea").value = av;
   const tv = $("#jTrade").value;
   $("#jTrade").innerHTML = Object.entries(TRADES).concat(Object.entries(SECTIONS).filter(([k]) => k !== "bijli"))
     .map(([k, v]) => `<option value="${k}">${esc(L(v.worker))}</option>`).join("");
@@ -167,11 +155,14 @@ function renderLoginSelects() {
 }
 
 document.querySelectorAll("[data-pick]").forEach((b) => b.addEventListener("click", () => {
+  if (b.dataset.pick === "customer") {
+    startSession({ role: "customer", name: t("customer"), area: store.get("rozgar.area", AREAS[0]) });
+    return;
+  }
   $("#rolePick").classList.add("hidden");
-  $(b.dataset.pick === "customer" ? "#customerForm" : "#workerForm").classList.remove("hidden");
+  $("#workerForm").classList.remove("hidden");
 }));
 document.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => {
-  $("#customerForm").classList.add("hidden");
   $("#workerForm").classList.add("hidden");
   $("#rolePick").classList.remove("hidden");
 }));
@@ -180,30 +171,19 @@ document.querySelectorAll("[data-wtab]").forEach((b) => b.addEventListener("clic
   $("#wSignin").classList.toggle("hidden", b.dataset.wtab !== "signin");
   $("#wJoin").classList.toggle("hidden", b.dataset.wtab !== "join");
 }));
-$("#cLogin").addEventListener("click", () => {
-  const name = $("#cName").value.trim();
-  if (!name) return toast(t("need_name"));
-  if (!validPhone($("#cPhone").value)) return toast(t("bad_phone"));
-  if ($("#cOtp").value !== DEMO_OTP) { $("#cOtpBox").classList.remove("hidden"); return toast(t("wrong_otp")); }
-  startSession({ role: "customer", name, area: $("#cArea").value });
-});
 $("#wLogin").addEventListener("click", () => {
-  if ($("#wPin").value !== "1234") return toast(t("wrong_pin"));
   const w = WORKERS.find((x) => x.id === $("#wPick").value);
-  startSession({ role: "worker", name: L(w.name), workerId: w.id, area: w.area });
+  if (w) startSession({ role: "worker", name: L(w.name), workerId: w.id, area: w.area });
 });
-$("#wJoinBtn").addEventListener("click", async () => {
+$("#wJoinBtn").addEventListener("click", (e) => busy(e.currentTarget, async () => {
   const name = $("#jName").value.trim();
-  if (!name) return toast(t("need_name"));
-  if (!validPhone($("#jPhone").value)) return toast(t("bad_phone"));
-  if ($("#jOtp").value !== DEMO_OTP) { $("#jOtpBox").classList.remove("hidden"); return toast(t("wrong_otp")); }
-  if (!validCnic($("#jCnic").value)) return toast(t("bad_cnic"));
+  if (!name) return toast(t("need_name"), "err");
   try {
-    const w = await postJSON("/api/workers", { name, phone: $("#jPhone").value, trade: $("#jTrade").value, area: $("#jArea").value, years: +$("#jYears").value || 0 });
+    const w = await postJSON("/api/workers", { name, trade: $("#jTrade").value, area: $("#jArea").value, years: +$("#jYears").value || 0 });
     WORKERS.push(w);
     startSession({ role: "worker", name, workerId: w.id, area: w.area });
-  } catch (e) { toast(e.message); }
-});
+  } catch (e) { toast(e.message, "err"); }
+}));
 $("#logoutBtn").addEventListener("click", () => {
   session = null;
   activeThread = "";
@@ -899,7 +879,6 @@ paintThemeBtn();
 function goHome() {
   if (!session) {
     // back to the two login cards
-    $("#customerForm").classList.add("hidden");
     $("#workerForm").classList.add("hidden");
     $("#rolePick").classList.remove("hidden");
   } else if (role === "customer") {

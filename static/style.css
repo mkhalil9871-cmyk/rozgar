@@ -339,3 +339,5 @@ button.is-busy { opacity: .6; cursor: progress; }
 /* long one-line previews must not stretch the layout on phones */
 .inbox > *, .thread-row .grow { min-width: 0; }
 .wcard .small.muted { overflow-wrap: anywhere; }
+/* the problem description box keeps one fixed size and scrolls inside */
+#desc { resize: none; height: 110px; overflow-y: auto; }

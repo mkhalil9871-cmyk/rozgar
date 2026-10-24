@@ -68,7 +68,7 @@ Built at **Hacktoberfest Hack Day Faisalabad 2026** for the *Best Open-Source AI
 - Delete a posted job at any time. Only the browser that posted it holds the job's private delete key.
 
 **For workers**
-- Sign in, or join with trade, area, experience and CNIC.
+- Pick a profile, or add a new one with name, trade, area and experience.
 - Job cards in the worker's language, with what to do and what to bring.
 - Offers checked against the estimate.
 - Before/after photo verification; verified jobs are added to the worker's portfolio.
@@ -157,7 +157,7 @@ python -m uvicorn app.main:app --port 8000
 
 Open <http://localhost:8000>. On Windows you can double-click `run.bat`.
 
-To see both sides, open two tabs: choose **Hire a worker** in one and **Find work** in the other. Demo login details are in [Limitations](#limitations).
+To see both sides, open two tabs: choose **Hire a worker** in one and **Find work** in the other. Choose **Hire a worker** or **Find work** on the first screen; no login is needed.
 
 **Environment variables**
 
@@ -231,7 +231,7 @@ The app reads these same files at startup, so the product and the skill always m
 This is a hackathon prototype.
 
 - **Worker profiles are samples** and are labelled as such. Each worker also sees one labelled sample job.
-- **Login is a demo.** No SMS is sent (code `1234`, worker PIN `1234`). Phone and CNIC numbers are checked for format only and are never stored.
+- **There is no login yet.** Anyone can choose "Hire a worker" or "Find work"; workers pick a sample profile or add their own.
 - **Data storage depends on the host.** Locally it is a SQLite file; on Vercel it needs the free Neon Postgres database, otherwise data is temporary.
 - **Rates are estimates** for Faisalabad and should be adjusted locally.
 - **Photo verification is a helpful check**, not proof; the customer makes the final decision.

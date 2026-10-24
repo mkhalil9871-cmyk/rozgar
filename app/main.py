@@ -79,11 +79,9 @@ def list_workers(section: str = "", area: str = "", trade: str = ""):
 
 class WorkerIn(BaseModel):
     name: str
-    phone: str
     trade: str
     area: str
     years: int = 1
-    cnic: str = ""
 
 
 @app.post("/api/workers")
@@ -105,7 +103,6 @@ def join_worker(body: WorkerIn):
         "new": True,
         "past_projects": [],
     }
-    # phone and CNIC are only format-checked by the app, never stored
     return store.add_worker(new)
 
 

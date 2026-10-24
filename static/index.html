@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <script>(function(){try{var s=localStorage.getItem("rozgar.theme");if(s)document.documentElement.dataset.theme=JSON.parse(s)}catch(e){}})()</script>
-  <link rel="stylesheet" href="/static/style.css?v=35">
+  <link rel="stylesheet" href="/static/style.css?v=37">
 </head>
 <body>
   <header>
@@ -25,7 +25,7 @@
       <div class="userbox hidden" id="userBox">
         <span id="userIc"></span>
         <span id="userName"></span>
-        <button class="secondary" id="logoutBtn" data-t="logout"></button>
+        <button class="secondary" id="logoutBtn" data-t="switch_role"></button>
       </div>
     </div>
   </header>
@@ -40,49 +40,27 @@
 
       <div id="rolePick" class="role-cards">
         <button class="role-card" data-pick="customer">
-          <img class="role-photo" src="/static/photos/customer.jpg?v=35" alt="">
+          <img class="role-photo" src="/static/photos/customer.jpg?v=37" alt="">
           <b data-t="as_customer"></b>
           <span class="muted small" data-t="as_customer_sub"></span>
         </button>
         <button class="role-card" data-pick="worker">
-          <img class="role-photo" src="/static/photos/worker.jpg?v=35" alt="">
+          <img class="role-photo" src="/static/photos/worker.jpg?v=37" alt="">
           <b data-t="as_worker"></b>
           <span class="muted small" data-t="as_worker_sub"></span>
         </button>
       </div>
 
-      <div id="customerForm" class="card login-form hidden">
-        <h2 data-t="as_customer"></h2>
-        <div class="qlabel" data-t="your_name"></div>
-        <input id="cName" autocomplete="name">
-        <div class="qlabel" data-t="phone"></div>
-        <div class="row nowrap"><input id="cPhone" type="tel" inputmode="numeric" maxlength="11" pattern="03[0-9]{9}" data-tp="phone_ph" autocomplete="tel"><button class="secondary" data-otp="c" data-t="send_code"></button></div>
-        <div id="cOtpBox" class="hidden"><div class="qlabel" data-t="otp"></div><input id="cOtp" inputmode="numeric" maxlength="4"><p class="small muted" data-t="otp_hint"></p></div>
-        <div class="qlabel" data-t="area"></div>
-        <select id="cArea"></select>
-        <button class="primary" id="cLogin" data-t="continue_btn"></button>
-        <button class="link" data-back data-t="back"></button>
-        <p class="small muted" data-t="demo_login"></p>
-      </div>
-
       <div id="workerForm" class="card login-form hidden">
-        <div class="seg tabs"><button class="active" data-wtab="signin" data-t="sign_in"></button><button data-wtab="join" data-t="join"></button></div>
+        <div class="seg tabs"><button class="active" data-wtab="signin" data-t="choose_profile"></button><button data-wtab="join" data-t="join"></button></div>
         <div id="wSignin">
           <div class="qlabel" data-t="your_profile"></div>
           <select id="wPick"></select>
-          <div class="qlabel" data-t="pin"></div>
-          <input id="wPin" type="password" inputmode="numeric" maxlength="4">
-          <p class="small muted" data-t="pin_hint"></p>
-          <button class="primary" id="wLogin" data-t="sign_in"></button>
+          <button class="primary" id="wLogin" data-t="continue_btn"></button>
         </div>
         <div id="wJoin" class="hidden">
           <div class="qlabel" data-t="your_name"></div>
-          <input id="jName">
-          <div class="qlabel" data-t="phone"></div>
-          <div class="row nowrap"><input id="jPhone" type="tel" inputmode="numeric" maxlength="11" pattern="03[0-9]{9}" data-tp="phone_ph"><button class="secondary" data-otp="j" data-t="send_code"></button></div>
-          <div id="jOtpBox" class="hidden"><div class="qlabel" data-t="otp"></div><input id="jOtp" inputmode="numeric" maxlength="4"><p class="small muted" data-t="otp_hint"></p></div>
-          <div class="qlabel" data-t="cnic"></div>
-          <input id="jCnic" inputmode="numeric" maxlength="15" data-tp="cnic_ph">
+          <input id="jName" autocomplete="name">
           <div class="qlabel" data-t="trade"></div>
           <select id="jTrade"></select>
           <div class="qlabel" data-t="area"></div>
@@ -107,7 +85,7 @@
           <h1 data-t="hero_title"></h1>
           <p class="muted" data-t="hero_sub"></p>
         </div>
-        <img class="hero-photo" src="/static/photos/hero.jpg?v=35" alt="">
+        <img class="hero-photo" src="/static/photos/hero.jpg?v=37" alt="">
       </div>
 
       <h2><span class="num">1</span><span data-t="step_section"></span></h2>
@@ -133,7 +111,7 @@
         </label>
         <img id="preview" class="preview hidden" alt="">
         <div class="qlabel" data-t="explain"></div>
-        <textarea id="desc" rows="3" data-tp="explain_ph"></textarea>
+        <textarea id="desc" rows="3" maxlength="500" data-tp="explain_ph"></textarea>
         <div class="qlabel" data-t="area"></div>
         <select id="area"></select>
         <p id="missingHint" class="hint warn-hint hidden"></p>
@@ -176,7 +154,7 @@
   </footer>
 
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
-  <script src="/static/i18n.js?v=35"></script>
-  <script src="/static/app.js?v=35"></script>
+  <script src="/static/i18n.js?v=37"></script>
+  <script src="/static/app.js?v=37"></script>
 </body>
 </html>
