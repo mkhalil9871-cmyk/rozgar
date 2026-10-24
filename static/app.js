@@ -104,7 +104,10 @@ function showScreen() {
   $("#userBox").classList.toggle("hidden", !loggedIn);
   if (loggedIn) {
     $("#userName").textContent = session.name;
-    $("#userIc").innerHTML = icon(role === "worker" ? "worker" : "customer", "tile-sm");
+    // initial in a circle: a profile badge, not a house icon that looks like a Home button
+    const initial = (session.name.trim()[0] || "?").toUpperCase();
+    $("#userIc").innerHTML = `<span class="avatar-badge ${role}">${esc(initial)}</span>`;
+    $("#userIc").title = `${session.name} · ${t(role === "worker" ? "worker" : "customer")}`;
   }
 }
 
@@ -675,6 +678,8 @@ function goHome() {
 }
 $("#homeBtn").addEventListener("click", goHome);
 $("#brandHome").addEventListener("click", goHome);
+$("#userIc").addEventListener("click", goHome);
+$("#userName").addEventListener("click", goHome);
 $("#brandHome").addEventListener("keydown", (e) => { if (e.key === "Enter") goHome(); });
 
 // ---------- boot ----------

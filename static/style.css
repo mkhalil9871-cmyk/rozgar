@@ -298,3 +298,7 @@ tr.muted td { color: var(--muted); }
 .home-btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
 .home-btn .mi { width: 16px; height: 16px; margin: 0; }
 @media (max-width: 520px) { .home-btn span:last-child { display: none; } .home-btn { padding: 0 10px; } }
+
+.avatar-badge { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); font-weight: 700; font-size: 14px; }
+.avatar-badge.worker { background: #d9771a; color: #fff; }
+#userIc, #userName { cursor: pointer; }
