@@ -1,9 +1,13 @@
-"""SQLite storage for workers, jobs, offers (bids) and chat messages.
+"""Storage for workers, jobs, offers (bids) and chat messages.
 
-The database file lives at ROZGAR_DB (default data/rozgar.db) and is created on
-first run. Sample workers are loaded from the skill's workers.json the first time.
-Jobs keep their flexible details (diagnosis, price, trace, photos) as JSON in one
-column; offers and messages have their own tables.
+Two backends, same tables:
+- Postgres when DATABASE_URL (or POSTGRES_URL) is set, e.g. a free Neon database on Vercel,
+  where the disk is not permanent and many function instances share one database.
+- SQLite otherwise, in ROZGAR_DB (default data/rozgar.db), for running on a laptop.
+
+Sample workers are loaded from the skill's workers.json the first time. Jobs keep their
+flexible details (diagnosis, price, trace, photos) as JSON in one column; offers and
+messages have their own tables.
 """
 
 import json
@@ -17,13 +21,14 @@ import uuid
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DB_PATH = Path(os.getenv("ROZGAR_DB", ROOT / "data" / "rozgar.db"))
 SEED_WORKERS = ROOT / "skills" / "rozgar-repair-estimator" / "workers.json"
+DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL") or ""
+PG = DATABASE_URL.startswith(("postgres://", "postgresql://"))
+# on Vercel without a database the code folder is read-only: fall back to a temporary file
+DB_PATH = Path(os.getenv("ROZGAR_DB") or ("/tmp/rozgar.db" if os.getenv("VERCEL") else ROOT / "data" / "rozgar.db"))
 
 _lock = threading.RLock()
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-_db = sqlite3.connect(DB_PATH, check_same_thread=False)
-_db.row_factory = sqlite3.Row
+_conn = None
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS workers (
@@ -31,56 +36,97 @@ CREATE TABLE IF NOT EXISTS workers (
     section   TEXT NOT NULL,
     trade     TEXT NOT NULL,
     area      TEXT NOT NULL,
-    rating    REAL NOT NULL DEFAULT 0,
+    rating    {real} NOT NULL DEFAULT 0,
     jobs_done INTEGER NOT NULL DEFAULT 0,
-    created   REAL NOT NULL,
-    data      TEXT NOT NULL            -- name, years, verified, past_projects (JSON)
+    created   {real} NOT NULL,
+    data      TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS jobs (
     id       TEXT PRIMARY KEY,
-    created  REAL NOT NULL,
-    status   TEXT NOT NULL,            -- open, in_progress, verified
+    created  {real} NOT NULL,
+    status   TEXT NOT NULL,
     section  TEXT NOT NULL,
     trade    TEXT NOT NULL,
     area     TEXT,
     offer    INTEGER,
     demo     INTEGER NOT NULL DEFAULT 0,
-    data     TEXT NOT NULL             -- diagnosis, price, booking, photo, trace... (JSON)
+    data     TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS bids (
-    id        TEXT PRIMARY KEY,
-    job_id    TEXT NOT NULL REFERENCES jobs(id),
-    worker_id TEXT NOT NULL REFERENCES workers(id),
-    amount    INTEGER NOT NULL,
-    check_status TEXT NOT NULL,        -- fair, high, low
-    note      TEXT,
-    time      REAL NOT NULL
+    id           TEXT PRIMARY KEY,
+    job_id       TEXT NOT NULL,
+    worker_id    TEXT NOT NULL,
+    amount       INTEGER NOT NULL,
+    check_status TEXT NOT NULL,
+    note         TEXT,
+    time         {real} NOT NULL
 );
 CREATE TABLE IF NOT EXISTS messages (
-    id        INTEGER PRIMARY KEY AUTOINCREMENT,
-    job_id    TEXT NOT NULL REFERENCES jobs(id),
-    worker_id TEXT NOT NULL REFERENCES workers(id),
-    sender    TEXT NOT NULL,           -- customer or worker
+    id        {serial},
+    job_id    TEXT NOT NULL,
+    worker_id TEXT NOT NULL,
+    sender    TEXT NOT NULL,
     text      TEXT NOT NULL,
-    time      REAL NOT NULL
+    time      {real} NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_jobs_section ON jobs(section, created);
 CREATE INDEX IF NOT EXISTS idx_bids_job ON bids(job_id);
-CREATE INDEX IF NOT EXISTS idx_messages_job ON messages(job_id, worker_id);
+CREATE INDEX IF NOT EXISTS idx_messages_job ON messages(job_id, worker_id)
 """
 
-# columns stored outside the JSON blob
 WORKER_COLS = ("id", "section", "trade", "area", "rating", "jobs_done")
 JOB_COLS = ("id", "created", "status", "section", "trade", "area", "offer", "demo")
 
 
-def _init():
+# ---------- connection ----------
+
+def _connect():
+    global _conn
+    if PG:
+        import psycopg
+        from psycopg.rows import dict_row
+        _conn = psycopg.connect(DATABASE_URL, autocommit=True, row_factory=dict_row)
+    else:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        _conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+        _conn.row_factory = sqlite3.Row
+    return _conn
+
+
+def _run(sql, params=()):
+    """Run one statement on either backend; reconnect once if a hosted DB dropped the connection."""
+    if PG:
+        sql = sql.replace("?", "%s")
     with _lock:
-        _db.executescript(SCHEMA)
-        if _db.execute("SELECT COUNT(*) FROM workers").fetchone()[0] == 0:
-            for w in json.loads(SEED_WORKERS.read_text(encoding="utf-8"))["workers"]:
-                add_worker(w)
-        _db.commit()
+        for attempt in (1, 2):
+            try:
+                cur = (_conn or _connect()).execute(sql, params)
+                if not PG:
+                    _conn.commit()
+                return cur
+            except Exception as e:
+                if not PG or attempt == 2 or "closed" not in str(e).lower() and "connection" not in str(e).lower():
+                    raise
+                _connect()
+
+
+def _all(sql, params=()):
+    return _run(sql, params).fetchall()
+
+
+def _one(sql, params=()):
+    return _run(sql, params).fetchone()
+
+
+def _init():
+    schema = (SCHEMA.replace("{serial}", "SERIAL PRIMARY KEY" if PG else "INTEGER PRIMARY KEY AUTOINCREMENT")
+              .replace("{real}", "DOUBLE PRECISION" if PG else "REAL"))
+    for stmt in schema.split(";"):
+        if stmt.strip():
+            _run(stmt)
+    if _one("SELECT COUNT(*) AS n FROM workers")["n"] == 0:
+        for w in json.loads(SEED_WORKERS.read_text(encoding="utf-8"))["workers"]:
+            add_worker(w)
 
 
 # ---------- workers ----------
@@ -93,44 +139,34 @@ def _row_to_worker(row):
 
 def add_worker(w):
     data = {k: v for k, v in w.items() if k not in WORKER_COLS}
-    with _lock:
-        _db.execute(
-            "INSERT INTO workers (id, section, trade, area, rating, jobs_done, created, data) VALUES (?,?,?,?,?,?,?,?)",
-            (w["id"], w["section"], w["trade"], w["area"], w.get("rating", 0), w.get("jobs_done", 0), time.time(),
-             json.dumps(data, ensure_ascii=False)),
-        )
-        _db.commit()
+    _run("INSERT INTO workers (id, section, trade, area, rating, jobs_done, created, data) VALUES (?,?,?,?,?,?,?,?) "
+         "ON CONFLICT (id) DO NOTHING",
+         (w["id"], w["section"], w["trade"], w["area"], w.get("rating", 0), w.get("jobs_done", 0), time.time(),
+          json.dumps(data, ensure_ascii=False)))
     return w
 
 
 def new_worker_id():
-    with _lock:
-        n = _db.execute("SELECT COUNT(*) FROM workers").fetchone()[0]
+    n = _one("SELECT COUNT(*) AS n FROM workers")["n"]
     return f"n{n + 1:03d}-{uuid.uuid4().hex[:4]}"
 
 
 def worker(worker_id):
-    with _lock:
-        row = _db.execute("SELECT * FROM workers WHERE id = ?", (worker_id,)).fetchone()
+    row = _one("SELECT * FROM workers WHERE id = ?", (worker_id,))
     return _row_to_worker(row) if row else None
 
 
 def all_workers():
-    with _lock:
-        rows = _db.execute("SELECT * FROM workers ORDER BY created").fetchall()
-    return [_row_to_worker(r) for r in rows]
+    return [_row_to_worker(r) for r in _all("SELECT * FROM workers ORDER BY created")]
 
 
 def workers_for(section, area="", trade=""):
-    with _lock:
-        rows = _db.execute("SELECT * FROM workers WHERE section = ?", (section,)).fetchall()
-    ws = [_row_to_worker(r) for r in rows]
+    ws = [_row_to_worker(r) for r in _all("SELECT * FROM workers WHERE section = ?", (section,))]
     return sorted(ws, key=lambda w: (bool(trade) and w["trade"] != trade, w["area"] != area, -w["rating"]))
 
 
 def areas():
-    with _lock:
-        return [r[0] for r in _db.execute("SELECT DISTINCT area FROM workers ORDER BY area")]
+    return [r["area"] for r in _all("SELECT DISTINCT area FROM workers ORDER BY area")]
 
 
 def add_project(worker_id, project):
@@ -141,9 +177,7 @@ def add_project(worker_id, project):
             return None
         w["past_projects"].insert(0, project)
         data = {k: v for k, v in w.items() if k not in WORKER_COLS}
-        _db.execute("UPDATE workers SET jobs_done = jobs_done + 1, data = ? WHERE id = ?",
-                    (json.dumps(data, ensure_ascii=False), worker_id))
-        _db.commit()
+        _run("UPDATE workers SET jobs_done = jobs_done + 1, data = ? WHERE id = ?", (json.dumps(data, ensure_ascii=False), worker_id))
     return worker(worker_id)
 
 
@@ -153,22 +187,20 @@ def _assemble(row):
     job = json.loads(row["data"])
     job.update({k: row[k] for k in JOB_COLS})
     job["demo"] = bool(row["demo"])
-    bids = _db.execute("SELECT * FROM bids WHERE job_id = ? ORDER BY time", (row["id"],)).fetchall()
+    bids = _all("SELECT * FROM bids WHERE job_id = ? ORDER BY time", (row["id"],))
     job["bids"] = [{"id": b["id"], "worker_id": b["worker_id"], "worker": worker(b["worker_id"]), "amount": b["amount"],
                     "note": b["note"], "check": {"status": b["check_status"]}, "time": b["time"]} for b in bids]
-    msgs = _db.execute("SELECT * FROM messages WHERE job_id = ? ORDER BY id", (row["id"],)).fetchall()
+    msgs = _all("SELECT * FROM messages WHERE job_id = ? ORDER BY id", (row["id"],))
     job["messages"] = [{"worker_id": m["worker_id"], "sender": m["sender"], "text": m["text"], "time": m["time"]} for m in msgs]
     return job
 
 
 def _save(job):
     data = {k: v for k, v in job.items() if k not in JOB_COLS and k not in ("bids", "messages")}
-    _db.execute(
-        "INSERT OR REPLACE INTO jobs (id, created, status, section, trade, area, offer, demo, data) VALUES (?,?,?,?,?,?,?,?,?)",
-        (job["id"], job["created"], job["status"], job["section"], job.get("trade") or job["section"], job.get("area"),
-         job.get("offer"), int(bool(job.get("demo"))), json.dumps(data, ensure_ascii=False)),
-    )
-    _db.commit()
+    _run("INSERT INTO jobs (id, created, status, section, trade, area, offer, demo, data) VALUES (?,?,?,?,?,?,?,?,?) "
+         "ON CONFLICT (id) DO UPDATE SET status = excluded.status, area = excluded.area, offer = excluded.offer, data = excluded.data",
+         (job["id"], job["created"], job["status"], job["section"], job.get("trade") or job["section"], job.get("area"),
+          job.get("offer"), int(bool(job.get("demo"))), json.dumps(data, ensure_ascii=False)))
 
 
 def create(job):
@@ -179,18 +211,22 @@ def create(job):
 
 
 def get(job_id):
-    with _lock:
-        row = _db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
-        return _assemble(row) if row else None
+    row = _one("SELECT * FROM jobs WHERE id = ?", (job_id,))
+    if not row:
+        return None
+    if _deliver_sample_offers(json.loads(row["data"]), row):
+        row = _one("SELECT * FROM jobs WHERE id = ?", (job_id,))
+    return _assemble(row)
 
 
 def all_jobs(section=None):
-    with _lock:
-        if section:
-            rows = _db.execute("SELECT * FROM jobs WHERE section = ? ORDER BY created DESC", (section,)).fetchall()
-        else:
-            rows = _db.execute("SELECT * FROM jobs ORDER BY created DESC").fetchall()
-        return [_assemble(r) for r in rows]
+    if section:
+        rows = _all("SELECT * FROM jobs WHERE section = ? ORDER BY created DESC", (section,))
+    else:
+        rows = _all("SELECT * FROM jobs ORDER BY created DESC")
+    for r in rows:
+        _deliver_sample_offers(json.loads(r["data"]), r)
+    return [_assemble(r) for r in rows]
 
 
 def update(job_id, **fields):
@@ -203,28 +239,21 @@ def update(job_id, **fields):
 
 def delete_job(job_id):
     with _lock:
-        _db.execute("DELETE FROM messages WHERE job_id = ?", (job_id,))
-        _db.execute("DELETE FROM bids WHERE job_id = ?", (job_id,))
-        _db.execute("DELETE FROM jobs WHERE id = ?", (job_id,))
-        _db.commit()
+        _run("DELETE FROM messages WHERE job_id = ?", (job_id,))
+        _run("DELETE FROM bids WHERE job_id = ?", (job_id,))
+        _run("DELETE FROM jobs WHERE id = ?", (job_id,))
 
 
 def add_bid(job_id, bid):
-    with _lock:
-        bid_id = uuid.uuid4().hex[:6]
-        _db.execute(
-            "INSERT INTO bids (id, job_id, worker_id, amount, check_status, note, time) VALUES (?,?,?,?,?,?,?)",
-            (bid_id, job_id, bid["worker_id"], bid["amount"], bid["check"]["status"], bid.get("note", ""), time.time()),
-        )
-        _db.commit()
-        return next(b for b in get(job_id)["bids"] if b["id"] == bid_id)
+    bid_id = uuid.uuid4().hex[:6]
+    _run("INSERT INTO bids (id, job_id, worker_id, amount, check_status, note, time) VALUES (?,?,?,?,?,?,?)",
+         (bid_id, job_id, bid["worker_id"], bid["amount"], bid["check"]["status"], bid.get("note", ""), time.time()))
+    return bid_id
 
 
 def add_message(job_id, msg):
-    with _lock:
-        _db.execute("INSERT INTO messages (job_id, worker_id, sender, text, time) VALUES (?,?,?,?,?)",
-                    (job_id, msg["worker_id"], msg["sender"], msg["text"], time.time()))
-        _db.commit()
+    _run("INSERT INTO messages (job_id, worker_id, sender, text, time) VALUES (?,?,?,?,?)",
+         (job_id, msg["worker_id"], msg["sender"], msg["text"], time.time()))
     return msg
 
 
@@ -255,7 +284,9 @@ SAMPLE_OFFERS = os.getenv("ROZGAR_SAMPLE_OFFERS", "1") == "1"
 def schedule_sample_offers(job_id):
     """Like InDrive: a few nearby sample workers answer a new job within seconds.
 
-    Offers are labelled as samples. Turn off with ROZGAR_SAMPLE_OFFERS=0.
+    The offers are planned now and stored with the job, then delivered whenever the
+    job is read after their time has come. No timers, so it also works on serverless
+    hosts such as Vercel. Offers are labelled as samples; ROZGAR_SAMPLE_OFFERS=0 turns this off.
     """
     if not SAMPLE_OFFERS:
         return
@@ -266,17 +297,33 @@ def schedule_sample_offers(job_id):
     candidates = workers_for(job["section"], job.get("area") or "", job.get("trade") or "")
     candidates = sorted(candidates, key=lambda w: w["id"] not in invited)[:3]
     lo, hi = job["price"]["fair_min"], job["price"]["fair_max"]
+    now = time.time()
+    plan = [{"worker_id": w["id"], "amount": int(round(random.uniform(lo, hi * 1.05) / 50) * 50) or lo, "due": now + delay}
+            for delay, w in zip((3, 7, 12), candidates)]
+    update(job_id, sample_plan=plan)
 
-    def offer(w):
-        j = get(job_id)
-        if not j or j["status"] != "open" or any(b["worker_id"] == w["id"] for b in j["bids"]):
-            return
-        amount = int(round(random.uniform(lo, hi * 1.05) / 50) * 50) or lo
-        status = "high" if amount > hi * 1.25 else "low" if amount < lo * 0.75 else "fair"
-        add_bid(job_id, {"worker_id": w["id"], "amount": amount, "note": "sample", "check": {"status": status}})
 
-    for delay, w in zip((3, 7, 12), candidates):
-        threading.Timer(delay, offer, args=(w,)).start()
+def _deliver_sample_offers(data, row):
+    """Turn planned sample offers whose time has come into real offers. Returns True if any were added."""
+    plan = data.get("sample_plan")
+    if not plan or row["status"] != "open":
+        return False
+    now = time.time()
+    due = [p for p in plan if p["due"] <= now]
+    if not due:
+        return False
+    with _lock:
+        lo = data.get("price", {}).get("fair_min", 0)
+        hi = data.get("price", {}).get("fair_max", 0)
+        taken = {b["worker_id"] for b in _all("SELECT worker_id FROM bids WHERE job_id = ?", (row["id"],))}
+        for p in due:
+            if p["worker_id"] not in taken:
+                a = p["amount"]
+                status = "high" if a > hi * 1.25 else "low" if a < lo * 0.75 else "fair"
+                add_bid(row["id"], {"worker_id": p["worker_id"], "amount": a, "note": "sample", "check": {"status": status}})
+        data["sample_plan"] = [p for p in plan if p["due"] > now]
+        _run("UPDATE jobs SET data = ? WHERE id = ?", (json.dumps(data, ensure_ascii=False), row["id"]))
+    return True
 
 
 # ---------- demo ----------
@@ -303,7 +350,7 @@ def seed_demo_job(w, section_info, worker_info):
                 return j
         summary, cause, card, mats, lo, hi, offer = DEMO_JOBS.get(w["trade"], DEMO_JOBS["bijli"])
         materials = [{"item": i, "qty": q, "unit_pkr": p, "total_pkr": q * p} for i, q, p in mats]
-        n = _db.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
+        n = _one("SELECT COUNT(*) AS n FROM jobs")["n"]
         return create({
             "demo": True,
             "lang": "ur",

@@ -225,6 +225,7 @@ def public(job):
     """What the browser gets: photos as small URLs instead of base64, and distance on every offer."""
     job = dict(job)
     job.pop("owner_token", None)  # only the poster's browser ever sees this
+    job.pop("sample_plan", None)
     if job.get("photo"):
         job["photo"] = {"url": f"/api/jobs/{job['id']}/photo/before"}
     if job.get("verification") and job["verification"].get("after_photo"):

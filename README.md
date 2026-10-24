@@ -118,7 +118,7 @@ flowchart TD
 
 - **AI for understanding, rules for money and safety.** Gemma 4 handles images, language and diagnosis. Prices and safety rules are plain Python, so every number can be checked.
 - **Input checking.** No estimate is made on mismatched photos or details, and quantities have sensible limits (for example at most 300 ft for a crack).
-- **Persistent storage.** Workers, jobs, offers and chat messages are stored in SQLite (`data/rozgar.db`), created automatically on first run and seeded with the sample workers.
+- **Persistent storage.** Workers, jobs, offers and chat messages are stored in Postgres when `DATABASE_URL` is set (for example on Vercel), or in a local SQLite file otherwise. Tables are created automatically on first run and seeded with the sample workers.
 - **Validated output.** Each agent must return JSON matching a Pydantic schema; invalid replies are repaired once.
 - **Resilience.** The app retries busy or failed calls, alternating between the two Gemma 4 models with a short cooldown. It also rotates API keys on rate limits and shows clear errors instead of crashing.
 
@@ -165,19 +165,21 @@ To see both sides, open two tabs: choose **Hire a worker** in one and **Find wor
 | `GEMINI_API_KEYS` | No | Extra keys, comma-separated, used when one hits a rate limit |
 | `GEMMA_MODEL` | No | Primary model (default `gemma-4-31b-it`) |
 | `GEMMA_FALLBACK_MODEL` | No | Fallback model (default `gemma-4-26b-a4b-it`) |
+| `DATABASE_URL` | No | Postgres connection string (set automatically by Vercel's Neon integration); without it, SQLite is used |
 | `ROZGAR_DB` | No | Path of the SQLite database (default `data/rozgar.db`) |
 | `ROZGAR_SAMPLE_OFFERS` | No | `1` (default) lets sample workers send offers in the demo; `0` turns it off |
 
 ## Deployment
 
-**Hugging Face Spaces (free, no card required)**
-1. Create a new Space with the **Docker** SDK and the **Blank** template.
-2. Under **Settings → Variables and secrets**, add the secret `GEMINI_API_KEY`.
-3. Push this repository to the Space. The included [`Dockerfile`](Dockerfile) serves the app on port 7860.
+**Vercel (free Hobby plan, no card required)**
+1. Sign in at [vercel.com](https://vercel.com) with GitHub, click **Add New → Project** and import this repository. Vercel detects the FastAPI app in `app/main.py`.
+2. Under **Environment Variables**, add `GEMINI_API_KEY`.
+3. Under **Storage**, create a free **Neon Postgres** database and connect it to the project. This sets `DATABASE_URL`, so workers, jobs, offers and chats are kept across requests.
+4. Deploy. [`vercel.json`](vercel.json) allows each request up to 300 seconds, enough for slow Gemma replies.
 
-**Other hosts.** The Dockerfile runs on any container host. A [`render.yaml`](render.yaml) is included for Render.
+**Docker.** The included [`Dockerfile`](Dockerfile) runs on any container host (port 7860 by default). A [`render.yaml`](render.yaml) is included for Render.
 
-The app stores data in a SQLite file and needs a single, always-on process. On hosts with temporary disks (including free Hugging Face Spaces), the database resets when the container restarts unless persistent storage is attached. Serverless platforms such as Vercel would need an external database.
+**Storage.** With `DATABASE_URL` set, the app uses Postgres; otherwise it uses a local SQLite file (`data/rozgar.db`). Serverless hosts need Postgres, because their disk is temporary and not shared between requests.
 
 ## Project structure
 
@@ -187,7 +189,7 @@ app/
   orchestrator.py    Multi-agent pipeline (Router, Specialist, Verifier)
   agents.py          Gemma 4 calls, schemas, retries and failover
   pricing.py         Rate card, safety rules, fairness check, worker matching
-  store.py           SQLite database: workers, jobs, offers (bids) and chat messages
+  store.py           Database (Postgres or SQLite): workers, jobs, offers (bids) and chat messages
 static/              Frontend (HTML, CSS, JavaScript, translations, images)
 skills/rozgar-repair-estimator/
   SKILL.md           Agent Skill definition
@@ -195,7 +197,8 @@ skills/rozgar-repair-estimator/
   rates.json         Trades, hourly rates and material prices
   workers.json       Sample worker profiles
   sections/          One guide per trade
-Dockerfile           Container for Hugging Face Spaces and other hosts
+vercel.json          Vercel function settings
+Dockerfile           Container for other hosts
 ```
 
 ## API reference
@@ -227,7 +230,7 @@ This is a hackathon prototype.
 
 - **Worker profiles are samples** and are labelled as such. Each worker also sees one labelled sample job.
 - **Login is a demo.** No SMS is sent (code `1234`, worker PIN `1234`). Phone and CNIC numbers are checked for format only and are never stored.
-- **Data is stored in a local SQLite file.** It survives restarts on your machine, but a free cloud host may reset it when the container is rebuilt.
+- **Data storage depends on the host.** Locally it is a SQLite file; on Vercel it needs the free Neon Postgres database, otherwise data is temporary.
 - **Rates are estimates** for Faisalabad and should be adjusted locally.
 - **Photo verification is a helpful check**, not proof; the customer makes the final decision.
 
